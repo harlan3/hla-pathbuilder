@@ -1,0 +1,45 @@
+Tables
+
+Object
+-------
+id(UUID), name(String), path(String), parentObject(UUID)
+
+Attribute
+----------
+id(UUID), index(Number), name(String), type(String), inherited(Boolean), parentObject(UUID)
+
+Interaction
+------------
+id(UUID), name(String), path(String), parentObject(UUID)
+
+Parameter
+----------
+id(UUID), index(Number), name(String), type(String), inherited(Boolean), parentObject(UUID)
+
+SimpleDatatype
+---------------
+id(UUID), name(String), type(String)
+
+EnumeratedDatatype
+-------------------
+id(UUID), name(String), type(String)
+
+ArrayDatatype
+--------------
+id(UUID), name(String), type(String), cardinality(String)
+
+FixedRecordDatatype
+--------------------
+id(UUID), name(String)
+
+FixedRecordField
+-----------------
+id(UUID), index(Number), name(String), type(String), parentObject(UUID)
+
+VariantRecordDatatype
+----------------------
+id(UUID), name(String)
+
+VariantRecordField
+-------------------
+id(UUID), index(Number), name(String), type(String), discriminant(Boolean), alternative(Boolean), parentObject(UUID)
