@@ -31,6 +31,7 @@ public class BuildElementPaths {
 	private DatabaseAPI databaseAPI;
 	
 	private String[] rootElementPathArray;
+	private int currentRootPathIndex = 0;
 	
 	public enum Element { 
 		OBJECT,
@@ -85,6 +86,54 @@ public class BuildElementPaths {
 		return interactionPath;	
 	}
 	
+	private void displayPartialPath() {
+		
+		boolean foundMatch = false;
+		int foundIndex = -1;
+		int elementCount = 0;
+		
+		String matchItem = rootElementPathArray[currentRootPathIndex];
+		
+		for (String pathElement : pathFollowStack) {
+			
+			String cleanPathElement = pathElement.replaceAll("\\(.*\\)", "").replaceAll(" ", "");
+			
+			if(cleanPathElement.equals(matchItem)) {
+				
+				foundMatch = true;
+				foundIndex = elementCount;
+				break;
+			}
+			
+			elementCount++;
+		}
+
+		if (foundMatch) {
+
+			System.out.print("[");
+
+			for (int i = foundIndex; i < pathFollowStack.size(); i++) {
+				System.out.print(pathFollowStack.get(i));
+				if (i != (pathFollowStack.size() - 1))
+					System.out.print(", ");
+			}
+
+			System.out.println("]");
+		} else if (currentRootPathIndex == rootElementPathArray.length - 1) {
+
+			System.out.print("[(" + rootElementPathArray[currentRootPathIndex] + ") "
+					+ rootElementPathArray[currentRootPathIndex] + ", ");
+
+			for (int i = 0; i < pathFollowStack.size(); i++) {
+				System.out.print(pathFollowStack.get(i));
+				if (i != (pathFollowStack.size() - 1))
+					System.out.print(", ");
+			}
+
+			System.out.println("]");
+		}
+	}
+	
 	private void displayElementPathTransition(String poppedElement) {
 		
 		String cleanElement = poppedElement.replaceAll("\\(.*\\)", "").replaceAll(" ", "");
@@ -116,6 +165,8 @@ public class BuildElementPaths {
 				if (i != (foundIndex-1))
 					System.out.print(", ");
 			}
+			
+			currentRootPathIndex = foundIndex - 1;
 			
 			System.out.println("]");
 		}
@@ -272,7 +323,7 @@ public class BuildElementPaths {
 		for (SearchToken searchToken : searchTokenList) {
 			
 			pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name);
-			
+    		
 			if (!isTerminalEndpoint(searchToken)) {
 				
 				if ((elementIsType == Element.OBJECT) && (databaseAPI.isObject(searchToken)))
@@ -286,8 +337,7 @@ public class BuildElementPaths {
 				else if (databaseAPI.isArrayRecord(searchToken))
 					traverseArrayRecord(searchToken);
 			} else {
-				//displayObjectPath(databaseAPI.getUUIDForObject(searchToken));
-				System.out.println(pathFollowStack.toString());
+				displayPartialPath();
 			}
 			
 			String poppedElement = pathFollowStack.pop();
