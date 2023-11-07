@@ -33,8 +33,8 @@ import orbisoftware.hla_pathbuilder.db_classes.*;
 
 public class DatabaseAPI {
 
-	//private String connect = "jdbc:derby:memory:myDB;create=true"; // in memory
-	private String connect = "jdbc:derby:myDB;create=true"; // in file
+	private String connect = "jdbc:derby:memory:myDB;create=true"; // in memory
+	//private String connect = "jdbc:derby:myDB;create=true"; // in file
 	private static Connection conn = null;
 
 	public static String NULL_UUID = "00000000-0000-0000-0000-000000000000";
