@@ -34,8 +34,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import orbisoftware.hla_pathbuilder.Constants.Element;
-import orbisoftware.hla_pathbuilder.code_gen.FixedRecord;
-import orbisoftware.hla_pathbuilder.code_gen.Interaction;
 import orbisoftware.hla_pathbuilder.db_classes.DbArrayDatatype;
 import orbisoftware.hla_pathbuilder.db_classes.DbAttribute;
 import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratedDatatype;

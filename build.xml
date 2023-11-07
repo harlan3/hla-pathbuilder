@@ -24,6 +24,8 @@
    <target name="compile" depends="clean, makedir">
       <javac srcdir="${src.dir}" destdir="${build.dir}" debuglevel="${debuglevel}">
          <classpath>
+            <pathelement path="${lib.dir}/commons-lang3-3.0.jar"/>
+            <pathelement path="${lib.dir}/commons-text-1.10.0.jar"/>
             <pathelement path="${lib.dir}/derby.jar"/>
             <pathelement path="${lib.dir}/derbyclient.jar"/>
             <pathelement path="${lib.dir}/derbyshared.jar"/>
