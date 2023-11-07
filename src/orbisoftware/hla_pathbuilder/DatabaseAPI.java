@@ -33,7 +33,8 @@ import orbisoftware.hla_pathbuilder.db_classes.*;
 
 public class DatabaseAPI {
 
-	private String connect = "jdbc:derby:memory:myDB;create=true";
+	//private String connect = "jdbc:derby:memory:myDB;create=true"; // in memory
+	private String connect = "jdbc:derby:myDB;create=true"; // in file
 	private static Connection conn = null;
 
 	public static String NULL_UUID = "00000000-0000-0000-0000-000000000000";
@@ -62,6 +63,7 @@ public class DatabaseAPI {
 			run("CREATE TABLE Attribute ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "index INTEGER, "
+					+ "origName VARCHAR(80), "
 					+ "name VARCHAR(80), "
 				    + "type VARCHAR(80), "
 					+ "inherited BOOLEAN, "
@@ -76,6 +78,7 @@ public class DatabaseAPI {
 			run("CREATE TABLE Parameter ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "index INTEGER, "
+				    + "origName VARCHAR(80), "
 					+ "name VARCHAR(80), "
 				    + "type VARCHAR(80), "
 					+ "inherited BOOLEAN, "
@@ -104,8 +107,11 @@ public class DatabaseAPI {
 			run("CREATE TABLE FixedRecordField ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "index INTEGER, "
+				    + "origName VARCHAR(80), "
 					+ "name VARCHAR(80), "
 				    + "type VARCHAR(80), "
+				    + "encoding VARCHAR(80), "
+				    + "primitive VARCHAR(80), "
 				    + "parentObject VARCHAR(36))");	
 			
 			run("CREATE TABLE VariantRecordDatatype ("
@@ -115,6 +121,7 @@ public class DatabaseAPI {
 			run("CREATE TABLE VariantRecordField ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "index INTEGER, "
+				    + "origName VARCHAR(80), "
 					+ "name VARCHAR(80), "
 				    + "type VARCHAR(80), "
 					+ "discriminant BOOLEAN, "					
@@ -156,6 +163,7 @@ public class DatabaseAPI {
 				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
 					var.id + "'," + 
 					var.index + ",'" +
+					var.origName + "','" +
 					var.name + "','" +
 					var.type + "'," +
 					var.inherited + ",'" +
@@ -196,6 +204,7 @@ public class DatabaseAPI {
 				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
 					var.id + "'," + 
 					var.index + ",'" +
+					var.origName + "','" +
 					var.name + "','" +
 					var.type + "'," +
 					var.inherited + ",'" +
@@ -289,8 +298,11 @@ public class DatabaseAPI {
 				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
 					var.id + "'," + 
 					var.index + ",'" +
+					var.origName + "','" +
 					var.name + "','" +
 					var.type + "','" +
+					var.encoding + "','" +
+					var.primitive + "','" +
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -326,6 +338,7 @@ public class DatabaseAPI {
 				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
 					var.id + "'," + 
 					var.index + ",'" +
+					var.origName + "','" +
 					var.name + "','" +
 					var.type + "'," +
 					var.discriminant + "," +
@@ -384,6 +397,7 @@ public class DatabaseAPI {
         		
         		var.id = results.getString("id");
         		var.index = results.getInt("index");
+        		var.origName = results.getString("origName");
         		var.name = results.getString("name");
         		var.type = results.getString("type");
         		var.inherited = results.getBoolean("inherited");
@@ -450,6 +464,7 @@ public class DatabaseAPI {
         		
         		var.id = results.getString("id");
         		var.index = results.getInt("index");
+        		var.origName = results.getString("origName");
         		var.name = results.getString("name");
         		var.type = results.getString("type");
         		var.inherited = results.getBoolean("inherited");
@@ -608,8 +623,11 @@ public class DatabaseAPI {
         		
         		var.id = results.getString("id");
         		var.index = results.getInt("index");
+        		var.origName = results.getString("origName");
         		var.name = results.getString("name");
         		var.type = results.getString("type");
+        		var.encoding = results.getString("encoding");
+        		var.primitive = results.getString("primitive");
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);
@@ -671,6 +689,7 @@ public class DatabaseAPI {
         		
         		var.id = results.getString("id");
         		var.index = results.getInt("index");
+        		var.origName = results.getString("origName"); 
         		var.name = results.getString("name");
         		var.type = results.getString("type");
         		var.discriminant = results.getBoolean("discriminant");

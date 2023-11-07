@@ -33,12 +33,7 @@ public class BuildElementPaths {
 	private String[] rootElementPathArray;
 	private int currentRootPathIndex = 0;
 	
-	public enum Element { 
-		OBJECT,
-		INTERACTION
-	}
-	
-	private Element elementIsType;
+	private Constants.Element elementIsType;
 	
 	BuildElementPaths() {
 		
@@ -96,12 +91,12 @@ public class BuildElementPaths {
 		
 		for (String pathElement : pathFollowStack) {
 			
-			String cleanPathElement = pathElement.replaceAll("\\(.*\\)", "").replaceAll(" ", "");
+			String cleanPathElement = pathElement.replaceAll(".*?\\((.*?)\\).*","$1");
 			
 			if(cleanPathElement.equals(matchItem)) {
 				
 				foundMatch = true;
-				foundIndex = elementCount;
+				foundIndex = elementCount + 1;
 				break;
 			}
 			
@@ -121,8 +116,7 @@ public class BuildElementPaths {
 			System.out.println("]");
 		} else if (currentRootPathIndex == rootElementPathArray.length - 1) {
 
-			System.out.print("[(" + rootElementPathArray[currentRootPathIndex] + ") "
-					+ rootElementPathArray[currentRootPathIndex] + ", ");
+			System.out.print("[");
 
 			for (int i = 0; i < pathFollowStack.size(); i++) {
 				System.out.print(pathFollowStack.get(i));
@@ -136,7 +130,7 @@ public class BuildElementPaths {
 	
 	private void displayElementPathTransition(String poppedElement) {
 		
-		String cleanElement = poppedElement.replaceAll("\\(.*\\)", "").replaceAll(" ", "");
+		String cleanElement = poppedElement.replaceAll(".*?\\((.*?)\\).*","$1");
 		boolean foundMatch = false;
 		int foundIndex = -1;
 		int elementCount = 0;
@@ -155,7 +149,7 @@ public class BuildElementPaths {
 		
 		if (foundMatch) {
 			
-			if (elementIsType == Element.OBJECT)
+			if (elementIsType == Constants.Element.OBJECT)
 				System.out.print("\nObject Path: [");
 			else
 				System.out.print("\nInteraction Path: [");
@@ -184,6 +178,7 @@ public class BuildElementPaths {
     		/*
     		System.out.println("id = " + var.id);
     		System.out.println("index = " + var.index);
+    		System.out.println("origName = " + var.origName);
     		System.out.println("name = " + var.name);
     		System.out.println("type = " + var.type);
     		System.out.println("inherited = " + var.inherited);
@@ -212,6 +207,7 @@ public class BuildElementPaths {
     		/*
     		System.out.println("id = " + var.id);
     		System.out.println("index = " + var.index);
+    		System.out.println("origName = " + var.origName);
     		System.out.println("name = " + var.name);
     		System.out.println("type = " + var.type);
     		System.out.println("inherited = " + var.inherited);
@@ -238,11 +234,14 @@ public class BuildElementPaths {
     		/*
     		System.out.println("id = " + var.id);
     		System.out.println("index = " + var.index);
+    		System.out.println("origName = " + var.origName);
     		System.out.println("name = " + var.name);
     		System.out.println("type = " + var.type);
+    		System.out.println("encoding = " + var.encoding);
+    		System.out.println("primitive = " + var.primitive);
     		System.out.println("parentObject = " + var.parentObject);
     		System.out.println();
-    		*/
+			*/
     		
     		// The id here doesn't have any relational aspect, use NULL_UUID
     		uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
@@ -265,13 +264,14 @@ public class BuildElementPaths {
     		/*
     		System.out.println("id = " + var.id);
     		System.out.println("index = " + var.index);
+    		System.out.println("origName = " + var.origName);
     		System.out.println("name = " + var.name);
     		System.out.println("type = " + var.type);
     		System.out.println("discriminant = " + var.discriminant);
     		System.out.println("alternative = " + var.alternative);
     		System.out.println("parentObject = " + var.parentObject);
     		System.out.println();
-    		*/
+			*/
 
     		for (VariantSelect variantSelect : HlaPathBuilder.variantSelectList) {
     			
@@ -326,9 +326,9 @@ public class BuildElementPaths {
     		
 			if (!isTerminalEndpoint(searchToken)) {
 				
-				if ((elementIsType == Element.OBJECT) && (databaseAPI.isObject(searchToken)))
+				if ((elementIsType == Constants.Element.OBJECT) && (databaseAPI.isObject(searchToken)))
 					traverseObject(databaseAPI.getUUIDForObject(searchToken));
-				else if ((elementIsType == Element.INTERACTION) && (databaseAPI.isInteraction(searchToken)))
+				else if ((elementIsType == Constants.Element.INTERACTION) && (databaseAPI.isInteraction(searchToken)))
 					traverseInteraction(databaseAPI.getUUIDForInteraction(searchToken));
 				else if (databaseAPI.isFixedRecord(searchToken))
 					traverseFixedRecord(databaseAPI.getUUIDForFixedRecord(searchToken));
@@ -346,17 +346,17 @@ public class BuildElementPaths {
 		}
 	}
 	
-	public void startTraversal(Element element, String elementUUID) {
+	public void startTraversal(Constants.Element element, String elementUUID) {
 		
-		if (element == Element.OBJECT) {
+		if (element == Constants.Element.OBJECT) {
 			
-			elementIsType = Element.OBJECT;
+			elementIsType = Constants.Element.OBJECT;
 			rootElementPathArray = getObjectPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
 			traverseObject(elementUUID);
-		} else if (element == Element.INTERACTION) {
+		} else if (element == Constants.Element.INTERACTION) {
 			
-			elementIsType = Element.INTERACTION;
+			elementIsType = Constants.Element.INTERACTION;
 			rootElementPathArray = getInteractionPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
 			traverseInteraction(elementUUID);

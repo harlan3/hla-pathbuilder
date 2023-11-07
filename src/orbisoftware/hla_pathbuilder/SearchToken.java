@@ -22,7 +22,7 @@ package orbisoftware.hla_pathbuilder;
 
 public class SearchToken {
 
-	SearchToken(String uuid, String name, String type) {
+	public SearchToken(String uuid, String name, String type) {
 		this.uuid = uuid;
 		this.name = name;
 		this.type = type;

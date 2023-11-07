@@ -33,7 +33,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import orbisoftware.hla_pathbuilder.BuildElementPaths.Element;
+import orbisoftware.hla_pathbuilder.Constants.Element;
+import orbisoftware.hla_pathbuilder.code_gen.FixedRecord;
+import orbisoftware.hla_pathbuilder.code_gen.Interaction;
 import orbisoftware.hla_pathbuilder.db_classes.DbArrayDatatype;
 import orbisoftware.hla_pathbuilder.db_classes.DbAttribute;
 import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratedDatatype;
@@ -52,14 +54,16 @@ public class HlaPathBuilder {
 	private static final String fileName = "RestaurantFOMmodule.xml";
 	public static List<VariantSelect> variantSelectList = new ArrayList<VariantSelect>();
 	public static Stack<String> pathBuilderStack = new Stack<String>();
-	
+	public Utils utils = new Utils();
+
 	// If true, all variants and alternatives will be ignored that do not have a
 	// VariantSelect created.
 	public static boolean useVariantSelect = false;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void insertExtendsAttribute(int index, String variableName, String dataType, UUID parentUUID) {
+	void insertExtendsAttribute(int index, String origVariableName, String variableName, String dataType,
+			UUID parentUUID) {
 
 		// Insert attribute into database
 		List<DbAttribute> list = new ArrayList<DbAttribute>();
@@ -67,6 +71,7 @@ public class HlaPathBuilder {
 
 		var.id = UUID.randomUUID().toString();
 		var.index = index;
+		var.origName = origVariableName;
 		var.name = variableName;
 		var.type = dataType;
 		var.inherited = true;
@@ -84,13 +89,15 @@ public class HlaPathBuilder {
 
 		String dataType = "";
 		String variableName = "";
+		String origVariableName = "";
 
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
 
 			if (name.equals("name")) {
-				variableName = nodeChild.getTextContent();
+				origVariableName = nodeChild.getTextContent();
+				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
 			}
 
 			if (name.equals("dataType")) {
@@ -106,6 +113,7 @@ public class HlaPathBuilder {
 
 		var.id = UUID.randomUUID().toString();
 		var.index = index;
+		var.origName = origVariableName;
 		var.name = variableName;
 		var.type = dataType;
 		var.inherited = false;
@@ -138,7 +146,7 @@ public class HlaPathBuilder {
 				System.out.println("// Start Object");
 				System.out.println("// " + objectName);
 				System.out.println("typedef struct {");
-				
+
 				typedefName = objectName;
 				pathBuilderStack.push(objectName);
 
@@ -158,11 +166,12 @@ public class HlaPathBuilder {
 
 				if (!parentClass.isEmpty()) {
 
-					String variableName = parentClass;
+					String origVariableName = parentClass;
+					String variableName = utils.convertToCamelCase(parentClass);
 					attributeIndex++;
 
 					System.out.println("   " + parentClass + " " + variableName + "; // extends");
-					insertExtendsAttribute(attributeIndex, variableName, parentClass, objectUUID);
+					insertExtendsAttribute(attributeIndex, origVariableName, variableName, parentClass, objectUUID);
 
 				}
 			}
@@ -210,7 +219,8 @@ public class HlaPathBuilder {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void insertExtendsParameter(int index, String variableName, String dataType, UUID parentUUID) {
+	void insertExtendsParameter(int index, String origVariableName, String variableName, String dataType,
+			UUID parentUUID) {
 
 		// Insert parameter into database
 		List<DbParameter> list = new ArrayList<DbParameter>();
@@ -219,6 +229,7 @@ public class HlaPathBuilder {
 
 		var.id = UUID.randomUUID().toString();
 		var.index = index;
+		var.origName = origVariableName;
 		var.name = variableName;
 		var.type = dataType;
 		var.inherited = true;
@@ -235,13 +246,16 @@ public class HlaPathBuilder {
 
 		String dataType = "";
 		String variableName = "";
+		String origVariableName = "";
 
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
 
-			if (name.equals("name"))
-				variableName = nodeChild.getTextContent();
+			if (name.equals("name")) {
+				origVariableName = nodeChild.getTextContent();
+				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
+			}
 
 			if (name.equals("dataType"))
 				dataType = nodeChild.getTextContent();
@@ -256,6 +270,7 @@ public class HlaPathBuilder {
 
 		var.id = UUID.randomUUID().toString();
 		var.index = index;
+		var.origName = origVariableName;
 		var.name = variableName;
 		var.type = dataType;
 		var.inherited = false;
@@ -290,7 +305,7 @@ public class HlaPathBuilder {
 
 				typedefName = interactionName;
 				pathBuilderStack.push(interactionName);
-				
+
 				// Insert interaction into database
 				interactionUUID = UUID.randomUUID();
 				List<DbInteraction> list = new ArrayList<DbInteraction>();
@@ -308,11 +323,13 @@ public class HlaPathBuilder {
 				// print out the parent object that is extended by this struct
 				if (!parentClass.isEmpty()) {
 
-					String variableName = parentClass;
+					String origVariableName = parentClass;
+					String variableName = utils.convertToCamelCase(parentClass);
 					parameterIndex++;
 
 					System.out.println("   " + parentClass + " " + variableName + "; // extends");
-					insertExtendsParameter(parameterIndex, variableName, parentClass, interactionUUID);
+					insertExtendsParameter(parameterIndex, origVariableName, variableName, parentClass,
+							interactionUUID);
 				}
 			}
 
@@ -547,17 +564,27 @@ public class HlaPathBuilder {
 
 		String dataType = "";
 		String variableName = "";
+		String origVariableName = "";
+		String encoding = "";
+		String primitive = "";
 
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
 
 			if (name.equals("name")) {
-				variableName = nodeChild.getTextContent();
+				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
+				origVariableName = nodeChild.getTextContent();
+
+				if (variableName.equals("class"))
+					variableName = "classValue";
 			}
 
-			if (name.equals("dataType"))
+			if (name.equals("dataType")) {
 				dataType = nodeChild.getTextContent();
+				encoding = utils.getEncodingType(dataType);
+				primitive = utils.getPrimitiveFromEncodingType(encoding);
+			}
 
 			nodeChild = nodeChild.getNextSibling();
 		}
@@ -568,8 +595,11 @@ public class HlaPathBuilder {
 
 		var.id = UUID.randomUUID().toString();
 		var.index = index;
+		var.origName = origVariableName;
 		var.name = variableName;
 		var.type = dataType;
+		var.encoding = encoding;
+		var.primitive = primitive;
 		var.parentObject = parentUUID.toString();
 
 		list.add(var);
@@ -641,7 +671,8 @@ public class HlaPathBuilder {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void parseDiscriminant(String dataType, String discriminantName, int index, UUID parentUUID) {
+	void parseDiscriminant(String dataType, String origDiscriminantName, String discriminantName, int index,
+			UUID parentUUID) {
 
 		List<DbVariantRecordField> list = new ArrayList<DbVariantRecordField>();
 
@@ -649,6 +680,7 @@ public class HlaPathBuilder {
 
 		var.id = UUID.randomUUID().toString();
 		var.index = index;
+		var.origName = origDiscriminantName;
 		var.name = discriminantName;
 		var.type = dataType;
 		var.discriminant = true;
@@ -672,7 +704,7 @@ public class HlaPathBuilder {
 			String name = nodeChild.getNodeName();
 
 			if (name.equals("name"))
-				variableName = nodeChild.getTextContent();
+				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
 
 			if (name.equals("dataType"))
 				dataType = nodeChild.getTextContent();
@@ -702,6 +734,7 @@ public class HlaPathBuilder {
 	void parseVariantRecordData(Node node) {
 
 		String variantRecordName = "";
+		String origDiscriminantName = "";
 		String discriminantName = "";
 		String dataType = "";
 		boolean hasData = false;
@@ -735,13 +768,16 @@ public class HlaPathBuilder {
 				databaseAPI.insertIntoVariantRecordDatatypeTable(list);
 			}
 
-			if (name.equals("discriminant"))
-				discriminantName = nodeChild.getTextContent();
+			if (name.equals("discriminant")) {
+				origDiscriminantName = nodeChild.getTextContent();
+				discriminantName = utils.convertToCamelCase(nodeChild.getTextContent());
+			}
 
 			if (name.equals("dataType")) {
 				variantRecordFieldIndex++;
 				dataType = nodeChild.getTextContent();
-				parseDiscriminant(dataType, discriminantName, variantRecordFieldIndex, objectUUID);
+				parseDiscriminant(dataType, origDiscriminantName, discriminantName, variantRecordFieldIndex,
+						objectUUID);
 				System.out.println("   " + dataType + " " + discriminantName + "; // Discriminant");
 			}
 
@@ -806,21 +842,42 @@ public class HlaPathBuilder {
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
-		
+
 		try {
+
+			// hlaPathBuilder.databaseAPI.initDatabase();
+
 			PrintStream outputStream = new PrintStream(new File("TypeDefs.h"));
 			PrintStream console = System.out;
-			
+
 			System.setOut(outputStream);
-			
+
 			hlaPathBuilder.databaseAPI.initDatabase();
 			hlaPathBuilder.databaseAPI.createTables();
 
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse(new File(fileName));
+			// First pass for dataTypes only
+			DocumentBuilder db1 = dbf.newDocumentBuilder();
+			Document doc1 = db1.parse(new File(fileName));
 
-			Node node = doc.getFirstChild();
+			Node node = doc1.getFirstChild();
 			Node nodeChild = node.getFirstChild();
+
+			while (nodeChild != null) {
+
+				String name = nodeChild.getNodeName();
+
+				if (name.equals("dataTypes"))
+					hlaPathBuilder.parseDataTypes(nodeChild);
+
+				nodeChild = nodeChild.getNextSibling();
+			}
+
+			// Second pass for objects and interactions
+			DocumentBuilder db2 = dbf.newDocumentBuilder();
+			Document doc2 = db2.parse(new File(fileName));
+
+			node = doc2.getFirstChild();
+			nodeChild = node.getFirstChild();
 
 			while (nodeChild != null) {
 
@@ -832,12 +889,9 @@ public class HlaPathBuilder {
 				if (name.equals("interactions"))
 					hlaPathBuilder.parseInteractions(nodeChild);
 
-				if (name.equals("dataTypes"))
-					hlaPathBuilder.parseDataTypes(nodeChild);
-
 				nodeChild = nodeChild.getNextSibling();
 			}
-			
+
 			System.setOut(console);
 			outputStream.close();
 
@@ -848,18 +902,18 @@ public class HlaPathBuilder {
 		try {
 			PrintStream outputStream = new PrintStream(new File("PathDefs.txt"));
 			PrintStream console = System.out;
-			
+
 			System.setOut(outputStream);
-			
+
 			buildElementPaths.setDatabase(hlaPathBuilder.databaseAPI);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
+
 			// Set up a variant select (all other variants and alternatives will be
 			// ignored).
-			
-			String uuidVariantRecord = hlaPathBuilder.databaseAPI.getUUIDForVariantRecord(
-					new SearchToken(DatabaseAPI.NULL_UUID, "", "WaiterValue"));
+
+			String uuidVariantRecord = hlaPathBuilder.databaseAPI
+					.getUUIDForVariantRecord(new SearchToken(DatabaseAPI.NULL_UUID, "", "WaiterValue"));
 			HlaPathBuilder.variantSelectList.add(new VariantSelect(uuidVariantRecord, "Rating"));
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -868,49 +922,50 @@ public class HlaPathBuilder {
 
 			{
 				String selectStatement = "SELECT * FROM Object WHERE name='Waiter'";
-	
+
 				List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
-	
+
 				for (DbObject var : list) {
-	
+
 					System.out.println("id = " + var.id);
 					System.out.println("name = " + var.name);
 					System.out.println("path = " + var.path);
 					System.out.println("parentObject = " + var.parentObject);
 					System.out.println();
-	
+
 					buildElementPaths.startTraversal(Element.OBJECT, var.id);
 				}
 			}
-			
+
 			System.out.println("\n");
-			
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
+
 			// Select from Interaction table - "MainCourseServed"
-			
+
 			{
 				String selectStatement = "SELECT * FROM Interaction WHERE name='MainCourseServed'";
-	
+
 				List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
-	
+
 				for (DbObject var : list) {
-	
+
 					System.out.println("id = " + var.id);
 					System.out.println("name = " + var.name);
 					System.out.println("path = " + var.path);
 					System.out.println("parentObject = " + var.parentObject);
 					System.out.println();
-	
+
 					buildElementPaths.startTraversal(Element.INTERACTION, var.id);
 				}
 			}
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
+
+			System.out.println("\n");
 			System.setOut(console);
 			outputStream.close();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

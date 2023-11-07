@@ -24,7 +24,10 @@ public class DbFixedRecordField {
 
 	public String id; //UUID
 	public int index;
+	public String origName;
 	public String name;
 	public String type;
+	public String encoding;
+	public String primitive;
 	public String parentObject; //UUID
 }
