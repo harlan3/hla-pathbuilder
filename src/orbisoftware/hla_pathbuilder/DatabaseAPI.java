@@ -98,7 +98,8 @@ public class DatabaseAPI {
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
 					+ "type VARCHAR(80), "
-					+ "cardinality VARCHAR(80))");
+					+ "cardinality VARCHAR(80),"
+					+ "encoding VARCHAR(80))");
 			
 			run("CREATE TABLE FixedRecordDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
@@ -263,7 +264,8 @@ public class DatabaseAPI {
 					var.id + "','" + 
 					var.name + "','" +
 					var.type + "','" +
-					var.cardinality + "')");
+					var.cardinality + "','" + 
+					var.encoding + "')");
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -563,6 +565,7 @@ public class DatabaseAPI {
         		var.name = results.getString("name");
         		var.type = results.getString("type");
         		var.cardinality = results.getString("cardinality");
+        		var.encoding = results.getString("encoding");
         		
         		list.add(var);
         	}

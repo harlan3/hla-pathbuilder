@@ -307,6 +307,7 @@ public class BuildElementPaths {
 			System.out.println("name = " + var.name);
 			System.out.println("type = " + var.type);
 			System.out.println("cardinality = " + var.cardinality);
+			System.out.println("encoding = " + var.encoding);
 			System.out.println();
 			*/
 			

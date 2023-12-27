@@ -726,7 +726,7 @@ http://www.sisostds.org/schemas/IEEE1516-DIF-2010.xsd">
 				<name>AddressBook</name>
 				<dataType>AddressType</dataType>
 				<cardinality>Dynamic</cardinality>
-				<encoding>An HLAinteger32BE followed by a set of index-value tuples. Each tuple consists of an HLAinteger32BE indicating the array index, followed by the element for that index. The initial HLAinteger32BE indicates the number of index-value pairs to follow, since all array elements need not be included.</encoding>
+				<encoding>HLAvariableArray</encoding>
 				<semantics>Collection of all employee addresses</semantics>
 			</arrayData>
 		</arrayDataTypes>

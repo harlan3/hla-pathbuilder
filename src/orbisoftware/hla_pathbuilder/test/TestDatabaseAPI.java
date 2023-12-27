@@ -343,16 +343,19 @@ public class TestDatabaseAPI {
     	var1.name = "cat";
     	var1.type = "catType";
     	var1.cardinality = "1";
+    	var1.encoding = "RPRlengthlessArray";
     	
     	var2.id = "22222";
     	var2.name = "dog";
     	var2.type = "dogType";
     	var2.cardinality = "2";
+    	var2.encoding = "RPRlengthlessArray";
     	
     	var3.id = "33333";
     	var3.name = "monkey";
     	var3.type = "monkeyType";
     	var3.cardinality = "3";
+    	var3.encoding = "RPRlengthlessArray";
     	
     	list.add(var1);
     	list.add(var2);
@@ -374,6 +377,7 @@ public class TestDatabaseAPI {
     		System.out.println("name = " + var.name);
     		System.out.println("type = " + var.type);
     		System.out.println("cardinality = " + var.cardinality);
+    		System.out.println("encoding = " + var.encoding);
     		System.out.println();
     	}
     	

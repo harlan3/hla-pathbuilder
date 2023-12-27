@@ -26,7 +26,7 @@ id(UUID), name(String), type(String)
 
 ArrayDatatype
 --------------
-id(UUID), name(String), type(String), cardinality(String)
+id(UUID), name(String), type(String), cardinality(String), encoding(String)
 
 FixedRecordDatatype
 --------------------

@@ -497,6 +497,8 @@ public class HlaPathBuilder {
 		String arrayType = "";
 		String dataType = "";
 		String cardinality = "";
+		String encoding = "";
+		
 		boolean hasData = false;
 
 		nodeChild = nodeChild.getFirstChild();
@@ -514,6 +516,9 @@ public class HlaPathBuilder {
 
 			if (name.equals("cardinality"))
 				cardinality = nodeChild.getTextContent();
+			
+			if (name.equals("encoding"))
+				encoding = nodeChild.getTextContent();
 
 			nodeChild = nodeChild.getNextSibling();
 		}
@@ -528,12 +533,13 @@ public class HlaPathBuilder {
 			var1.name = arrayType;
 			var1.type = dataType;
 			var1.cardinality = cardinality;
+			var1.encoding = encoding;
 
 			list.add(var1);
 
 			databaseAPI.insertIntoArrayDatatypeTable(list);
 
-			System.out.println("typedef " + dataType + " " + arrayType + ' ' + cardinality + ";");
+			System.out.println("typedef " + dataType + " " + arrayType + " " + cardinality + " " + encoding + ";");
 		}
 	}
 
@@ -905,6 +911,7 @@ public class HlaPathBuilder {
 
 			buildElementPaths.setDatabase(hlaPathBuilder.databaseAPI);
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			// Set up a variant select (all other variants and alternatives will be
@@ -937,6 +944,7 @@ public class HlaPathBuilder {
 
 			System.out.println("\n");
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			// Select from Interaction table - "MainCourseServed"
@@ -960,6 +968,7 @@ public class HlaPathBuilder {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+			
 			System.out.println("\n");
 			System.setOut(console);
 			outputStream.close();

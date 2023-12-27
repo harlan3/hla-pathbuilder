@@ -11,7 +11,6 @@
 	<classpathentry kind="lib" path="lib/derbyshared.jar"/>
 	<classpathentry kind="lib" path="lib/commons-text-1.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/freemarker.jar"/>
 	<classpathentry kind="lib" path="C:/Users/harla/rtis_D39/lib/win64_vc++-14.0/rtis1516e.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
