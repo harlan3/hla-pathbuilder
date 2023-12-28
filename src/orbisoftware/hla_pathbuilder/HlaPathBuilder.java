@@ -655,7 +655,7 @@ public class HlaPathBuilder {
 		}
 
 		if (hasData) {
-			System.out.println("}" + fixedRecordName + ";");
+			System.out.println("} " + fixedRecordName + ";");
 			System.out.println("// End Fixed Record");
 			System.out.println();
 		}
