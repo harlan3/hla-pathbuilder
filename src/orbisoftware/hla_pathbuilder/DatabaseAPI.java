@@ -740,6 +740,19 @@ public class DatabaseAPI {
     	return returnVal.size() >= 1;
     }
     
+    public String getUUIDForAttribute(SearchToken searchToken) {
+    	
+    	String returnUUID = NULL_UUID;
+		String selectStatement = "SELECT * FROM Attribute WHERE name = '" + searchToken.type + "'";
+		
+		List<DbAttribute> returnVal = selectFromAttributeTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnUUID = returnVal.get(0).id;
+		
+		return returnUUID;
+    }
+    
     public String getUUIDForInteraction(SearchToken searchToken) {
     	
     	String returnUUID = NULL_UUID;
@@ -765,6 +778,19 @@ public class DatabaseAPI {
     	List<DbInteraction> returnVal = selectFromInteractionTable(selectStatement);
     	
     	return returnVal.size() >= 1;
+    }
+    
+    public String getUUIDForParameter(SearchToken searchToken) {
+    	
+    	String returnUUID = NULL_UUID;
+		String selectStatement = "SELECT * FROM Parameter WHERE name = '" + searchToken.type + "'";
+		
+		List<DbParameter> returnVal = selectFromParameterTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnUUID = returnVal.get(0).id;
+		
+		return returnUUID;
     }
     
     public String getUUIDForFixedRecord(SearchToken searchToken) {
@@ -821,37 +847,85 @@ public class DatabaseAPI {
     	return returnVal.size() >= 1;
     }
     
+    public String getUUIDForArrayRecord(SearchToken searchToken) {
+    	
+    	String returnUUID = NULL_UUID;
+		String selectStatement = "SELECT * FROM ArrayDatatype WHERE name = '" + searchToken.type + "'";
+		
+		List<DbArrayDatatype> returnVal = selectFromArrayDatatypeTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnUUID = returnVal.get(0).id;
+		
+		return returnUUID;
+    }
+    
     public boolean isArrayRecord(SearchToken searchToken) {
     	
     	String selectStatement;
     	
-    	selectStatement = "SELECT * FROM ArrayDatatype WHERE name = '" + searchToken.type + "'";
-    	
-    	List<DbArrayDatatype> returnVal = this.selectFromArrayDatatypeTable(selectStatement);
+    	if (searchToken.uuid != NULL_UUID)
+    		selectStatement = "SELECT * FROM ArrayDatatype WHERE id = '" + searchToken.uuid + "'";
+    	else
+    		selectStatement = "SELECT * FROM ArrayDatatype WHERE name = '" + searchToken.type + "'";
+    		
+    	List<DbArrayDatatype> returnVal = selectFromArrayDatatypeTable(selectStatement);
     	
     	return returnVal.size() >= 1;	
     	
+    }
+    
+    public String getUUIDForSimpleRecord(SearchToken searchToken) {
+    	
+    	String returnUUID = NULL_UUID;
+		String selectStatement = "SELECT * FROM SimpleDatatype WHERE name = '" + searchToken.type + "'";
+		
+		List<DbSimpleDatatype> returnVal = selectFromSimpleDatatypeTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnUUID = returnVal.get(0).id;
+		
+		return returnUUID;
     }
     
     public boolean isSimpleRecord(SearchToken searchToken) {
     	
     	String selectStatement;
     	
-    	selectStatement = "SELECT * FROM SimpleDatatype WHERE name = '" + searchToken.type + "'";
+    	if (searchToken.uuid != NULL_UUID)
+    		selectStatement = "SELECT * FROM SimpleDatatype WHERE id = '" + searchToken.uuid + "'";
+    	else
+    		selectStatement = "SELECT * FROM SimpleDatatype WHERE name = '" + searchToken.type + "'";
     	
-    	List<DbSimpleDatatype> returnVal = this.selectFromSimpleDatatypeTable(selectStatement);
+    	List<DbSimpleDatatype> returnVal = selectFromSimpleDatatypeTable(selectStatement);
     	
     	return returnVal.size() >= 1;	
     	
+    }
+    
+    public String getUUIDForEnumeratedRecord(SearchToken searchToken) {
+    	
+    	String returnUUID = NULL_UUID;
+		String selectStatement = "SELECT * FROM EnumeratedDatatype WHERE name = '" + searchToken.type + "'";
+		
+		List<DbEnumeratedDatatype> returnVal = selectFromEnumeratedDatatypeTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnUUID = returnVal.get(0).id;
+		
+		return returnUUID;
     }
     
     public boolean isEnumeratedRecord(SearchToken searchToken) {
     	
     	String selectStatement;
     	
-    	selectStatement = "SELECT * FROM EnumeratedDatatype WHERE name = '" + searchToken.type + "'";
+    	if (searchToken.uuid != NULL_UUID)
+    		selectStatement = "SELECT * FROM EnumeratedDatatype WHERE id = '" + searchToken.uuid + "'";
+    	else
+    		selectStatement = "SELECT * FROM EnumeratedDatatype WHERE name = '" + searchToken.type + "'";
     	
-    	List<DbEnumeratedDatatype> returnVal = this.selectFromEnumeratedDatatypeTable(selectStatement);
+    	List<DbEnumeratedDatatype> returnVal = selectFromEnumeratedDatatypeTable(selectStatement);
     	
     	return returnVal.size() >= 1;	
     }

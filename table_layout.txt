@@ -1,45 +1,45 @@
 Tables
 
-Object
--------
-id(UUID), name(String), path(String), parentObject(UUID)
-
-Attribute
-----------
-id(UUID), index(Number), origName(String), name(String), type(String), inherited(Boolean), parentObject(UUID)
-
-Interaction
-------------
-id(UUID), name(String), path(String), parentObject(UUID)
-
-Parameter
-----------
-id(UUID), index(Number), origName(String), name(String), type(String), inherited(Boolean), parentObject(UUID)
-
-SimpleDatatype
----------------
-id(UUID), name(String), type(String)
-
-EnumeratedDatatype
--------------------
-id(UUID), name(String), type(String)
-
-ArrayDatatype
+Object (TID=1)
 --------------
+id(UUID), name(String), path(String), parentObject(UUID)
+
+Attribute (TID=2)
+-----------------
+id(UUID), index(Number), origName(String), name(String), type(String), inherited(Boolean), parentObject(UUID)
+
+Interaction (TID=3)
+-------------------
+id(UUID), name(String), path(String), parentObject(UUID)
+
+Parameter (TID=4)
+-----------------
+id(UUID), index(Number), origName(String), name(String), type(String), inherited(Boolean), parentObject(UUID)
+
+SimpleDatatype (TID=5)
+----------------------
+id(UUID), name(String), type(String)
+
+EnumeratedDatatype (TID=6)
+--------------------------
+id(UUID), name(String), type(String)
+
+ArrayDatatype (TID=7)
+---------------------
 id(UUID), name(String), type(String), cardinality(String), encoding(String)
 
-FixedRecordDatatype
---------------------
+FixedRecordDatatype (TID=8)
+---------------------------
 id(UUID), name(String)
 
-FixedRecordField
------------------
+FixedRecordField (TID=9)
+------------------------
 id(UUID), index(Number), origName(String), name(String), type(String), parentObject(UUID)
 
-VariantRecordDatatype
-----------------------
+VariantRecordDatatype (TID=10)
+-----------------------------
 id(UUID), name(String)
 
-VariantRecordField
--------------------
+VariantRecordField (TID=11)
+--------------------------
 id(UUID), index(Number), origName(String), name(String), type(String), discriminant(Boolean), alternative(Boolean), parentObject(UUID)

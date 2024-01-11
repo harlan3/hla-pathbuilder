@@ -193,7 +193,8 @@ public class BuildElementPaths {
     			System.out.println("null found");
     		
     		// The id here doesn't have any relational aspect, use NULL_UUID
-    		uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		String uuid = databaseAPI.getUUIDForAttribute(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		uuidRefList.add(new SearchToken(uuid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -220,7 +221,8 @@ public class BuildElementPaths {
     		*/
     		
     		// The id here doesn't have any relational aspect, use NULL_UUID
-    		uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		String uuid = databaseAPI.getUUIDForParameter(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		uuidRefList.add(new SearchToken(uuid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -248,7 +250,8 @@ public class BuildElementPaths {
 			*/
     		
     		// The id here doesn't have any relational aspect, use NULL_UUID
-    		uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		String uuid = databaseAPI.getUUIDForFixedRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		uuidRefList.add(new SearchToken(uuid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -290,7 +293,8 @@ public class BuildElementPaths {
     		
     		if (!ignore) {
 	    		// The id here doesn't have any relational aspect, use NULL_UUID
-	    		uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    			String uuid = databaseAPI.getUUIDForVariantRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+	    		uuidRefList.add(new SearchToken(uuid, var.name, var.type));
     		}
     	}
     	
@@ -316,7 +320,8 @@ public class BuildElementPaths {
 			*/
 			
 			// The id here doesn't have any relational aspect, use NULL_UUID
-			uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			String uuid = databaseAPI.getUUIDForArrayRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			uuidRefList.add(new SearchToken(uuid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -340,7 +345,8 @@ public class BuildElementPaths {
 			*/
 			
 			// The id here doesn't have any relational aspect, use NULL_UUID
-			uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			String uuid = databaseAPI.getUUIDForSimpleRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			uuidRefList.add(new SearchToken(uuid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -363,7 +369,8 @@ public class BuildElementPaths {
 			*/
 			
 			// The id here doesn't have any relational aspect, use NULL_UUID
-			uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			String uuid = databaseAPI.getUUIDForEnumeratedRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			uuidRefList.add(new SearchToken(uuid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -373,7 +380,9 @@ public class BuildElementPaths {
 		
 		for (SearchToken searchToken : searchTokenList) {
 			
-			pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name);
+			pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name); 
+			//pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name + "|" + searchToken.uuid);
+			//pathFollowStack.push(searchToken.uuid);
     		
 			if (!isTerminalEndpoint(searchToken)) {
 				
