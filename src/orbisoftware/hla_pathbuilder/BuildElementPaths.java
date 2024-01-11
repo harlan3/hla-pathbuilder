@@ -39,26 +39,27 @@ public class BuildElementPaths {
 		
 	}
 	
-	private boolean isTerminalEndpoint(SearchToken searchToken) {
+	// Table ID
+	private Constants.TID getTID(SearchToken searchToken) {
 		
-		boolean terminalEndpoint = true;
+		Constants.TID tid = Constants.TID.None;
 		
-		if (databaseAPI.isObject(searchToken))
-			terminalEndpoint = false;
-		else if (databaseAPI.isInteraction(searchToken))
-			terminalEndpoint = false;
+		if ((elementIsType == Constants.Element.OBJECT) && (databaseAPI.isObject(searchToken)))
+			tid = Constants.TID.Object;
+		else if ((elementIsType == Constants.Element.INTERACTION) && (databaseAPI.isInteraction(searchToken)))
+			tid = Constants.TID.Interaction;
 		else if (databaseAPI.isFixedRecord(searchToken))
-			terminalEndpoint = false;
+			tid = Constants.TID.FixedRecord;
 		else if (databaseAPI.isVariantRecord(searchToken))
-			terminalEndpoint = false;
+			tid = Constants.TID.VariantRecord;
 		else if (databaseAPI.isArrayRecord(searchToken))
-			terminalEndpoint = false;
+			tid = Constants.TID.Array;
 		else if (databaseAPI.isSimpleRecord(searchToken))
-			terminalEndpoint = false;
+			tid = Constants.TID.Simple;
 		else if (databaseAPI.isEnumeratedRecord(searchToken))
-			terminalEndpoint = false;
+			tid = Constants.TID.Enumerated;
 		
-		return terminalEndpoint;
+		return tid;
 	}
 	
 	private String getObjectPath(String elementUUID) {
@@ -384,24 +385,40 @@ public class BuildElementPaths {
 			//pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name + "|" + searchToken.uuid);
 			//pathFollowStack.push(searchToken.uuid);
     		
-			if (!isTerminalEndpoint(searchToken)) {
-				
-				if ((elementIsType == Constants.Element.OBJECT) && (databaseAPI.isObject(searchToken)))
+			switch(getTID(searchToken)) {
+			
+			case Object:
 					traverseObject(databaseAPI.getUUIDForObject(searchToken));
-				else if ((elementIsType == Constants.Element.INTERACTION) && (databaseAPI.isInteraction(searchToken)))
-					traverseInteraction(databaseAPI.getUUIDForInteraction(searchToken));
-				else if (databaseAPI.isFixedRecord(searchToken))
-					traverseFixedRecord(databaseAPI.getUUIDForFixedRecord(searchToken));
-				else if (databaseAPI.isVariantRecord(searchToken))
-					traverseVariantRecord(databaseAPI.getUUIDForVariantRecord(searchToken));
-				else if (databaseAPI.isArrayRecord(searchToken))
-					traverseArrayRecord(searchToken);
-				else if (databaseAPI.isSimpleRecord(searchToken))
-					traverseSimpleRecord(searchToken);
-				else if (databaseAPI.isEnumeratedRecord(searchToken))
-					traverseEnumeratedRecord(searchToken);
-			} else {
+				break;
+				
+			case Interaction:
+				traverseInteraction(databaseAPI.getUUIDForInteraction(searchToken));
+				break;
+				
+			case FixedRecord:
+				traverseFixedRecord(databaseAPI.getUUIDForFixedRecord(searchToken));
+				break;
+				
+			case VariantRecord:
+				traverseVariantRecord(databaseAPI.getUUIDForVariantRecord(searchToken));
+				break;
+				
+			case Array:
+				traverseArrayRecord(searchToken);
+				break;
+				
+			case Simple:
+				traverseSimpleRecord(searchToken);
+				break;
+				
+			case Enumerated:
+				traverseEnumeratedRecord(searchToken);
+				break;
+				
+			case None:	
+			default:
 				displayPartialPath();
+				break;
 			}
 			
 			String poppedElement = pathFollowStack.pop();

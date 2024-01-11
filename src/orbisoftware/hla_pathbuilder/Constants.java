@@ -4,7 +4,22 @@ public class Constants {
 
 	public enum Element { 
 		OBJECT,
-		INTERACTION,
-		FIXED_RECORD
+		INTERACTION
+	}
+	
+	// Table ID
+	public enum TID {
+		None,
+		Object,
+		Attribute,
+		Interaction,
+		Parameter,
+		Simple,
+		Enumerated,
+		Array,
+		FixedRecord,
+		FixedRecordField,
+		VariantRecord,
+		VariantRecordField
 	}
 }
