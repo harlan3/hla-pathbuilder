@@ -833,6 +833,29 @@ public class DatabaseAPI {
     	
     }
     
+    public boolean isSimpleRecord(SearchToken searchToken) {
+    	
+    	String selectStatement;
+    	
+    	selectStatement = "SELECT * FROM SimpleDatatype WHERE name = '" + searchToken.type + "'";
+    	
+    	List<DbSimpleDatatype> returnVal = this.selectFromSimpleDatatypeTable(selectStatement);
+    	
+    	return returnVal.size() >= 1;	
+    	
+    }
+    
+    public boolean isEnumeratedRecord(SearchToken searchToken) {
+    	
+    	String selectStatement;
+    	
+    	selectStatement = "SELECT * FROM EnumeratedDatatype WHERE name = '" + searchToken.type + "'";
+    	
+    	List<DbEnumeratedDatatype> returnVal = this.selectFromEnumeratedDatatypeTable(selectStatement);
+    	
+    	return returnVal.size() >= 1;	
+    }
+    
     private void run(String sql) throws SQLException {
     	
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

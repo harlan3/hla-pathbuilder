@@ -53,6 +53,10 @@ public class BuildElementPaths {
 			terminalEndpoint = false;
 		else if (databaseAPI.isArrayRecord(searchToken))
 			terminalEndpoint = false;
+		else if (databaseAPI.isSimpleRecord(searchToken))
+			terminalEndpoint = false;
+		else if (databaseAPI.isEnumeratedRecord(searchToken))
+			terminalEndpoint = false;
 		
 		return terminalEndpoint;
 	}
@@ -319,6 +323,52 @@ public class BuildElementPaths {
 	}
 	
 	
+	private void traverseSimpleRecord(SearchToken searchToken) {
+		
+    	String selectStatement = "SELECT * FROM SimpleDatatype where name = '" + searchToken.type + "'";
+    	
+    	List<DbSimpleDatatype> list = databaseAPI.selectFromSimpleDatatypeTable(selectStatement);
+    	List<SearchToken> uuidRefList = new ArrayList<SearchToken>();
+
+		for (DbSimpleDatatype var : list) {
+
+			/*
+			System.out.println("id = " + var.id);
+			System.out.println("name = " + var.name);
+			System.out.println("type = " + var.type);
+			System.out.println();
+			*/
+			
+			// The id here doesn't have any relational aspect, use NULL_UUID
+			uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+		}
+
+		traverseGeneric(uuidRefList);
+	}
+	
+	private void traverseEnumeratedRecord(SearchToken searchToken) {
+		
+    	String selectStatement = "SELECT * FROM EnumeratedDatatype where name = '" + searchToken.type + "'";
+    	
+    	List<DbEnumeratedDatatype> list = databaseAPI.selectFromEnumeratedDatatypeTable(selectStatement);
+    	List<SearchToken> uuidRefList = new ArrayList<SearchToken>();
+
+		for (DbEnumeratedDatatype var : list) {
+
+			/*
+			System.out.println("id = " + var.id);
+			System.out.println("name = " + var.name);
+			System.out.println("type = " + var.type);
+			System.out.println();
+			*/
+			
+			// The id here doesn't have any relational aspect, use NULL_UUID
+			uuidRefList.add(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+		}
+
+		traverseGeneric(uuidRefList);
+	}
+	
 	private void traverseGeneric(List<SearchToken> searchTokenList) {
 		
 		for (SearchToken searchToken : searchTokenList) {
@@ -337,6 +387,10 @@ public class BuildElementPaths {
 					traverseVariantRecord(databaseAPI.getUUIDForVariantRecord(searchToken));
 				else if (databaseAPI.isArrayRecord(searchToken))
 					traverseArrayRecord(searchToken);
+				else if (databaseAPI.isSimpleRecord(searchToken))
+					traverseSimpleRecord(searchToken);
+				else if (databaseAPI.isEnumeratedRecord(searchToken))
+					traverseEnumeratedRecord(searchToken);
 			} else {
 				displayPartialPath();
 			}
