@@ -33,18 +33,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
-import orbisoftware.hla_pathbuilder.Constants.Element;
-import orbisoftware.hla_pathbuilder.db_classes.DbArrayDatatype;
-import orbisoftware.hla_pathbuilder.db_classes.DbAttribute;
-import orbisoftware.hla_pathbuilder.db_classes.DbEnumeratedDatatype;
-import orbisoftware.hla_pathbuilder.db_classes.DbFixedRecordDatatype;
-import orbisoftware.hla_pathbuilder.db_classes.DbFixedRecordField;
-import orbisoftware.hla_pathbuilder.db_classes.DbInteraction;
-import orbisoftware.hla_pathbuilder.db_classes.DbObject;
-import orbisoftware.hla_pathbuilder.db_classes.DbParameter;
-import orbisoftware.hla_pathbuilder.db_classes.DbSimpleDatatype;
-import orbisoftware.hla_pathbuilder.db_classes.DbVariantRecordDatatype;
-import orbisoftware.hla_pathbuilder.db_classes.DbVariantRecordField;
+import orbisoftware.hla_pathbuilder.Constants.*;
+import orbisoftware.hla_pathbuilder.db_classes.*;
 
 public class HlaPathBuilder {
 
@@ -377,6 +367,72 @@ public class HlaPathBuilder {
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	void parseBasicData(Node nodeChild) {
+
+		String basicType = "";
+		String size = "";
+		String endian = "";
+		
+		boolean hasData = false;
+
+		nodeChild = nodeChild.getFirstChild();
+
+		while (nodeChild != null) {
+
+			String name = nodeChild.getNodeName();
+			hasData = true;
+
+			if (name.equals("name"))
+				basicType = nodeChild.getTextContent();
+			
+			if (name.equals("size"))
+				size = nodeChild.getTextContent();
+			
+			if (name.equals("endian"))
+				endian = nodeChild.getTextContent();
+
+			nodeChild = nodeChild.getNextSibling();
+		}
+
+		if (hasData) {
+
+			List<DbBasicDatatype> list = new ArrayList<DbBasicDatatype>();
+
+			DbBasicDatatype var1 = new DbBasicDatatype();
+
+			var1.id = UUID.randomUUID().toString();
+			var1.name = basicType;
+			var1.type = "";
+			var1.size = size;
+			var1.endian = endian;
+			
+			list.add(var1);
+
+			databaseAPI.insertIntoBasicDatatypeTable(list);
+
+			System.out.println("const " + basicType + " = " + size + ";");
+		}
+	}
+
+	void parseBasicDataTypes(Node node) {
+
+		System.out.println("// Start Basic Data Constants");
+
+		Node nodeChild = node.getFirstChild();
+
+		while (nodeChild != null) {
+
+			parseBasicData(nodeChild);
+
+			nodeChild = nodeChild.getNextSibling();
+		}
+
+		System.out.println("// End Basic Data Constants");
+		System.out.println();
+	}
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	void parseSimpleData(Node nodeChild) {
 
 		String simpleType = "";
@@ -434,6 +490,7 @@ public class HlaPathBuilder {
 		System.out.println("// End Simple Data Types");
 		System.out.println();
 	}
+	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void parseEnumeratedData(Node nodeChild) {
@@ -851,9 +908,7 @@ public class HlaPathBuilder {
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
 
 		try {
-
-			// hlaPathBuilder.databaseAPI.initDatabase();
-
+			
 			PrintStream outputStream = new PrintStream(new File("TypeDefs.h"));
 			PrintStream console = System.out;
 
@@ -941,7 +996,7 @@ public class HlaPathBuilder {
 					System.out.println("parentObject = " + var.parentObject);
 					System.out.println();
 
-					buildElementPaths.startTraversal(Element.OBJECT, var.id);
+					buildElementPaths.startTraversal(Element.Object, var.id);
 				}
 			}
 
@@ -965,7 +1020,7 @@ public class HlaPathBuilder {
 					System.out.println("parentObject = " + var.parentObject);
 					System.out.println();
 
-					buildElementPaths.startTraversal(Element.INTERACTION, var.id);
+					buildElementPaths.startTraversal(Element.Interaction, var.id);
 				}
 			}
 

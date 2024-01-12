@@ -43,3 +43,7 @@ id(UUID), name(String)
 VariantRecordField (TID=11)
 --------------------------
 id(UUID), index(Number), origName(String), name(String), type(String), discriminant(Boolean), alternative(Boolean), parentObject(UUID)
+
+BasicDatatype (TID=12)
+----------------------
+id(UUID), name(String), type(String), size(Number), endian(String)

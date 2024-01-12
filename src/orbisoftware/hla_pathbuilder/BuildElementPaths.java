@@ -58,6 +58,8 @@ public class BuildElementPaths {
 			tid = Constants.TID.Simple;
 		else if (databaseAPI.isEnumeratedRecord(searchToken))
 			tid = Constants.TID.Enumerated;
+		else if (databaseAPI.isBasicRecord(searchToken))
+			tid = Constants.TID.Basic;
 		
 		return tid;
 	}
@@ -65,11 +67,9 @@ public class BuildElementPaths {
 	private SearchResults deepSearchForUUID(SearchToken searchToken) {
 		
 		SearchResults searchResults = new SearchResults(Constants.TID.None, DatabaseAPI.NULL_UUID);
-		Constants.TID tid = getTID(searchToken);
+		searchResults.tid = getTID(searchToken);
 		
-		searchResults.tid = tid;
-		
-		switch(getTID(searchToken)) {
+		switch(searchResults.tid) {
 		
 		case Object:
 			searchResults.uuid = databaseAPI.getUUIDForObject(searchToken);
@@ -99,7 +99,11 @@ public class BuildElementPaths {
 			searchResults.uuid = databaseAPI.getUUIDForEnumeratedRecord(searchToken);
 			break;
 			
-		case None:	
+		case Basic:
+			searchResults.uuid = databaseAPI.getUUIDForBasicRecord(searchToken);
+			break;			
+			
+		case None:
 		default:
 			break;
 		}
@@ -422,6 +426,31 @@ public class BuildElementPaths {
 		traverseGeneric(uuidRefList);
 	}
 	
+	private void traverseBasicRecord(SearchToken searchToken) {
+		
+    	String selectStatement = "SELECT * FROM BasicDatatype where name = '" + searchToken.type + "'";
+    	
+    	List<DbBasicDatatype> list = databaseAPI.selectFromBasicDatatypeTable(selectStatement);
+    	List<SearchToken> uuidRefList = new ArrayList<SearchToken>();
+
+		for (DbBasicDatatype var : list) {
+
+			/*
+			System.out.println("id = " + var.id);
+			System.out.println("name = " + var.name);
+			System.out.println("type = " + var.type);
+			System.out.println("size = " + var.size);
+			System.out.println("endian = " + var.endian);
+			System.out.println();
+			*/
+			
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+		}
+
+		traverseGeneric(uuidRefList);
+	}
+	
 	private void traverseGeneric(List<SearchToken> searchTokenList) {
 		
 		for (SearchToken searchToken : searchTokenList) {
@@ -459,6 +488,10 @@ public class BuildElementPaths {
 				
 			case Enumerated:
 				traverseEnumeratedRecord(searchToken);
+				break;
+				
+			case Basic:
+				traverseBasicRecord(searchToken);
 				break;
 				
 			case None:	

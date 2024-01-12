@@ -84,6 +84,13 @@ public class DatabaseAPI {
 					+ "inherited BOOLEAN, "
 				    + "parentObject VARCHAR(36))");	
 
+			run("CREATE TABLE BasicDatatype ("
+					+ "id VARCHAR(36) PRIMARY KEY, "
+				    + "name VARCHAR(80), "
+					+ "type VARCHAR(80),"
+					+ "size VARCHAR(80),"
+					+ "endian VARCHAR(80))");    		
+
 			run("CREATE TABLE SimpleDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
@@ -210,6 +217,26 @@ public class DatabaseAPI {
 					var.type + "'," +
 					var.inherited + ",'" +
 					var.parentObject + "')");
+			}
+		} catch (SQLException sqlExcept) {
+			sqlExcept.printStackTrace();
+		}
+	}
+	
+	public void insertIntoBasicDatatypeTable(List<DbBasicDatatype> list) {
+
+		try {
+			Statement stmt = conn.createStatement();
+			String tableName = "BasicDatatype";
+
+			for (DbBasicDatatype var : list) {
+
+				stmt.execute("INSERT INTO " + tableName + " VALUES ('" +  
+					var.id + "','" + 
+					var.name + "','" +
+					var.type + "','" +
+					var.size + "','" +
+					var.endian + "')");		
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -502,6 +529,39 @@ public class DatabaseAPI {
         		var.id = results.getString("id");
         		var.name = results.getString("name");
         		var.type = results.getString("type");
+        		
+        		list.add(var);
+        	}
+        	
+        	results.close();
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+        
+        return list;
+    }
+    
+    public List<DbBasicDatatype> selectFromBasicDatatypeTable(String selectStatement)
+    {
+    	List<DbBasicDatatype> list = new ArrayList<DbBasicDatatype>();
+    	
+        try
+        {
+        	Statement stmt = conn.createStatement();
+        	ResultSet results = stmt.executeQuery(selectStatement);
+        	
+        	while (results.next()) {
+        		
+        		DbBasicDatatype var = new DbBasicDatatype();
+        		
+        		var.id = results.getString("id");
+        		var.name = results.getString("name");
+        		var.type = "";
+        		var.size = results.getString("size");
+        		var.endian = results.getString("endian");
         		
         		list.add(var);
         	}
@@ -900,7 +960,33 @@ public class DatabaseAPI {
     	List<DbSimpleDatatype> returnVal = selectFromSimpleDatatypeTable(selectStatement);
     	
     	return returnVal.size() >= 1;	
+    }
+    
+    public String getUUIDForBasicRecord(SearchToken searchToken) {
     	
+    	String returnUUID = NULL_UUID;
+		String selectStatement = "SELECT * FROM BasicDatatype WHERE name = '" + searchToken.type + "'";
+		
+		List<DbBasicDatatype> returnVal = selectFromBasicDatatypeTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnUUID = returnVal.get(0).id;
+		
+		return returnUUID;
+    }
+    
+    public boolean isBasicRecord(SearchToken searchToken) {
+    	
+    	String selectStatement;
+    	
+    	if (searchToken.uuid != NULL_UUID)
+    		selectStatement = "SELECT * FROM BasicDatatype WHERE id = '" + searchToken.uuid + "'";
+    	else
+    		selectStatement = "SELECT * FROM BasicDatatype WHERE name = '" + searchToken.type + "'";
+    	
+    	List<DbBasicDatatype> returnVal = selectFromBasicDatatypeTable(selectStatement);
+    	
+    	return returnVal.size() >= 1;	
     }
     
     public String getUUIDForEnumeratedRecord(SearchToken searchToken) {

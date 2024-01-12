@@ -20,6 +20,7 @@ public class Constants {
 		FixedRecord,
 		FixedRecordField,
 		VariantRecord,
-		VariantRecordField
+		VariantRecordField,
+		Basic
 	}
 }

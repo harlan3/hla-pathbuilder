@@ -18,15 +18,13 @@
  *
  */
 
-package orbisoftware.hla_pathbuilder;
+package orbisoftware.hla_pathbuilder.db_classes;
 
-public class SearchResults {
+public class DbBasicDatatype {
 
-	public SearchResults(Constants.TID tid, String uuid) {
-		this.tid = tid;
-		this.uuid = uuid;
-	}
-	
-	public Constants.TID tid;
-	public String uuid;
+	public String id; //UUID
+	public String name;
+	public String type; //blank
+	public String size;
+	public String endian;
 }
