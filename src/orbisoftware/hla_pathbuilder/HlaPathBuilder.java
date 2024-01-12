@@ -896,6 +896,9 @@ public class HlaPathBuilder {
 
 			if (name.equals("variantRecordDataTypes"))
 				parseVariantRecordDataTypes(nodeChild);
+			
+			if (name.equals("basicDataRepresentations"))
+				parseBasicDataTypes(nodeChild);
 
 			nodeChild = nodeChild.getNextSibling();
 		}
