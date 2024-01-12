@@ -54,6 +54,9 @@ public class HlaPathBuilder {
 	public static Stack<String> pathBuilderStack = new Stack<String>();
 	public Utils utils = new Utils();
 
+	// If true, output of pathdefs will contain UUIDs instead of field names
+	public static boolean uuidMarkupOutput = false;
+	
 	// If true, all variants and alternatives will be ignored that do not have a
 	// VariantSelect created.
 	public static boolean useVariantSelect = false;

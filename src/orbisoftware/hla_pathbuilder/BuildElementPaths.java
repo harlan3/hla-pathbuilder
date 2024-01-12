@@ -39,14 +39,14 @@ public class BuildElementPaths {
 		
 	}
 	
-	// Table ID
+	// SQL Table ID
 	private Constants.TID getTID(SearchToken searchToken) {
 		
 		Constants.TID tid = Constants.TID.None;
 		
-		if ((elementIsType == Constants.Element.OBJECT) && (databaseAPI.isObject(searchToken)))
+		if ((elementIsType == Constants.Element.Object) && (databaseAPI.isObject(searchToken)))
 			tid = Constants.TID.Object;
-		else if ((elementIsType == Constants.Element.INTERACTION) && (databaseAPI.isInteraction(searchToken)))
+		else if ((elementIsType == Constants.Element.Interaction) && (databaseAPI.isInteraction(searchToken)))
 			tid = Constants.TID.Interaction;
 		else if (databaseAPI.isFixedRecord(searchToken))
 			tid = Constants.TID.FixedRecord;
@@ -62,6 +62,51 @@ public class BuildElementPaths {
 		return tid;
 	}
 	
+	private SearchResults deepSearchForUUID(SearchToken searchToken) {
+		
+		SearchResults searchResults = new SearchResults(Constants.TID.None, DatabaseAPI.NULL_UUID);
+		Constants.TID tid = getTID(searchToken);
+		
+		searchResults.tid = tid;
+		
+		switch(getTID(searchToken)) {
+		
+		case Object:
+			searchResults.uuid = databaseAPI.getUUIDForObject(searchToken);
+			break;
+			
+		case Interaction:
+			searchResults.uuid = databaseAPI.getUUIDForInteraction(searchToken);
+			break;
+			
+		case FixedRecord:
+			searchResults.uuid = databaseAPI.getUUIDForFixedRecord(searchToken);
+			break;
+			
+		case VariantRecord:
+			searchResults.uuid = databaseAPI.getUUIDForVariantRecord(searchToken);
+			break;
+			
+		case Array:
+			searchResults.uuid = databaseAPI.getUUIDForArrayRecord(searchToken);
+			break;
+			
+		case Simple:
+			searchResults.uuid = databaseAPI.getUUIDForSimpleRecord(searchToken);
+			break;
+			
+		case Enumerated:
+			searchResults.uuid = databaseAPI.getUUIDForEnumeratedRecord(searchToken);
+			break;
+			
+		case None:	
+		default:
+			break;
+		}
+		
+		return searchResults;
+	}
+	
 	private String getObjectPath(String elementUUID) {
 		
     	String selectStatement = "SELECT * FROM Object WHERE id = '" + elementUUID + "'";
@@ -69,7 +114,10 @@ public class BuildElementPaths {
     	String objPath = null;
     	
 		if (objList.size() >= 1)
-			objPath = objList.get(0).path;
+			if (HlaPathBuilder.uuidMarkupOutput)
+				objPath = objList.get(0).id;
+			else
+				objPath = objList.get(0).path;
 		
 		return objPath;	
 	}
@@ -81,7 +129,10 @@ public class BuildElementPaths {
     	String interactionPath = null;
     	
 		if (interactionList.size() >= 1)
-			interactionPath = interactionList.get(0).path;
+			if (HlaPathBuilder.uuidMarkupOutput)
+				interactionPath = interactionList.get(0).id;
+			else
+				interactionPath = interactionList.get(0).path;
 		
 		return interactionPath;	
 	}
@@ -154,7 +205,7 @@ public class BuildElementPaths {
 		
 		if (foundMatch) {
 			
-			if (elementIsType == Constants.Element.OBJECT)
+			if (elementIsType == Constants.Element.Object)
 				System.out.print("\nObject Path: [");
 			else
 				System.out.print("\nInteraction Path: [");
@@ -193,9 +244,8 @@ public class BuildElementPaths {
     		if (var == null)
     			System.out.println("null found");
     		
-    		// The id here doesn't have any relational aspect, use NULL_UUID
-    		String uuid = databaseAPI.getUUIDForAttribute(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-    		uuidRefList.add(new SearchToken(uuid, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -221,9 +271,8 @@ public class BuildElementPaths {
     		System.out.println();
     		*/
     		
-    		// The id here doesn't have any relational aspect, use NULL_UUID
-    		String uuid = databaseAPI.getUUIDForParameter(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-    		uuidRefList.add(new SearchToken(uuid, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -250,9 +299,8 @@ public class BuildElementPaths {
     		System.out.println();
 			*/
     		
-    		// The id here doesn't have any relational aspect, use NULL_UUID
-    		String uuid = databaseAPI.getUUIDForFixedRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-    		uuidRefList.add(new SearchToken(uuid, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+    		uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -293,9 +341,9 @@ public class BuildElementPaths {
     		}
     		
     		if (!ignore) {
-	    		// The id here doesn't have any relational aspect, use NULL_UUID
-    			String uuid = databaseAPI.getUUIDForVariantRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-	    		uuidRefList.add(new SearchToken(uuid, var.name, var.type));
+
+    			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+	    		uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
     		}
     	}
     	
@@ -320,9 +368,8 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			// The id here doesn't have any relational aspect, use NULL_UUID
-			String uuid = databaseAPI.getUUIDForArrayRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-			uuidRefList.add(new SearchToken(uuid, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -345,9 +392,8 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			// The id here doesn't have any relational aspect, use NULL_UUID
-			String uuid = databaseAPI.getUUIDForSimpleRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-			uuidRefList.add(new SearchToken(uuid, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -369,9 +415,8 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			// The id here doesn't have any relational aspect, use NULL_UUID
-			String uuid = databaseAPI.getUUIDForEnumeratedRecord(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-			uuidRefList.add(new SearchToken(uuid, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
+			uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -380,15 +425,16 @@ public class BuildElementPaths {
 	private void traverseGeneric(List<SearchToken> searchTokenList) {
 		
 		for (SearchToken searchToken : searchTokenList) {
+						
+			if (HlaPathBuilder.uuidMarkupOutput)
+				pathFollowStack.push(searchToken.uuid);
+			else
+				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name); 
 			
-			pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name); 
-			//pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name + "|" + searchToken.uuid);
-			//pathFollowStack.push(searchToken.uuid);
-    		
 			switch(getTID(searchToken)) {
 			
 			case Object:
-					traverseObject(databaseAPI.getUUIDForObject(searchToken));
+				traverseObject(databaseAPI.getUUIDForObject(searchToken));
 				break;
 				
 			case Interaction:
@@ -429,15 +475,15 @@ public class BuildElementPaths {
 	
 	public void startTraversal(Constants.Element element, String elementUUID) {
 		
-		if (element == Constants.Element.OBJECT) {
+		if (element == Constants.Element.Object) {
 			
-			elementIsType = Constants.Element.OBJECT;
+			elementIsType = Constants.Element.Object;
 			rootElementPathArray = getObjectPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
 			traverseObject(elementUUID);
-		} else if (element == Constants.Element.INTERACTION) {
+		} else if (element == Constants.Element.Interaction) {
 			
-			elementIsType = Constants.Element.INTERACTION;
+			elementIsType = Constants.Element.Interaction;
 			rootElementPathArray = getInteractionPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
 			traverseInteraction(elementUUID);
