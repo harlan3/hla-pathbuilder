@@ -167,9 +167,9 @@ public class BuildElementPaths {
 
 			System.out.print("[");
 
-			for (int i = foundIndex; i < pathFollowStack.size(); i++) {
+			for (int i = foundIndex; i < pathFollowStack.size()-1; i++) {
 				System.out.print(pathFollowStack.get(i));
-				if (i != (pathFollowStack.size() - 1))
+				if (i != (pathFollowStack.size() - 2))
 					System.out.print(", ");
 			}
 
@@ -178,9 +178,9 @@ public class BuildElementPaths {
 
 			System.out.print("[");
 
-			for (int i = 0; i < pathFollowStack.size(); i++) {
+			for (int i = 0; i < pathFollowStack.size()-1; i++) {
 				System.out.print(pathFollowStack.get(i));
-				if (i != (pathFollowStack.size() - 1))
+				if (i != (pathFollowStack.size() - 2))
 					System.out.print(", ");
 			}
 
@@ -456,7 +456,7 @@ public class BuildElementPaths {
 		for (SearchToken searchToken : searchTokenList) {
 						
 			if (HlaPathBuilder.uuidMarkupOutput)
-				pathFollowStack.push(searchToken.uuid);
+				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name + " | " + searchToken.uuid); 
 			else
 				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name); 
 			
