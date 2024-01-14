@@ -61,6 +61,7 @@ public class DatabaseAPI {
 				+ "id VARCHAR(36) PRIMARY KEY, "
 			    + "name VARCHAR(80), "
 				+ "path VARCHAR(400), "
+				+ "debugPath VARCHAR(400), "
 				+ "parentObject VARCHAR(36))");
 			
 			run("CREATE TABLE Attribute ("
@@ -76,6 +77,7 @@ public class DatabaseAPI {
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
 					+ "path VARCHAR(400), "
+				    + "debugPath VARCHAR(400), "
 					+ "parentObject VARCHAR(36))");
 			
 			run("CREATE TABLE Parameter ("
@@ -156,6 +158,7 @@ public class DatabaseAPI {
 					var.id + "','" + 
 					var.name + "','" +
 					var.path + "','" +
+					var.debugPath + "','" +
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -197,6 +200,7 @@ public class DatabaseAPI {
 					var.id + "','" + 
 					var.name + "','" +
 					var.path + "','" +
+					var.debugPath + "','" +
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -398,6 +402,7 @@ public class DatabaseAPI {
         		var.id = results.getString("id");
         		var.name = results.getString("name");
         		var.path = results.getString("path");
+        		var.debugPath = results.getString("debugPath");
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);
@@ -465,6 +470,7 @@ public class DatabaseAPI {
         		var.id = results.getString("id");
         		var.name = results.getString("name");
         		var.path = results.getString("path");
+        		var.debugPath = results.getString("debugPath");
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);

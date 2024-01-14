@@ -25,5 +25,6 @@ public class DbObject {
 	public String id; //UUID
 	public String name;
 	public String path;
+	public String debugPath;
 	public String parentObject; //UUID
 }

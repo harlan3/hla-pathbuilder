@@ -2,7 +2,7 @@ Tables
 
 Object (TID=1)
 --------------
-id(UUID), name(String), path(String), parentObject(UUID)
+id(UUID), name(String), path(String), debugPath(String),parentObject(UUID)
 
 Attribute (TID=2)
 -----------------
@@ -10,7 +10,7 @@ id(UUID), index(Number), origName(String), name(String), type(String), inherited
 
 Interaction (TID=3)
 -------------------
-id(UUID), name(String), path(String), parentObject(UUID)
+id(UUID), name(String), path(String), debugPath(String), parentObject(UUID)
 
 Parameter (TID=4)
 -----------------

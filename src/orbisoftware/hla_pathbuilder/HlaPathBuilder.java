@@ -43,6 +43,8 @@ public class HlaPathBuilder {
 	private static final String fileName = "RestaurantFOMmodule.xml";
 	public static List<VariantSelect> variantSelectList = new ArrayList<VariantSelect>();
 	public static Stack<String> pathBuilderStack = new Stack<String>();
+	public static Stack<String> debugStack = new Stack<String>();
+	
 	public Utils utils = new Utils();
 
 	// If true, use memory based database. Otherwise use a file based database.
@@ -148,16 +150,15 @@ public class HlaPathBuilder {
 
 				typedefName = objectName;
 
-				if (uuidMarkupOutput)
-					pathBuilderStack.push(objectUUID.toString());
-				else
-					pathBuilderStack.push(objectName);
+				pathBuilderStack.push(objectName);
+				debugStack.push(objectUUID.toString());
 
 				DbObject var = new DbObject();
 
 				var.id = objectUUID.toString();
 				var.name = objectName;
 				var.path = pathBuilderStack.toString();
+				var.debugPath = debugStack.toString();
 				var.parentObject = parentUUID.toString();
 
 				list.add(var);
@@ -187,6 +188,7 @@ public class HlaPathBuilder {
 				System.out.println("// End Object" + "\n");
 				typedefName = parseObject(nodeChild, objectName, objectUUID);
 				pathBuilderStack.pop();
+				debugStack.pop();
 			}
 
 			nodeChild = nodeChild.getNextSibling();
@@ -196,6 +198,7 @@ public class HlaPathBuilder {
 			System.out.println("} " + typedefName + ";");
 			System.out.println("// End Object" + "\n\n");
 			pathBuilderStack.pop();
+			debugStack.pop();
 		}
 
 		return typedefName;
@@ -308,16 +311,15 @@ public class HlaPathBuilder {
 
 				typedefName = interactionName;
 
-				if (uuidMarkupOutput)
-					pathBuilderStack.push(interactionUUID.toString());
-				else
-					pathBuilderStack.push(interactionName);
+				pathBuilderStack.push(interactionName);
+				debugStack.push(interactionUUID.toString());
 
 				DbInteraction var = new DbInteraction();
 
 				var.id = interactionUUID.toString();
 				var.name = interactionName;
 				var.path = pathBuilderStack.toString();
+				var.debugPath = debugStack.toString(); 
 				var.parentObject = parentUUID.toString();
 
 				list.add(var);
@@ -348,6 +350,7 @@ public class HlaPathBuilder {
 				System.out.println();
 				typedefName = parseInteraction(nodeChild, interactionName, interactionUUID);
 				pathBuilderStack.pop();
+				debugStack.pop();
 			}
 
 			nodeChild = nodeChild.getNextSibling();
@@ -358,6 +361,7 @@ public class HlaPathBuilder {
 			System.out.println("// End Interaction");
 			System.out.println();
 			pathBuilderStack.pop();
+			debugStack.pop();
 		}
 
 		return typedefName;
@@ -1012,6 +1016,7 @@ public class HlaPathBuilder {
 					System.out.println("id = " + var.id);
 					System.out.println("name = " + var.name);
 					System.out.println("path = " + var.path);
+					System.out.println("debugPath = " + var.debugPath);
 					System.out.println("parentObject = " + var.parentObject);
 					System.out.println();
 
@@ -1035,6 +1040,7 @@ public class HlaPathBuilder {
 					System.out.println("id = " + var.id);
 					System.out.println("name = " + var.name);
 					System.out.println("path = " + var.path);
+					System.out.println("debugPath = " + var.debugPath);
 					System.out.println("parentObject = " + var.parentObject);
 					System.out.println();
 
