@@ -33,8 +33,8 @@ import orbisoftware.hla_pathbuilder.db_classes.*;
 
 public class DatabaseAPI {
 
-	private String connect = "jdbc:derby:memory:myDB;create=true"; // in memory
-	//private String connect = "jdbc:derby:myDB;create=true"; // in file
+	private String connectMemoryStr = "jdbc:derby:memory:myDB;create=true"; // in memory
+	private String connectFileStr = "jdbc:derby:myDB;create=true"; // in file
 	private static Connection conn = null;
 
 	public static String NULL_UUID = "00000000-0000-0000-0000-000000000000";
@@ -43,7 +43,10 @@ public class DatabaseAPI {
 		
         try
         {
-            conn = DriverManager.getConnection(connect);
+        	if (HlaPathBuilder.useMemoryDb)
+        		conn = DriverManager.getConnection(connectMemoryStr);
+        	else
+        		conn = DriverManager.getConnection(connectFileStr);
         }
         catch (Exception except)
         {

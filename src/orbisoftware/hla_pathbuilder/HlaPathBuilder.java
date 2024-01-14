@@ -22,6 +22,7 @@ package orbisoftware.hla_pathbuilder;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -44,9 +45,12 @@ public class HlaPathBuilder {
 	public static Stack<String> pathBuilderStack = new Stack<String>();
 	public Utils utils = new Utils();
 
+	// If true, use memory based database. Otherwise use a file based database.
+	public static boolean useMemoryDb = false;
+
 	// If true, output of pathdefs will contain UUIDs instead of field names
 	public static boolean uuidMarkupOutput = false;
-	
+
 	// If true, all variants and alternatives will be ignored that do not have a
 	// VariantSelect created.
 	public static boolean useVariantSelect = false;
@@ -143,12 +147,12 @@ public class HlaPathBuilder {
 				List<DbObject> list = new ArrayList<DbObject>();
 
 				typedefName = objectName;
-				
+
 				if (uuidMarkupOutput)
 					pathBuilderStack.push(objectUUID.toString());
 				else
 					pathBuilderStack.push(objectName);
-				
+
 				DbObject var = new DbObject();
 
 				var.id = objectUUID.toString();
@@ -303,7 +307,7 @@ public class HlaPathBuilder {
 				List<DbInteraction> list = new ArrayList<DbInteraction>();
 
 				typedefName = interactionName;
-				
+
 				if (uuidMarkupOutput)
 					pathBuilderStack.push(interactionUUID.toString());
 				else
@@ -380,7 +384,7 @@ public class HlaPathBuilder {
 		String basicType = "";
 		String size = "";
 		String endian = "";
-		
+
 		boolean hasData = false;
 
 		nodeChild = nodeChild.getFirstChild();
@@ -392,10 +396,10 @@ public class HlaPathBuilder {
 
 			if (name.equals("name"))
 				basicType = nodeChild.getTextContent();
-			
+
 			if (name.equals("size"))
 				size = nodeChild.getTextContent();
-			
+
 			if (name.equals("endian"))
 				endian = nodeChild.getTextContent();
 
@@ -413,7 +417,7 @@ public class HlaPathBuilder {
 			var1.type = "";
 			var1.size = size;
 			var1.endian = endian;
-			
+
 			list.add(var1);
 
 			databaseAPI.insertIntoBasicDatatypeTable(list);
@@ -438,9 +442,9 @@ public class HlaPathBuilder {
 		System.out.println("// End Basic Data Constants");
 		System.out.println();
 	}
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	void parseSimpleData(Node nodeChild) {
 
 		String simpleType = "";
@@ -498,7 +502,7 @@ public class HlaPathBuilder {
 		System.out.println("// End Simple Data Types");
 		System.out.println();
 	}
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void parseEnumeratedData(Node nodeChild) {
@@ -566,7 +570,7 @@ public class HlaPathBuilder {
 		String dataType = "";
 		String cardinality = "";
 		String encoding = "";
-		
+
 		boolean hasData = false;
 
 		nodeChild = nodeChild.getFirstChild();
@@ -584,7 +588,7 @@ public class HlaPathBuilder {
 
 			if (name.equals("cardinality"))
 				cardinality = nodeChild.getTextContent();
-			
+
 			if (name.equals("encoding"))
 				encoding = nodeChild.getTextContent();
 
@@ -904,7 +908,7 @@ public class HlaPathBuilder {
 
 			if (name.equals("variantRecordDataTypes"))
 				parseVariantRecordDataTypes(nodeChild);
-			
+
 			if (name.equals("basicDataRepresentations"))
 				parseBasicDataTypes(nodeChild);
 
@@ -922,51 +926,56 @@ public class HlaPathBuilder {
 
 			PrintStream outputStream = new PrintStream(new File("TypeDefs.h"));
 			PrintStream console = System.out;
-
+			Path myDbPath = Paths.get(System.getProperty("user.dir") + File.separator + "myDB");
+			boolean dbExist = Files.exists(myDbPath);
 			System.setOut(outputStream);
 
 			hlaPathBuilder.databaseAPI.initDatabase();
-			hlaPathBuilder.databaseAPI.createTables();
 
-			// First pass for dataTypes only
-			DocumentBuilder db1 = dbf.newDocumentBuilder();
-			Document doc1 = db1.parse(new File(fileName));
+			if (useMemoryDb || (!useMemoryDb && !dbExist)) {
 
-			Node node = doc1.getFirstChild();
-			Node nodeChild = node.getFirstChild();
+				hlaPathBuilder.databaseAPI.createTables();
 
-			while (nodeChild != null) {
+				// First pass for dataTypes only
+				DocumentBuilder db1 = dbf.newDocumentBuilder();
+				Document doc1 = db1.parse(new File(fileName));
 
-				String name = nodeChild.getNodeName();
+				Node node = doc1.getFirstChild();
+				Node nodeChild = node.getFirstChild();
 
-				if (name.equals("dataTypes"))
-					hlaPathBuilder.parseDataTypes(nodeChild);
+				while (nodeChild != null) {
 
-				nodeChild = nodeChild.getNextSibling();
+					String name = nodeChild.getNodeName();
+
+					if (name.equals("dataTypes"))
+						hlaPathBuilder.parseDataTypes(nodeChild);
+
+					nodeChild = nodeChild.getNextSibling();
+				}
+
+				// Second pass for objects and interactions
+				DocumentBuilder db2 = dbf.newDocumentBuilder();
+				Document doc2 = db2.parse(new File(fileName));
+
+				node = doc2.getFirstChild();
+				nodeChild = node.getFirstChild();
+
+				while (nodeChild != null) {
+
+					String name = nodeChild.getNodeName();
+
+					if (name.equals("objects"))
+						hlaPathBuilder.parseObjects(nodeChild);
+
+					if (name.equals("interactions"))
+						hlaPathBuilder.parseInteractions(nodeChild);
+
+					nodeChild = nodeChild.getNextSibling();
+				}
+
+				System.setOut(console);
+				outputStream.close();
 			}
-
-			// Second pass for objects and interactions
-			DocumentBuilder db2 = dbf.newDocumentBuilder();
-			Document doc2 = db2.parse(new File(fileName));
-
-			node = doc2.getFirstChild();
-			nodeChild = node.getFirstChild();
-
-			while (nodeChild != null) {
-
-				String name = nodeChild.getNodeName();
-
-				if (name.equals("objects"))
-					hlaPathBuilder.parseObjects(nodeChild);
-
-				if (name.equals("interactions"))
-					hlaPathBuilder.parseInteractions(nodeChild);
-
-				nodeChild = nodeChild.getNextSibling();
-			}
-
-			System.setOut(console);
-			outputStream.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -979,7 +988,6 @@ public class HlaPathBuilder {
 			System.setOut(outputStream);
 
 			buildElementPaths.setDatabase(hlaPathBuilder.databaseAPI);
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1013,7 +1021,6 @@ public class HlaPathBuilder {
 
 			System.out.println("\n");
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			// Select from Interaction table - "MainCourseServed"
@@ -1037,7 +1044,6 @@ public class HlaPathBuilder {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			
 			System.out.println("\n");
 			System.setOut(console);
 			outputStream.close();
