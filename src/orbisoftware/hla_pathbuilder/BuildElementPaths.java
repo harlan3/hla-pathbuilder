@@ -54,12 +54,12 @@ public class BuildElementPaths {
 			tid = Constants.TID.VariantRecord;
 		else if (databaseAPI.isArrayRecord(searchToken))
 			tid = Constants.TID.Array;
+		else if (databaseAPI.isBasicRecord(searchToken))
+			tid = Constants.TID.Basic;
 		else if (databaseAPI.isSimpleRecord(searchToken))
 			tid = Constants.TID.Simple;
 		else if (databaseAPI.isEnumeratedRecord(searchToken))
 			tid = Constants.TID.Enumerated;
-		else if (databaseAPI.isBasicRecord(searchToken))
-			tid = Constants.TID.Basic;
 		
 		return tid;
 	}
