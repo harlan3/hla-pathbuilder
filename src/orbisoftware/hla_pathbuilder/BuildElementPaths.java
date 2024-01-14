@@ -118,10 +118,7 @@ public class BuildElementPaths {
     	String objPath = null;
     	
 		if (objList.size() >= 1)
-			if (HlaPathBuilder.uuidMarkupOutput)
-				objPath = objList.get(0).id;
-			else
-				objPath = objList.get(0).path;
+			objPath = objList.get(0).path;
 		
 		return objPath;	
 	}
@@ -133,10 +130,7 @@ public class BuildElementPaths {
     	String interactionPath = null;
     	
 		if (interactionList.size() >= 1)
-			if (HlaPathBuilder.uuidMarkupOutput)
-				interactionPath = interactionList.get(0).id;
-			else
-				interactionPath = interactionList.get(0).path;
+			interactionPath = interactionList.get(0).path;
 		
 		return interactionPath;	
 	}
@@ -450,7 +444,7 @@ public class BuildElementPaths {
 		for (SearchToken searchToken : searchTokenList) {
 						
 			if (HlaPathBuilder.uuidMarkupOutput)
-				pathFollowStack.push(searchToken.uuid); 
+				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name + " | " + "TID = " + searchToken.tid + " | " + searchToken.uuid); 
 			else
 				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name); 
 			
