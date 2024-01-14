@@ -57,7 +57,7 @@ public class DatabaseAPI {
 			run("CREATE TABLE Object ("
 				+ "id VARCHAR(36) PRIMARY KEY, "
 			    + "name VARCHAR(80), "
-				+ "path VARCHAR(200), "
+				+ "path VARCHAR(400), "
 				+ "parentObject VARCHAR(36))");
 			
 			run("CREATE TABLE Attribute ("
@@ -72,7 +72,7 @@ public class DatabaseAPI {
 			run("CREATE TABLE Interaction ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
-					+ "path VARCHAR(200), "
+					+ "path VARCHAR(400), "
 					+ "parentObject VARCHAR(36))");
 			
 			run("CREATE TABLE Parameter ("

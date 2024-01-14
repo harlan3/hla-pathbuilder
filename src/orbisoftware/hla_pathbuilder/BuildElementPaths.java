@@ -141,6 +141,19 @@ public class BuildElementPaths {
 		return interactionPath;	
 	}
 	
+	private void insertPath(int index) {
+		
+		System.out.print("[");
+
+		for (int i = index; i < pathFollowStack.size()-1; i++) {
+			System.out.print(pathFollowStack.get(i));
+			if (i != (pathFollowStack.size() - 2))
+				System.out.print(", ");
+		}
+
+		System.out.println("]");
+	}
+	
 	private void displayPartialPath() {
 		
 		boolean foundMatch = false;
@@ -163,29 +176,10 @@ public class BuildElementPaths {
 			elementCount++;
 		}
 
-		if (foundMatch) {
-
-			System.out.print("[");
-
-			for (int i = foundIndex; i < pathFollowStack.size()-1; i++) {
-				System.out.print(pathFollowStack.get(i));
-				if (i != (pathFollowStack.size() - 2))
-					System.out.print(", ");
-			}
-
-			System.out.println("]");
-		} else if (currentRootPathIndex == rootElementPathArray.length - 1) {
-
-			System.out.print("[");
-
-			for (int i = 0; i < pathFollowStack.size()-1; i++) {
-				System.out.print(pathFollowStack.get(i));
-				if (i != (pathFollowStack.size() - 2))
-					System.out.print(", ");
-			}
-
-			System.out.println("]");
-		}
+		if (foundMatch)
+			insertPath(foundIndex);
+		else if (currentRootPathIndex == rootElementPathArray.length - 1)
+			insertPath(0);
 	}
 	
 	private void displayElementPathTransition(String poppedElement) {
@@ -248,8 +242,8 @@ public class BuildElementPaths {
     		if (var == null)
     			System.out.println("null found");
     		
-    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-    		uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -275,8 +269,8 @@ public class BuildElementPaths {
     		System.out.println();
     		*/
     		
-    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-    		uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -303,8 +297,8 @@ public class BuildElementPaths {
     		System.out.println();
 			*/
     		
-    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-    		uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -346,8 +340,8 @@ public class BuildElementPaths {
     		
     		if (!ignore) {
 
-    			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-	    		uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+    			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+	    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
     		}
     	}
     	
@@ -372,8 +366,8 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-			uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+			uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -396,8 +390,8 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-			uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+			uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -419,8 +413,8 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-			uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+			uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -444,8 +438,8 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, var.name, var.type));
-			uuidRefList.add(new SearchToken(searchResults.uuid, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+			uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
 		}
 
 		traverseGeneric(uuidRefList);
@@ -456,7 +450,7 @@ public class BuildElementPaths {
 		for (SearchToken searchToken : searchTokenList) {
 						
 			if (HlaPathBuilder.uuidMarkupOutput)
-				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name + " | " + searchToken.uuid); 
+				pathFollowStack.push(searchToken.uuid); 
 			else
 				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name); 
 			

@@ -138,13 +138,17 @@ public class HlaPathBuilder {
 				System.out.println("// " + objectName);
 				System.out.println("typedef struct {");
 
-				typedefName = objectName;
-				pathBuilderStack.push(objectName);
-
 				// Insert object into database
 				objectUUID = UUID.randomUUID();
 				List<DbObject> list = new ArrayList<DbObject>();
 
+				typedefName = objectName;
+				
+				if (uuidMarkupOutput)
+					pathBuilderStack.push(objectUUID.toString());
+				else
+					pathBuilderStack.push(objectName);
+				
 				DbObject var = new DbObject();
 
 				var.id = objectUUID.toString();
@@ -294,12 +298,16 @@ public class HlaPathBuilder {
 				System.out.println("// " + interactionName);
 				System.out.println("typedef struct {");
 
-				typedefName = interactionName;
-				pathBuilderStack.push(interactionName);
-
 				// Insert interaction into database
 				interactionUUID = UUID.randomUUID();
 				List<DbInteraction> list = new ArrayList<DbInteraction>();
+
+				typedefName = interactionName;
+				
+				if (uuidMarkupOutput)
+					pathBuilderStack.push(interactionUUID.toString());
+				else
+					pathBuilderStack.push(interactionName);
 
 				DbInteraction var = new DbInteraction();
 
@@ -911,7 +919,7 @@ public class HlaPathBuilder {
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
 
 		try {
-			
+
 			PrintStream outputStream = new PrintStream(new File("TypeDefs.h"));
 			PrintStream console = System.out;
 
