@@ -6,28 +6,49 @@
                 <name>HLAASCIIchar</name>
                 <size>1</size>
                 <interpretation></interpretation>
-                <endian>Big</endian>
+                <endian>NA</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
+                <name>HLAASCIIstring</name>
+                <size>Dynamic</size>
+                <interpretation></interpretation>
+                <endian>NA</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
+                <name>HLAunicodeChar</name>
+                <size>16</size>
+                <interpretation></interpretation>
+                <endian>NA</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
+                <name>HLAunicodeString</name>
+                <size>Dynamic</size>
+                <interpretation></interpretation>
+                <endian>NA</endian>
                 <encoding></encoding>
             </basicData>
             <basicData>
                 <name>HLAboolean</name>
                 <size>1</size>
                 <interpretation></interpretation>
-                <endian>Big</endian>
+                <endian>NA</endian>
                 <encoding></encoding>
             </basicData>
             <basicData>
                 <name>HLAoctet</name>
                 <size>1</size>
                 <interpretation></interpretation>
-                <endian>Big</endian>
+                <endian>NA</endian>
                 <encoding></encoding>
             </basicData>
             <basicData>
                 <name>HLAbyte</name>
                 <size>1</size>
                 <interpretation></interpretation>
-                <endian>Big</endian>
+                <endian>NA</endian>
                 <encoding></encoding>
             </basicData>
             <basicData>
@@ -38,10 +59,24 @@
                 <encoding></encoding>
             </basicData>
             <basicData>
+                <name>HLAfloat32LE</name>
+                <size>32</size>
+                <interpretation></interpretation>
+                <endian>Little</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
                 <name>HLAfloat64BE</name>
                 <size>64</size>
                 <interpretation></interpretation>
                 <endian>Big</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
+                <name>HLAfloat64LE</name>
+                <size>64</size>
+                <interpretation></interpretation>
+                <endian>Little</endian>
                 <encoding></encoding>
             </basicData>
             <basicData>
@@ -52,6 +87,13 @@
                 <encoding></encoding>
             </basicData>
             <basicData>
+                <name>HLAinteger16LE</name>
+                <size>16</size>
+                <interpretation></interpretation>
+                <endian>Little</endian>
+                <encoding></encoding>
+            </basicData>            
+            <basicData>
                 <name>HLAinteger32BE</name>
                 <size>32</size>
                 <interpretation></interpretation>
@@ -59,10 +101,45 @@
                 <encoding></encoding>
             </basicData>
             <basicData>
+                <name>HLAinteger32LE</name>
+                <size>32</size>
+                <interpretation></interpretation>
+                <endian>Little</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
                 <name>HLAinteger64BE</name>
                 <size>64</size>
                 <interpretation></interpretation>
                 <endian>Big</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
+                <name>HLAinteger64LE</name>
+                <size>64</size>
+                <interpretation></interpretation>
+                <endian>Little</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
+                <name>HLAoctetPairBE</name>
+                <size>16</size>
+                <interpretation></interpretation>
+                <endian>Big</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
+                <name>HLAoctetPairLE</name>
+                <size>16</size>
+                <interpretation></interpretation>
+                <endian>Little</endian>
+                <encoding></encoding>
+            </basicData>
+            <basicData>
+                <name>HLAopaqueData</name>
+                <size>Dynamic</size>
+                <interpretation></interpretation>
+                <endian>NA</endian>
                 <encoding></encoding>
             </basicData>
         </basicDataRepresentations>
