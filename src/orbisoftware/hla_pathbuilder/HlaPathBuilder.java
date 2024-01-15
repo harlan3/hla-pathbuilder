@@ -1034,9 +1034,9 @@ public class HlaPathBuilder {
 					System.out.println("id = " + var.id);
 					System.out.println("name = " + var.name);
 					System.out.println("path = " + var.path);
-					System.out.println("debugPath = " + var.debugPath);
+					if (uuidMarkupOutput)
+						System.out.println("debugPath = " + var.debugPath);
 					System.out.println("parentObject = " + var.parentObject);
-					System.out.println();
 
 					buildElementPaths.startTraversal(Element.Object, var.id);
 				}
@@ -1058,9 +1058,9 @@ public class HlaPathBuilder {
 					System.out.println("id = " + var.id);
 					System.out.println("name = " + var.name);
 					System.out.println("path = " + var.path);
-					System.out.println("debugPath = " + var.debugPath);
+					if (uuidMarkupOutput)
+						System.out.println("debugPath = " + var.debugPath);
 					System.out.println("parentObject = " + var.parentObject);
-					System.out.println();
 
 					buildElementPaths.startTraversal(Element.Interaction, var.id);
 				}
