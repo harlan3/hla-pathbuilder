@@ -41,6 +41,7 @@ public class HlaPathBuilder {
 
 	private DatabaseAPI databaseAPI = new DatabaseAPI();
 	private static final String fileName = "RestaurantFOMmodule.xml";
+	private static final String fomSupportTypes = "FOM_support_types.xml";
 	public static List<VariantSelect> variantSelectList = new ArrayList<VariantSelect>();
 	public static Stack<String> pathBuilderStack = new Stack<String>();
 	public static Stack<String> debugStack = new Stack<String>();
@@ -956,12 +957,29 @@ public class HlaPathBuilder {
 
 					nodeChild = nodeChild.getNextSibling();
 				}
-
-				// Second pass for objects and interactions
+				
+				// Second pass for FOM support dataTypes only
 				DocumentBuilder db2 = dbf.newDocumentBuilder();
-				Document doc2 = db2.parse(new File(fileName));
+				Document doc2 = db2.parse(new File(fomSupportTypes));
 
 				node = doc2.getFirstChild();
+				nodeChild = node.getFirstChild();
+
+				while (nodeChild != null) {
+
+					String name = nodeChild.getNodeName();
+
+					if (name.equals("dataTypes"))
+						hlaPathBuilder.parseDataTypes(nodeChild);
+
+					nodeChild = nodeChild.getNextSibling();
+				}
+				
+				// Third pass for objects and interactions
+				DocumentBuilder db3 = dbf.newDocumentBuilder();
+				Document doc3 = db3.parse(new File(fileName));
+
+				node = doc3.getFirstChild();
 				nodeChild = node.getFirstChild();
 
 				while (nodeChild != null) {
