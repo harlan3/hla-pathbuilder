@@ -121,7 +121,7 @@ public class HlaPathBuilder {
 
 		databaseAPI.insertIntoAttributeTable(list);
 
-		System.out.println("   " + dataType + " " + variableName + ";");
+		System.out.println("   " + dataType + " " + origVariableName + ";");
 	}
 
 	String parseObject(Node node, String parentClass, UUID parentUUID) {
@@ -171,7 +171,7 @@ public class HlaPathBuilder {
 					String variableName = utils.convertToCamelCase(parentClass);
 					attributeIndex++;
 
-					System.out.println("   " + parentClass + " " + variableName + "; // extends");
+					System.out.println("   " + parentClass + " " + origVariableName + "; // extends");
 					insertExtendsAttribute(attributeIndex, origVariableName, variableName, parentClass, objectUUID);
 
 				}
@@ -283,7 +283,7 @@ public class HlaPathBuilder {
 
 		databaseAPI.insertIntoParameterTable(list);
 
-		System.out.println("   " + dataType + " " + variableName + ";");
+		System.out.println("   " + dataType + " " + origVariableName + ";");
 	}
 
 	String parseInteraction(Node node, String parentClass, UUID parentUUID) {
@@ -333,7 +333,7 @@ public class HlaPathBuilder {
 					String variableName = utils.convertToCamelCase(parentClass);
 					parameterIndex++;
 
-					System.out.println("   " + parentClass + " " + variableName + "; // extends");
+					System.out.println("   " + parentClass + " " + origVariableName + "; // extends");
 					insertExtendsParameter(parameterIndex, origVariableName, variableName, parentClass,
 							interactionUUID);
 				}

@@ -236,8 +236,8 @@ public class BuildElementPaths {
     		if (var == null)
     			System.out.println("null found");
     		
-    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
-    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.origName, var.type));
+    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.origName, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
@@ -263,8 +263,8 @@ public class BuildElementPaths {
     		System.out.println();
     		*/
     		
-    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
-    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.origName, var.type));
+    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.origName, var.type));
     	}
     	
 		traverseGeneric(uuidRefList);
