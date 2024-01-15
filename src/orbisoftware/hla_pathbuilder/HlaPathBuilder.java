@@ -1038,6 +1038,7 @@ public class HlaPathBuilder {
 						System.out.println("debugPath = " + var.debugPath);
 					System.out.println("parentObject = " + var.parentObject);
 
+					buildElementPaths.resetState();
 					buildElementPaths.startTraversal(Element.Object, var.id);
 				}
 			}
@@ -1062,6 +1063,7 @@ public class HlaPathBuilder {
 						System.out.println("debugPath = " + var.debugPath);
 					System.out.println("parentObject = " + var.parentObject);
 
+					buildElementPaths.resetState();
 					buildElementPaths.startTraversal(Element.Interaction, var.id);
 				}
 			}

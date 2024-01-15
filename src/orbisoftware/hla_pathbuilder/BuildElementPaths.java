@@ -28,6 +28,7 @@ import orbisoftware.hla_pathbuilder.db_classes.*;
 public class BuildElementPaths {
 
 	private Stack<String> pathFollowStack = new Stack<String>();
+	private ArrayList<String> attrParams = new ArrayList<String>();
 	private DatabaseAPI databaseAPI;
 	
 	private String[] rootElementPathArray;
@@ -37,6 +38,14 @@ public class BuildElementPaths {
 	
 	BuildElementPaths() {
 		
+	}
+	
+	public void resetState() {
+		
+		pathFollowStack.clear();
+		attrParams.clear();
+		rootElementPathArray = new String[0];
+		currentRootPathIndex = 0;
 	}
 	
 	// SQL Table ID
@@ -139,6 +148,15 @@ public class BuildElementPaths {
 		
 		System.out.print("[");
 
+		// Add element to the attributes/parameters list
+		String[] split = pathFollowStack.get(index).split("\\s+");
+		
+		if (attrParams.size() > 0) {
+			if (!split[1].equals(attrParams.get(attrParams.size()-1)))
+				attrParams.add(split[1]);
+		} else
+			attrParams.add(split[1]);
+		
 		for (int i = index; i < pathFollowStack.size()-1; i++) {
 			System.out.print(pathFollowStack.get(i));
 			if (i != (pathFollowStack.size() - 2))
@@ -233,8 +251,6 @@ public class BuildElementPaths {
     		System.out.println("parentObject = " + var.parentObject);
     		System.out.println();
     		*/
-    		if (var == null)
-    			System.out.println("null found");
     		
     		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.origName, var.type));
     		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.origName, var.type));
@@ -502,12 +518,16 @@ public class BuildElementPaths {
 			rootElementPathArray = getObjectPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
 			traverseObject(elementUUID);
+			System.out.println();
+			System.out.println("Attributes: " + this.attrParams.toString());
 		} else if (element == Constants.Element.Interaction) {
 			
 			elementIsType = Constants.Element.Interaction;
 			rootElementPathArray = getInteractionPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
 			traverseInteraction(elementUUID);
+			System.out.println();
+			System.out.println("Parameters: " + this.attrParams.toString());
 		}
 	}
 	
