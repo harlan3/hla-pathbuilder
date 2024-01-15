@@ -1017,7 +1017,7 @@ public class HlaPathBuilder {
 			// ignored).
 
 			String uuidVariantRecord = hlaPathBuilder.databaseAPI
-					.getUUIDForVariantRecord(new SearchToken(DatabaseAPI.NULL_UUID, "", "WaiterValue"));
+					.getUUIDForVariantRecord(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, "", "WaiterValue"));
 			HlaPathBuilder.variantSelectList.add(new VariantSelect(uuidVariantRecord, "Rating"));
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
