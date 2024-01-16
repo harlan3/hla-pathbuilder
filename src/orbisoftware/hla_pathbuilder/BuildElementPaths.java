@@ -145,8 +145,6 @@ public class BuildElementPaths {
 	}
 	
 	private void insertPath(int index) {
-		
-		System.out.print("[");
 
 		// Add element to the attributes/parameters list
 		String[] split = pathFollowStack.get(index).split("\\s+");
@@ -156,6 +154,8 @@ public class BuildElementPaths {
 				attrParams.add(split[1]);
 		} else
 			attrParams.add(split[1]);
+		
+		System.out.print("[");
 		
 		for (int i = index; i < pathFollowStack.size()-1; i++) {
 			System.out.print(pathFollowStack.get(i));
