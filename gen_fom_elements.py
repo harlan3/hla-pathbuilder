@@ -31,6 +31,7 @@ for node in objectTags:
         if (nodeName != "HLAobjectRoot"):
             objectList.append(nodeName)
 
+objectList = list(set(objectList))
 objectList.sort()
 
 for objectName in objectList:
@@ -52,6 +53,7 @@ for node in interactionTags:
         if (nodeName != "HLAinteractionRoot"):
             interactionList.append(nodeName)
 
+interactionList = list(set(interactionList))
 interactionList.sort()
 
 for interactionName in interactionList:
