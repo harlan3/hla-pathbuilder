@@ -12,7 +12,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args" : ["NIS_2.2.0_monolithicNTF.xml"]
+            "args" : ["RestaurantFOMmodule.xml"]
         }
     ]
 }
