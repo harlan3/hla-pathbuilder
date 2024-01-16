@@ -31,21 +31,29 @@ import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import jargs.gnu.CmdLineParser;
 import orbisoftware.hla_pathbuilder.Constants.*;
 import orbisoftware.hla_pathbuilder.db_classes.*;
 
 public class HlaPathBuilder {
 
 	private DatabaseAPI databaseAPI = new DatabaseAPI();
-	private static final String fileName = "RestaurantFOMmodule.xml";
+	private static String fomFilename = "";
 	private static final String fomSupportTypes = "FOM_support_types.xml";
+	private static final String protocolSpecDir = "protocol_specs";
+	private static String elementModel = "";
+	private static String encoderLanguage = "";
 	public static List<VariantSelect> variantSelectList = new ArrayList<VariantSelect>();
 	public static Stack<String> pathBuilderStack = new Stack<String>();
 	public static Stack<String> debugStack = new Stack<String>();
-	
+	public static List<String> elementObjectList = new ArrayList<String>();
+	public static List<String> elementInteractionList = new ArrayList<String>();
+
 	public Utils utils = new Utils();
 
 	// If true, use memory based database. Otherwise use a file based database.
@@ -320,7 +328,7 @@ public class HlaPathBuilder {
 				var.id = interactionUUID.toString();
 				var.name = interactionName;
 				var.path = pathBuilderStack.toString();
-				var.debugPath = debugStack.toString(); 
+				var.debugPath = debugStack.toString();
 				var.parentObject = parentUUID.toString();
 
 				list.add(var);
@@ -921,29 +929,75 @@ public class HlaPathBuilder {
 		}
 	}
 
+	private static void printUsage() {
+
+		System.out.println("Usage: HlaPathBuilder [OPTION]...");
+		System.out.println("Generate proto specs and encoder files.");
+		System.out.println();
+		System.out.println("   -f, --fom          FOM file used by HLA federation");
+		System.out.println(
+				"   -e, --element      Element model file which controls which of the FOM models are generated");
+		System.out.println("   -l, --language     Language used for encoders. Either \"java\" or \"c++\" is valid.");
+		System.out.println("   -h, --help         Show this help message");
+
+	}
+
 	public static void main(String[] args) {
 
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
 
+		CmdLineParser parser = new CmdLineParser();
+
+		CmdLineParser.Option fomOption = parser.addStringOption('f', "fom");
+		CmdLineParser.Option elementOption = parser.addStringOption('e', "element");
+		CmdLineParser.Option languageOption = parser.addStringOption('l', "language");
+		CmdLineParser.Option helpOption = parser.addBooleanOption('h', "help");
+
+		try {
+			parser.parse(args);
+		} catch (CmdLineParser.OptionException e) {
+			System.out.println(e.getMessage());
+			printUsage();
+			System.exit(0);
+		}
+
+		String fomValue = (String) parser.getOptionValue(fomOption);
+		String elementValue = (String) parser.getOptionValue(elementOption);
+		String languageValue = (String) parser.getOptionValue(languageOption);
+		Boolean helpValue = (Boolean) parser.getOptionValue(helpOption);
+
+		if ((helpValue != null) || (fomValue == null || elementValue == null || languageValue == null)) {
+			printUsage();
+			System.exit(0);
+		} else if (!languageValue.equals("java") && !languageValue.equals("c++")) {
+			printUsage();
+			System.exit(0);
+		}
+
+		fomFilename = fomValue;
+		elementModel = elementValue;
+		encoderLanguage = languageValue;
+
 		try {
 
-			PrintStream outputStream = new PrintStream(new File("TypeDefs.h"));
-			PrintStream console = System.out;
 			Path myDbPath = Paths.get(System.getProperty("user.dir") + File.separator + "myDB");
 			boolean dbExist = Files.exists(myDbPath);
-			System.setOut(outputStream);
 
 			hlaPathBuilder.databaseAPI.initDatabase();
 
 			if (useMemoryDb || (!useMemoryDb && !dbExist)) {
-
+				
+				PrintStream outputStream = new PrintStream(new File("TypeDefs.h"));
+				PrintStream console = System.out;
+				System.setOut(outputStream);
+				
 				hlaPathBuilder.databaseAPI.createTables();
 
 				// First pass for dataTypes only
 				DocumentBuilder db1 = dbf.newDocumentBuilder();
-				Document doc1 = db1.parse(new File(fileName));
+				Document doc1 = db1.parse(new File(fomFilename));
 
 				Node node = doc1.getFirstChild();
 				Node nodeChild = node.getFirstChild();
@@ -957,7 +1011,7 @@ public class HlaPathBuilder {
 
 					nodeChild = nodeChild.getNextSibling();
 				}
-				
+
 				// Second pass for FOM support dataTypes only
 				DocumentBuilder db2 = dbf.newDocumentBuilder();
 				Document doc2 = db2.parse(new File(fomSupportTypes));
@@ -974,10 +1028,10 @@ public class HlaPathBuilder {
 
 					nodeChild = nodeChild.getNextSibling();
 				}
-				
+
 				// Third pass for objects and interactions
 				DocumentBuilder db3 = dbf.newDocumentBuilder();
-				Document doc3 = db3.parse(new File(fileName));
+				Document doc3 = db3.parse(new File(fomFilename));
 
 				node = doc3.getFirstChild();
 				nodeChild = node.getFirstChild();
@@ -994,7 +1048,7 @@ public class HlaPathBuilder {
 
 					nodeChild = nodeChild.getNextSibling();
 				}
-
+				
 				System.setOut(console);
 				outputStream.close();
 			}
@@ -1003,77 +1057,141 @@ public class HlaPathBuilder {
 			e.printStackTrace();
 		}
 
+		// Fourth pass to load element models
 		try {
-			PrintStream outputStream = new PrintStream(new File("PathDefs.txt"));
-			PrintStream console = System.out;
+			DocumentBuilder db4 = dbf.newDocumentBuilder();
+			Document doc4 = db4.parse(new File(elementModel));
 
-			System.setOut(outputStream);
+			Node node = doc4.getFirstChild();
+			Node nodeChild = node.getFirstChild();
 
-			buildElementPaths.setDatabase(hlaPathBuilder.databaseAPI);
+			while (nodeChild != null) {
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				String name = nodeChild.getNodeName();
 
-			// Set up a variant select (all other variants and alternatives will be
-			// ignored).
-
-			String uuidVariantRecord = hlaPathBuilder.databaseAPI
-					.getUUIDForVariantRecord(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, "", "WaiterValue"));
-			HlaPathBuilder.variantSelectList.add(new VariantSelect(uuidVariantRecord, "Rating"));
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			// Select from Object table - "Waiter"
-
-			{
-				String selectStatement = "SELECT * FROM Object WHERE name='Waiter'";
-
-				List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
-
-				for (DbObject var : list) {
-
-					System.out.println("id = " + var.id);
-					System.out.println("name = " + var.name);
-					System.out.println("path = " + var.path);
-					if (uuidMarkupOutput)
-						System.out.println("debugPath = " + var.debugPath);
-					System.out.println("parentObject = " + var.parentObject);
-
-					buildElementPaths.resetState();
-					buildElementPaths.startTraversal(Element.Object, var.id);
+				if (name.equals("objects")) {
+					NodeList nodes = nodeChild.getChildNodes();
+					for (int i = 0; i < nodes.getLength(); i++) {
+						String textContent = nodes.item(i).getTextContent();
+						if (!textContent.isBlank())
+							elementObjectList.add(textContent);
+					}
 				}
-			}
 
-			System.out.println("\n");
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-			// Select from Interaction table - "MainCourseServed"
-
-			{
-				String selectStatement = "SELECT * FROM Interaction WHERE name='MainCourseServed'";
-
-				List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
-
-				for (DbObject var : list) {
-
-					System.out.println("id = " + var.id);
-					System.out.println("name = " + var.name);
-					System.out.println("path = " + var.path);
-					if (uuidMarkupOutput)
-						System.out.println("debugPath = " + var.debugPath);
-					System.out.println("parentObject = " + var.parentObject);
-
-					buildElementPaths.resetState();
-					buildElementPaths.startTraversal(Element.Interaction, var.id);
+				if (name.equals("interactions")) {
+					NodeList nodes = nodeChild.getChildNodes();
+					for (int i = 0; i < nodes.getLength(); i++) {
+						String textContent = nodes.item(i).getTextContent();
+						if (!textContent.isBlank())
+							elementInteractionList.add(textContent);
+					}
 				}
+
+				nodeChild = nodeChild.getNextSibling();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Remove and then recreate protocol specification, object and interaction
+		// directories
+		try {
+			File specDir = new File(System.getProperty("user.dir") + File.separator + protocolSpecDir);
+			File objDir = new File(
+					System.getProperty("user.dir") + File.separator + protocolSpecDir + File.separator + "Objects");
+			File intDir = new File(System.getProperty("user.dir") + File.separator + protocolSpecDir + File.separator
+					+ "Interactions");
 
-			System.out.println("\n");
-			System.setOut(console);
-			outputStream.close();
+			if (Files.exists(specDir.toPath()))
+				FileUtils.forceDelete(specDir);
 
+			FileUtils.forceMkdir(specDir);
+			FileUtils.forceMkdir(objDir);
+			FileUtils.forceMkdir(intDir);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// Set database API
+		buildElementPaths.setDatabase(hlaPathBuilder.databaseAPI);
+
+		// Process all objects defined in elementObjectList
+		try {
+
+			for (String elementObject : elementObjectList) {
+
+				PrintStream outputStream = new PrintStream(new File(System.getProperty("user.dir") + File.separator
+						+ protocolSpecDir + File.separator + "Objects" + File.separator + elementObject + ".txt"));
+				PrintStream console = System.out;
+
+				System.setOut(outputStream);
+
+				// Select from Object table
+
+				{
+					String selectStatement = "SELECT * FROM Object WHERE name='" + elementObject + "'";
+
+					List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
+
+					for (DbObject var : list) {
+
+						System.out.println("id = " + var.id);
+						System.out.println("name = " + var.name);
+						System.out.println("path = " + var.path);
+						if (uuidMarkupOutput)
+							System.out.println("debugPath = " + var.debugPath);
+						System.out.println("parentObject = " + var.parentObject);
+
+						buildElementPaths.resetState();
+						buildElementPaths.startTraversal(Element.Object, var.id);
+					}
+				}
+
+				System.out.println("\n");
+				System.setOut(console);
+				outputStream.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// Process all interactions defined in elementInteractionList
+		try {
+
+			for (String elementInteraction : elementInteractionList) {
+
+				PrintStream outputStream = new PrintStream(
+						new File(System.getProperty("user.dir") + File.separator + protocolSpecDir + File.separator
+								+ "Interactions" + File.separator + elementInteraction + ".txt"));
+				PrintStream console = System.out;
+
+				System.setOut(outputStream);
+
+				{
+					String selectStatement = "SELECT * FROM Interaction WHERE name='" + elementInteraction + "'";
+
+					List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
+
+					for (DbObject var : list) {
+
+						System.out.println("id = " + var.id);
+						System.out.println("name = " + var.name);
+						System.out.println("path = " + var.path);
+						if (uuidMarkupOutput)
+							System.out.println("debugPath = " + var.debugPath);
+						System.out.println("parentObject = " + var.parentObject);
+
+						buildElementPaths.resetState();
+						buildElementPaths.startTraversal(Element.Interaction, var.id);
+					}
+				}
+
+				System.out.println("\n");
+				System.setOut(console);
+				outputStream.close();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
