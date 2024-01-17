@@ -1116,43 +1116,40 @@ public class HlaPathBuilder {
 
 		// Set database API
 		buildElementPaths.setDatabase(hlaPathBuilder.databaseAPI);
-
+		
 		// Process all objects defined in elementObjectList
 		try {
 
 			for (String elementObject : elementObjectList) {
 
-				PrintStream outputStream = new PrintStream(new File(System.getProperty("user.dir") + File.separator
-						+ protocolSpecDir + File.separator + "Objects" + File.separator + elementObject + ".txt"));
-				PrintStream console = System.out;
-
-				System.setOut(outputStream);
-
-				// Select from Object table
-
-				{
 					String selectStatement = "SELECT * FROM Object WHERE name='" + elementObject + "'";
 
 					List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
 
 					for (DbObject var : list) {
 
+						byte[] pathBytes = var.path.getBytes();
+						String cityHashHex = CityHash.cityHash64Hex(pathBytes, 0, pathBytes.length);
+						
+						PrintStream outputStream = new PrintStream(new File(System.getProperty("user.dir") + File.separator
+								+ protocolSpecDir + File.separator + "Objects" + File.separator + var.name + "_" + cityHashHex + ".txt"));
+						PrintStream console = System.out;
+						System.setOut(outputStream);
+						
 						System.out.println("id = " + var.id);
-						System.out.println("name = " + var.name);
+						System.out.println("name = " + var.name + "_" + cityHashHex);
 						System.out.println("path = " + var.path);
 						if (uuidMarkupOutput)
 							System.out.println("debugPath = " + var.debugPath);
-						System.out.println("parentObject = " + var.parentObject);
+						System.out.println("parentObject = " + var.parentObject);			
 
 						buildElementPaths.resetState();
 						buildElementPaths.startTraversal(Element.Object, var.id);
+						
+						System.out.println("\n");
+						System.setOut(console);
 					}
 				}
-
-				System.out.println("\n");
-				System.setOut(console);
-				outputStream.close();
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1162,36 +1159,34 @@ public class HlaPathBuilder {
 
 			for (String elementInteraction : elementInteractionList) {
 
-				PrintStream outputStream = new PrintStream(
-						new File(System.getProperty("user.dir") + File.separator + protocolSpecDir + File.separator
-								+ "Interactions" + File.separator + elementInteraction + ".txt"));
-				PrintStream console = System.out;
-
-				System.setOut(outputStream);
-
-				{
 					String selectStatement = "SELECT * FROM Interaction WHERE name='" + elementInteraction + "'";
 
-					List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
+					List<DbInteraction> list = hlaPathBuilder.databaseAPI.selectFromInteractionTable(selectStatement);
 
-					for (DbObject var : list) {
+					for (DbInteraction var : list) {
 
+						byte[] pathBytes = var.path.getBytes();
+						String cityHashHex = CityHash.cityHash64Hex(pathBytes, 0, pathBytes.length);
+						
+						PrintStream outputStream = new PrintStream(new File(System.getProperty("user.dir") + File.separator
+								+ protocolSpecDir + File.separator + "Interactions" + File.separator + var.name + "_" + cityHashHex + ".txt"));
+						PrintStream console = System.out;
+						System.setOut(outputStream);
+						
 						System.out.println("id = " + var.id);
-						System.out.println("name = " + var.name);
+						System.out.println("name = " + var.name + "_" + cityHashHex);
 						System.out.println("path = " + var.path);
 						if (uuidMarkupOutput)
 							System.out.println("debugPath = " + var.debugPath);
-						System.out.println("parentObject = " + var.parentObject);
+						System.out.println("parentObject = " + var.parentObject);			
 
 						buildElementPaths.resetState();
 						buildElementPaths.startTraversal(Element.Interaction, var.id);
+						
+						System.out.println("\n");
+						System.setOut(console);
 					}
 				}
-
-				System.out.println("\n");
-				System.setOut(console);
-				outputStream.close();
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
