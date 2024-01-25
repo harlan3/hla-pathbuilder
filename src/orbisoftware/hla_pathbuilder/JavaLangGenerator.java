@@ -18,11 +18,8 @@
  *
  */
 
-package orbisoftware.hla_pathbuilder.db_classes;
+package orbisoftware.hla_pathbuilder;
 
-public class DbSimpleDatatype {
+public class JavaLangGenerator {
 
-	public String id; // UUID
-	public String name;
-	public String type;
 }

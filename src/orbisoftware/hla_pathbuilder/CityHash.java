@@ -1,5 +1,3 @@
-package orbisoftware.hla_pathbuilder;
-
 /*
  * Copyright (C) 2012 tamtam180
  *
@@ -21,6 +19,9 @@ package orbisoftware.hla_pathbuilder;
  * @see http://google-opensource.blogspot.jp/2011/04/introducing-cityhash.html
  * @see http://code.google.com/p/cityhash/
  */
+
+package orbisoftware.hla_pathbuilder;
+
 public class CityHash {
 
     private static final long k0 = 0xc3a5c85c97cb3127L;

@@ -33,6 +33,7 @@ public class BuildElementPaths {
 	
 	private String[] rootElementPathArray;
 	private int currentRootPathIndex = 0;
+	private int currentPathDef = 0;
 	
 	private Constants.Element elementIsType;
 	
@@ -46,6 +47,7 @@ public class BuildElementPaths {
 		attrParams.clear();
 		rootElementPathArray = new String[0];
 		currentRootPathIndex = 0;
+		currentPathDef = 0;
 	}
 	
 	// SQL Table ID
@@ -215,10 +217,15 @@ public class BuildElementPaths {
 		
 		if (foundMatch) {
 			
+			if (currentPathDef > 0)
+				System.out.println("</pathDef" + currentPathDef + ">");
+			currentPathDef++;
+			System.out.println("\n<pathDef" + currentPathDef + ">");
+			
 			if (elementIsType == Constants.Element.Object)
-				System.out.print("\nObject Path: [");
+				System.out.print("Path: [");
 			else
-				System.out.print("\nInteraction Path: [");
+				System.out.print("Path: [");
 			
 			for (int i=0; i<foundIndex; i++) {
 				System.out.print(rootElementPathArray[i]);
@@ -320,10 +327,13 @@ public class BuildElementPaths {
     	
     	List<DbVariantRecordField> list = databaseAPI.selectFromVariantRecordFieldTable(selectStatement);
     	List<SearchToken> uuidRefList = new ArrayList<SearchToken>();
+    	int index = 0;
     	
     	for (DbVariantRecordField var : list) {
     		
-    		boolean ignore = HlaPathBuilder.useVariantSelect;
+    		// Output variant containing the discriminant and one alternative path. 
+    		// Use a different index to select another alternative.
+    		boolean useVariantRecord = (index < 2);
     		
     		/*
     		System.out.println("id = " + var.id);
@@ -336,23 +346,14 @@ public class BuildElementPaths {
     		System.out.println("parentObject = " + var.parentObject);
     		System.out.println();
 			*/
-
-    		for (VariantSelect variantSelect : HlaPathBuilder.variantSelectList) {
-    			
-    			if ((var.parentObject.equals(variantSelect.parentUUID)) &&
-    				(var.discriminant == true))
-    				ignore = false;
-    			
-        		if ((var.parentObject.equals(variantSelect.parentUUID)) &&
-        			(var.name.equals(variantSelect.alternative)))
-        			ignore = false;
-    		}
     		
-    		if (!ignore) {
+    		if (useVariantRecord) {
 
     			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
 	    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
     		}
+    		
+    		index++;
     	}
     	
     	traverseGeneric(uuidRefList);
@@ -518,16 +519,25 @@ public class BuildElementPaths {
 			rootElementPathArray = getObjectPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
 			traverseObject(elementUUID);
+			if (currentPathDef > 0)
+				System.out.println("</pathDef" + currentPathDef + ">");
 			System.out.println();
+			System.out.println("<metaData>");
 			System.out.println("Attributes: " + this.attrParams.toString());
+			System.out.println("Attributes Length: " + this.attrParams.size());
+			System.out.println("</metaData>");
 		} else if (element == Constants.Element.Interaction) {
 			
 			elementIsType = Constants.Element.Interaction;
 			rootElementPathArray = getInteractionPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
 			traverseInteraction(elementUUID);
+			if (currentPathDef > 0)
+				System.out.println("</pathDef" + currentPathDef + ">");
 			System.out.println();
+			System.out.println("<metaData>");
 			System.out.println("Parameters: " + this.attrParams.toString());
+			System.out.println("</metaData>");
 		}
 	}
 	

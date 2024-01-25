@@ -18,11 +18,37 @@
  *
  */
 
-package orbisoftware.hla_pathbuilder.db_classes;
+package orbisoftware.hla_pathbuilder;
 
-public class DbSimpleDatatype {
+import java.util.ArrayList;
+import java.util.List;
 
-	public String id; // UUID
-	public String name;
-	public String type;
+class NodeElement {
+	
+    List<NodeElement> children;
+    
+	String elementString = "";
+
+    public NodeElement(String elementString) {
+    	
+        this.elementString = elementString;
+        
+        this.children = new ArrayList<>();
+    }
+    
+    public boolean isNodeEqual(NodeElement nodeValue) {
+    	
+    	if (this.elementString.equals(nodeValue.elementString))
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public boolean isNodeEqual(String nodeValue) {
+    	
+    	if (this.elementString.equals(nodeValue))
+    		return true;
+    	else
+    		return false;
+    }
 }

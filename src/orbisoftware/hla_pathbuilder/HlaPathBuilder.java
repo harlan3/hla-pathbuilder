@@ -45,10 +45,9 @@ public class HlaPathBuilder {
 	private DatabaseAPI databaseAPI = new DatabaseAPI();
 	private static String fomFilename = "";
 	private static final String fomSupportTypes = "FOM_support_types.xml";
-	private static final String protocolSpecDir = "protocol_specs";
+	public static final String protocolSpecDir = "protocol_specs";
 	private static String elementModel = "";
 	private static String encoderLanguage = "";
-	public static List<VariantSelect> variantSelectList = new ArrayList<VariantSelect>();
 	public static Stack<String> pathBuilderStack = new Stack<String>();
 	public static Stack<String> debugStack = new Stack<String>();
 	public static List<String> elementObjectList = new ArrayList<String>();
@@ -60,11 +59,7 @@ public class HlaPathBuilder {
 	public static boolean useMemoryDb = false;
 
 	// If true, output of pathdefs will contain UUIDs instead of field names
-	public static boolean uuidMarkupOutput = false;
-
-	// If true, all variants and alternatives will be ignored that do not have a
-	// VariantSelect created.
-	public static boolean useVariantSelect = false;
+	public static boolean uuidMarkupOutput = true;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -947,6 +942,8 @@ public class HlaPathBuilder {
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
+		MMGenerator mmGenerator = new MMGenerator();
+		CodeGenerator codeGenerator = new CodeGenerator();
 
 		CmdLineParser parser = new CmdLineParser();
 
@@ -985,7 +982,8 @@ public class HlaPathBuilder {
 			Path myDbPath = Paths.get(System.getProperty("user.dir") + File.separator + "myDB");
 			boolean dbExist = Files.exists(myDbPath);
 
-			hlaPathBuilder.databaseAPI.initDatabase();
+			hlaPathBuilder.databaseAPI.initDatabase();	
+			
 
 			if (useMemoryDb || (!useMemoryDb && !dbExist)) {
 				
@@ -1136,18 +1134,23 @@ public class HlaPathBuilder {
 						PrintStream console = System.out;
 						System.setOut(outputStream);
 						
+						System.out.println("<info>");
 						System.out.println("id = " + var.id);
 						System.out.println("name = " + var.name + "_" + cityHashHex);
 						System.out.println("path = " + var.path);
 						if (uuidMarkupOutput)
 							System.out.println("debugPath = " + var.debugPath);
 						System.out.println("parentObject = " + var.parentObject);			
-
+						System.out.println("</info>");
+						
 						buildElementPaths.resetState();
 						buildElementPaths.startTraversal(Element.Object, var.id);
 						
 						System.out.println("\n");
 						System.setOut(console);
+						
+						mmGenerator.setDatabase(hlaPathBuilder.databaseAPI);
+						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Object);
 					}
 				}
 		} catch (Exception e) {
@@ -1173,18 +1176,23 @@ public class HlaPathBuilder {
 						PrintStream console = System.out;
 						System.setOut(outputStream);
 						
+						System.out.println("<info>");
 						System.out.println("id = " + var.id);
 						System.out.println("name = " + var.name + "_" + cityHashHex);
 						System.out.println("path = " + var.path);
 						if (uuidMarkupOutput)
 							System.out.println("debugPath = " + var.debugPath);
 						System.out.println("parentObject = " + var.parentObject);			
-
+						System.out.println("</info>");
+						
 						buildElementPaths.resetState();
 						buildElementPaths.startTraversal(Element.Interaction, var.id);
 						
 						System.out.println("\n");
 						System.setOut(console);
+						
+						mmGenerator.setDatabase(hlaPathBuilder.databaseAPI);
+						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Interaction);
 					}
 				}
 		} catch (Exception e) {
