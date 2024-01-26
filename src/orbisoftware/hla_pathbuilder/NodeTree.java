@@ -225,7 +225,7 @@ public class NodeTree {
         		String tid[] = elementNodes[2].replaceAll("\\s+","").split("=");
         		
         		printContents(format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\"" + elementNodes[0].trim() + "\" " +
-	        		"TID=\"" + tid[1] + "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+	        		"TID=\"" + tid[1] + "\" " + elementNodes[1].trim() + " FOLDED=\"true\"" + " expanded=\"false\"" + ">");
 	        	
         	} else if ((node.elementString.contains("path=")) || (node.elementString.contains("classHandle="))) {
         		
@@ -264,7 +264,7 @@ public class NodeTree {
         		String format = insertIndentSpaces();
         		String tid[] = elementNodes[1].replaceAll("\\s+","").split("=");
         		printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + elementNodes[0].trim() + "\" " +
-	        		"TID=\"" + tid[1] + "\" FOLDED=\"true\">");
+	        		"TID=\"" + tid[1] + "\" FOLDED=\"true\"" + " + expanded=\"false\"" + ">");
         		
         	}
         }
