@@ -253,7 +253,7 @@ public class MMGenerator {
 						System.out.println("<map version=\"1.0.1\">");
 						updateElementTreeFromLine("ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\"" + classNameShort
 								+ "\"" + " className=\"" + classNameFull + "\"" + " classHandle=\"" + classHandle + "\""
-								+ " FOLDED=\"true\"" + " expanded=\"false\"" + ">");
+								+ " FOLDED=\"true\"" + ">");
 					}
 				}
 
@@ -269,7 +269,7 @@ public class MMGenerator {
 
 						String pathLine = "ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\""
 								+ pathTokens[(pathTokens.length - 1)] + "\"" + " path=\"" + path + "\""
-								+ " FOLDED=\"true\"" + " expanded=\"false\"" + ">";
+								+ " FOLDED=\"true\"" + ">";
 						updateElementTreeFromLine(pathLine);
 					}
 
