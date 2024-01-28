@@ -217,15 +217,13 @@ public class NodeTree {
         	
         	String elementNodes[] = node.elementString.split("\\|");
         	
-        	if (node.elementString.contains("TID = Array")) {
+        	if (node.elementString.contains("TID=Array")) {
         		
             	setStackDepthInc();
             	String format = insertIndentSpaces();
-                
-        		String tid[] = elementNodes[2].replaceAll("\\s+","").split("=");
         		
         		printContents(format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\"" + elementNodes[0].trim() + "\" " +
-	        		"TID=\"" + tid[1] + "\" " + elementNodes[1].trim() + " FOLDED=\"false\">");
+	        		elementNodes[2].trim() + elementNodes[1].trim() + " FOLDED=\"true\">");
 	        	
         	} else if ((node.elementString.contains("path=")) || (node.elementString.contains("classHandle="))) {
         		
@@ -262,9 +260,8 @@ public class NodeTree {
         		
         		setStackDepthInc();
         		String format = insertIndentSpaces();
-        		String tid[] = elementNodes[1].replaceAll("\\s+","").split("=");
         		printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + elementNodes[0].trim() + "\" " +
-	        		"TID=\"" + tid[1] + "\" FOLDED=\"false\">");
+	        		elementNodes[1].trim() + " FOLDED=\"true\">");
         		
         	}
         }

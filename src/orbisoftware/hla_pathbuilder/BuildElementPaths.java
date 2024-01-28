@@ -36,6 +36,9 @@ public class BuildElementPaths {
 	private int currentPathDef = 0;
 	
 	private Constants.Element elementIsType;
+	private String currentPath = "";
+	
+	private static String rollingKeyHash;
 	
 	BuildElementPaths() {
 		
@@ -48,6 +51,8 @@ public class BuildElementPaths {
 		rootElementPathArray = new String[0];
 		currentRootPathIndex = 0;
 		currentPathDef = 0;
+		currentPath = "";
+		rollingKeyHash = "";
 	}
 	
 	// SQL Table ID
@@ -222,20 +227,19 @@ public class BuildElementPaths {
 			currentPathDef++;
 			System.out.println("\n<pathDef" + currentPathDef + ">");
 			
-			if (elementIsType == Constants.Element.Object)
-				System.out.print("Path: [");
-			else
-				System.out.print("Path: [");
+			currentPath = "Path: [";
 			
 			for (int i=0; i<foundIndex; i++) {
-				System.out.print(rootElementPathArray[i]);
+				currentPath += rootElementPathArray[i];
 				if (i != (foundIndex-1))
-					System.out.print(", ");
+					currentPath += (", ");
 			}
 			
 			currentRootPathIndex = foundIndex - 1;
 			
-			System.out.println("]");
+			currentPath += "]";
+			
+			System.out.println(currentPath);
 		}
 	}
 	
@@ -331,9 +335,10 @@ public class BuildElementPaths {
     	
     	for (DbVariantRecordField var : list) {
     		
-    		// Output variant containing the discriminant and one alternative path. 
-    		// Use a different index to select another alternative.
-    		boolean useVariantRecord = (index < 2);
+    		// Output variant containing the discriminant and one alternative path.
+    		//boolean useVariantRecord = (index < 2);
+    		
+    		boolean useVariantRecord = true;
     		
     		/*
     		System.out.println("id = " + var.id);
@@ -460,10 +465,13 @@ public class BuildElementPaths {
 		
 		for (SearchToken searchToken : searchTokenList) {
 						
+			String hashPathString = currentPath + " " + rollingKeyHash + " " + searchToken.type + " " + searchToken.name + " " + searchToken.uuid;
+			rollingKeyHash = CityHash.cityHash64Hex(hashPathString.getBytes(), 0 ,hashPathString.length());
+			
 			if (HlaPathBuilder.uuidMarkupOutput)
-				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name + " | " + "TID = " + searchToken.tid + " | " + searchToken.uuid); 
+				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name + " | " + "TID=\"" + searchToken.tid + "\" | " + rollingKeyHash + " | " + searchToken.uuid); 
 			else
-				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name); 
+				pathFollowStack.push("(" + searchToken.type + ") " + searchToken.name);
 			
 			switch(getTID(searchToken)) {
 			
@@ -537,6 +545,7 @@ public class BuildElementPaths {
 			System.out.println();
 			System.out.println("<metaData>");
 			System.out.println("Parameters: " + this.attrParams.toString());
+			System.out.println("Parameters Length: " + this.attrParams.size());
 			System.out.println("</metaData>");
 		}
 	}
