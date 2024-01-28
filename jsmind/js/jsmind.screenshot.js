@@ -1,6 +1,6 @@
-/**
- * @license BSD
- * @copyright 2014-2023 hizzgdev@163.com
+/*
+ * Released under BSD License
+ * Copyright (c) 2014-2015 hizzgdev@163.com
  * 
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
@@ -8,7 +8,7 @@
 
 (function ($w) {
     'use strict';
-    console.warn("The version is outdated. see details: https://hizzgdev.github.io/jsmind/es6/")
+
     var __name__ = 'jsMind';
     var jsMind = $w[__name__];
     if (!jsMind) { return; }
@@ -66,7 +66,7 @@
 
     jcanvas.fittingString = function (ctx, text, max_width) {
         var width = ctx.measureText(text).width;
-        var ellipsis = '…';
+        var ellipsis = '…'
         var ellipsis_width = ctx.measureText(ellipsis).width;
         if (width <= max_width || width <= ellipsis_width) {
             return text;
@@ -170,7 +170,7 @@
             ctx.textBaseline = 'bottom';
             ctx.fillStyle = '#000';
             ctx.font = '11px Verdana,Arial,Helvetica,sans-serif';
-            ctx.fillText('github.com/hizzgdev/jsmind', c.width - 5.5, c.height - 2.5);
+            ctx.fillText('hizzgdev.github.io/jsmind', c.width - 5.5, c.height - 2.5);
             ctx.textAlign = 'left';
             ctx.fillText($w.location, 5.5, c.height - 2.5);
         },

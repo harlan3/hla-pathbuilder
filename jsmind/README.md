@@ -1,31 +1,39 @@
-# jsMind
+jsMind
+======
 
-[![npm version](https://badge.fury.io/js/jsmind.svg)](https://www.npmjs.com/package/jsmind)
-![build-test](https://github.com/hizzgdev/jsmind/actions/workflows/node.js.yml/badge.svg)
+jsMind 是一个显示/编辑思维导图的纯 javascript 类库，其基于 html5 的 canvas 进行设计。jsMind 以 BSD 协议开源，在此基础上你可以在你的项目上任意使用。你可以在此浏览[适用于 jsMind 的 BSD 许可协议(中英文版本)][3]。
 
-jsMind 是一个显示/编辑思维导图的纯 javascript 类库，其基于 html5 canvas 和 svg 进行设计。jsMind 以 [BSD 协议开源](LICENSE)，在此基础上你可以在你的项目上任意使用。
+jsMind is a pure javascript library for mindmap, it base on html5 canvas. jsMind was released under BSD license, you can embed it in any project, if only you observe the license. You can read [the BSD license agreement for jsMind in English and Chinese version][3] here.
 
-jsMind is mind map library built by javascript, it base on html5 canvas and svg. jsMind is released under [the BSD license](LICENSE), you can embed it in any project as long as you abide by the license.
+**jsmind 现已发布到 npm https://www.npmjs.com/package/jsmind**
 
-## Project Home
+Links:
 
--   [jsMind on Github](https://github.com/hizzgdev/jsmind)
--   [国内镜像 - Gitee](https://gitee.com/hizzgdev/jsmind)
+* App : <http://jsmind.sinaapp.com>
+* Home : <http://hizzgdev.github.io/jsmind/developer.html>
+* Demo :
+  * <http://hizzgdev.github.io/jsmind/example/1_basic.html>
+  * <http://hizzgdev.github.io/jsmind/example/2_features.html>
+* Documents :
+  * [简体中文][1]
+  * [English(draft)][2]
+* Wiki :
+  * [邮件列表 Mailing List](../../wiki/MailingList)
+  * [热点问题 Hot Topics](../../wiki/HotTopics)
+* Donate :
+  * [资助本项目的开发][4]
 
-## Get Started
+Get Started:
 
 ```html
 <html>
     <head>
-        <link
-            type="text/css"
-            rel="stylesheet"
-            href="//cdn.jsdelivr.net/npm/jsmind@0.8.1/style/jsmind.css"
-        />
-        <script
-            type="text/javascript"
-            src="//cdn.jsdelivr.net/npm/jsmind@0.8.1/es6/jsmind.js"
-        ></script>
+        <link type="text/css" rel="stylesheet" href="style/jsmind.css" />
+        <script type="text/javascript" src="js/jsmind.js"></script>
+        <!--
+            enable drag-and-drop feature
+            <script type="text/javascript" src="js/jsmind.draggable.js"></script>
+        -->
     </head>
     <body>
         <div id="jsmind_container"></div>
@@ -33,12 +41,12 @@ jsMind is mind map library built by javascript, it base on html5 canvas and svg.
         <script type="text/javascript">
             var mind = {
                 // 3 data formats were supported ...
-                // see documents for more information
+                // see Documents for more information
             };
             var options = {
-                container: 'jsmind_container',
-                theme: 'orange',
-                editable: true,
+                container:'jsmind_container',
+                theme:'orange',
+                editable:true
             };
             var jm = new jsMind(options);
             jm.show(mind);
@@ -47,28 +55,7 @@ jsMind is mind map library built by javascript, it base on html5 canvas and svg.
 </html>
 ```
 
-## Links
-
--   Resources:
-    -   [文档 - Documents](https://hizzgdev.github.io/jsmind/docs)
-    -   [NPM - jsmind](https://www.npmjs.com/package/jsmind)
-    -   CDN - [用法](docs/zh/1.usage.md) [Usage](docs/en/1.usage.md)
-        -   [UNPKG](https://unpkg.com/browse/jsmind/)
-        -   [jsDelivr](https://www.jsdelivr.com/package/npm/jsmind/)
-        -   [jsDelivr 国内镜像](https://jsd.onmicrosoft.cn/npm/jsmind/)
--   Apps :
-    -   <https://jsmind.online>
--   Demo :
-    -   [显示一个脑图 Render a mindmap](https://hizzgdev.github.io/jsmind/example/1_basic.html) [[国内版](https://hizzgdev.github.io/jsmind/example/1_basic_cn.html)]
-    -   [试用所有功能 Try all features](https://hizzgdev.github.io/jsmind/example/2_features.html) [[国内版](https://hizzgdev.github.io/jsmind/example/2_features_cn.html)]
-    -   [requirejs + jsMind](https://hizzgdev.github.io/jsmind/example/3_requirejs.html)
-    -   [更多示例 - More samples](https://github.com/hizzgdev/jsmind-samples) [[国内版](https://gitee.com/hizzgdev/jsmind-samples)]
-
-## Funding
-
--   [致谢 - Acknowledgement](https://hizzgdev.github.io/acknowledgement.html)
--   [资助 - Sponsor](https://hizzgdev.github.io/sponsor.html)
-
-## Maintainer
-
--   [张志刚 - Zhigang Zhang](https://hizzgdev.github.io)
+[1]:docs/zh/index.md
+[2]:docs/en/index.md
+[3]:LICENSE
+[4]:http://hizzgdev.github.io/jsmind/donate.html

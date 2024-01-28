@@ -1,6 +1,6 @@
-/**
- * @license BSD
- * @copyright 2014-2023 hizzgdev@163.com
+/*
+ * Released under BSD License
+ * Copyright (c) 2014-2015 hizzgdev@163.com
  * 
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
@@ -8,7 +8,6 @@
 
 (function ($w) {
     'use strict';
-    console.warn("The version is outdated. see details: https://hizzgdev.github.io/jsmind/es6/")
     var $d = $w.document;
     var __name__ = 'jsMind';
     var jsMind = $w[__name__];
@@ -24,11 +23,8 @@
 
     var options = {
         line_width: 5,
-        line_color: 'rgba(0,0,0,0.3)',
         lookup_delay: 500,
-        lookup_interval: 80,
-        scrolling_trigger_width: 20,
-        scrolling_step_length: 10
+        lookup_interval: 80
     };
 
     jsMind.draggable = function (jm) {
@@ -49,8 +45,6 @@
         this.hlookup_timer = 0;
         this.capture = false;
         this.moved = false;
-        this.view_panel = jm.view.e_panel;
-        this.view_panel_rect = null
     };
 
     jsMind.draggable.prototype = {
@@ -111,7 +105,7 @@
         _magnet_shadow: function (node) {
             if (!!node) {
                 this.canvas_ctx.lineWidth = options.line_width;
-                this.canvas_ctx.strokeStyle = options.line_color;
+                this.canvas_ctx.strokeStyle = 'rgba(0,0,0,0.3)';
                 this.canvas_ctx.lineCap = 'round';
                 this._clear_lines();
                 this._canvas_lineto(node.sp.x, node.sp.y, node.np.x, node.np.y);
@@ -146,7 +140,6 @@
                 jsMind.direction.right : jsMind.direction.left;
             var nodes = this.jm.mind.nodes;
             var node = null;
-            var layout = this.jm.layout;
             var min_distance = Number.MAX_VALUE;
             var distance = 0;
             var closest_node = null;
@@ -157,9 +150,6 @@
                 node = nodes[nodeid];
                 if (node.isroot || node.direction == direct) {
                     if (node.id == this.active_node.id) {
-                        continue;
-                    }
-                    if (!layout.is_visible(node)) {
                         continue;
                     }
                     ns = node.get_size();
@@ -241,16 +231,14 @@
             var jview = this.jm.view;
             var el = e.target || event.srcElement;
             if (el.tagName.toLowerCase() != 'jmnode') { return; }
-            if (jview.get_draggable_canvas()) { jview.disable_draggable_canvas() }
             var nodeid = jview.get_binded_nodeid(el);
             if (!!nodeid) {
                 var node = this.jm.get_node(nodeid);
                 if (!node.isroot) {
                     this.reset_shadow(el);
-                    this.view_panel_rect = this.view_panel.getBoundingClientRect()
                     this.active_node = node;
-                    this.offset_x = (e.clientX || e.touches[0].clientX) / jview.actualZoom - el.offsetLeft;
-                    this.offset_y = (e.clientY || e.touches[0].clientY) / jview.actualZoom - el.offsetTop;
+                    this.offset_x = (e.clientX || e.touches[0].clientX) - el.offsetLeft;
+                    this.offset_y = (e.clientY || e.touches[0].clientY) - el.offsetTop;
                     this.client_hw = Math.floor(el.clientWidth / 2);
                     this.client_hh = Math.floor(el.clientHeight / 2);
                     if (this.hlookup_delay != 0) {
@@ -278,35 +266,10 @@
                 this.show_shadow();
                 this.moved = true;
                 clear_selection();
-                var jview = this.jm.view;
-                var px = (e.clientX || e.touches[0].clientX) / jview.actualZoom - this.offset_x;
-                var py = (e.clientY || e.touches[0].clientY) / jview.actualZoom - this.offset_y;
-                // scrolling container axisY if drag nodes exceeding container
-                if (
-                    e.clientY - this.view_panel_rect.top < options.scrolling_trigger_width &&
-                    this.view_panel.scrollTop > options.scrolling_step_length
-                  ) {
-                    this.view_panel.scrollBy(0, -options.scrolling_step_length);
-                    this.offset_y += options.scrolling_step_length / jview.actualZoom;
-                  } else if (
-                    this.view_panel_rect.bottom - e.clientY < options.scrolling_trigger_width &&
-                    this.view_panel.scrollTop <
-                    this.view_panel.scrollHeight - this.view_panel_rect.height - options.scrolling_step_length
-                  ) {
-                    this.view_panel.scrollBy(0, options.scrolling_step_length);
-                    this.offset_y -= options.scrolling_step_length / jview.actualZoom;
-                  }
-                // scrolling container axisX if drag nodes exceeding container
-                if (e.clientX - this.view_panel_rect.left < options.scrolling_trigger_width && this.view_panel.scrollLeft > options.scrolling_step_length) {
-                    this.view_panel.scrollBy(-options.scrolling_step_length, 0);
-                    this.offset_x += options.scrolling_step_length / jview.actualZoom;
-                } else if (
-                    this.view_panel_rect.right - e.clientX < options.scrolling_trigger_width &&
-                    this.view_panel.scrollLeft < this.view_panel.scrollWidth - this.view_panel_rect.width - options.scrolling_step_length
-                    ) {
-                    this.view_panel.scrollBy(options.scrolling_step_length, 0);
-                    this.offset_x -= options.scrolling_step_length / jview.actualZoom;
-                }
+                var px = (e.clientX || e.touches[0].clientX) - this.offset_x;
+                var py = (e.clientY || e.touches[0].clientY) - this.offset_y;
+                var cx = px + this.client_hw;
+                var cy = py + this.client_hh;
                 this.shadow.style.left = px + 'px';
                 this.shadow.style.top = py + 'px';
                 clear_selection();
@@ -315,7 +278,6 @@
 
         dragend: function (e) {
             if (!this.jm.get_editable()) { return; }
-            if (this.jm.view.get_draggable_canvas()) { this.jm.view.enable_draggable_canvas() }
             if (this.capture) {
                 if (this.hlookup_delay != 0) {
                     $w.clearTimeout(this.hlookup_delay);
@@ -335,7 +297,6 @@
                 }
                 this.hide_shadow();
             }
-            this.view_panel_rect = null
             this.moved = false;
             this.capture = false;
         },

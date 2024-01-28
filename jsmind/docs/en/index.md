@@ -1,32 +1,19 @@
-Table of Contents
+Contents
 ======
 
-* [Usage](1.usage.md)
-  * Basic Framework
-  * Data Format
-  * Themes
-  * Styles
-* [Options](2.options.md)
-  * Introduction
-  * Conventional Options
-  * Layout Options
-  * Shortcuts
-* [API / Operation](3.operation.md)
-  * Rendering a Mindmap
-  * Finding Nodes
-  * Operation on Nodes
-  * Editing Nodes
-  * Setting Style
-  * Access to Data
-  * Other Operations
-* [Experimental Features](experimental-features.md)
-  * [Screenshot (Export as Image)](plugin-screenshot.md)
-* [Contribution](4.contribution.md)
-* [Development Guide](5.development.md)
+**Sorry, documents in English have not been completed.**
 
-copyright notice
-======
+**Thank you for helping us complete (or revise) it.**
 
-Reproduction and deduction are prohibited.
+* [1. Usage](1.usage.md)
+  * 1.1. Basic Framework
+  * 1.2. Data Format
+  * 1.3. Themes
+* [2. Options](2.options.md)
+* [3. Operation](3.operation.md)
+* [4. Contribution](4.contribution.md)
 
-The jsMind project is still being updated and the corresponding documentation is updated at the same time as the version is updated. In order to avoid confusion to the user, it is forbidden to reprint this document without written permission and to make changes of any kind to this document.
+COPYRIGHT
+===
+
+No reproduction, No derivatives.

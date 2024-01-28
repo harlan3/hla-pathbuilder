@@ -21,14 +21,14 @@
     <input type="button" value="Browse..." onclick="document.getElementById('file_input_freemind').click();" />
     <button class="sub" onclick="open_freemind();">Open File</button>
 </div>
-<script type="text/javascript" src="../js-legacy/jsmind.js"></script>
+<script type="text/javascript" src="../js/jsmind.js"></script>
 <script type="text/javascript">
     var _jm = null;
     function open_empty(){
         var options = {
             container:'jsmind_container',
             theme:'greensea',
-            editable:true
+            editable:false
         }
         _jm = jsMind.show(options);
     }
