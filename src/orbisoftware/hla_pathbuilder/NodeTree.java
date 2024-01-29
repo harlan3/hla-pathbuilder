@@ -193,7 +193,8 @@ public class NodeTree {
     
     private String conditionalInsertEndNode(String elementString) {
     	
-    	if ((elementString.contains("path")) || (elementString.contains("classHandle")))
+    	if (elementString.contains("path") || elementString.contains("classHandle") || elementString.contains("attributes") ||
+    		elementString.contains("parameters") || elementString.contains("MetaData"))
     		return "";
     	else {
     		String returnVal = "";
@@ -256,10 +257,20 @@ public class NodeTree {
         		String format = insertIndentSpaces();
         		printContents(format + "</node>");
         		
-        	} else {
+        	} else if (node.elementString.contains("<attributes>") || node.elementString.contains("<attributesLength>")) {
         		
+        		System.out.println(node.elementString);
+        				
+        	} else if (node.elementString.contains("<parameters>") || node.elementString.contains("<parametersLength>")) {
+        		
+        		System.out.println(node.elementString);
+        				
+        	} else if (node.elementString.contains("MetaData")) {
+        		// placeholder
+        	} else {
         		setStackDepthInc();
         		String format = insertIndentSpaces();
+        		
         		printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + elementNodes[0].trim() + "\" " +
 	        		elementNodes[1].trim() + " FOLDED=\"true\">");
         		

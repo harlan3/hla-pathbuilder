@@ -43,6 +43,11 @@ public class MMGenerator {
 	private String classNameShort;
 	private String classHandle;
 
+	private NodeElement metaDataNode;
+	
+	private String attributesTag;
+	private String parametersTag;
+	
 	public static final String rootNodeUUID = "00000000-0000-0000-0000-000000000000";
 
 	private List<String> documentLines;
@@ -51,8 +56,6 @@ public class MMGenerator {
 	private int nextSquashAndMergeElementNum = 0;
 
 	private NodeTree nodeTree;
-
-	boolean inVariant = true;
 
 	MMGenerator() {
 
@@ -214,6 +217,10 @@ public class MMGenerator {
 			System.setOut(outputStream);
 
 			documentLines = FileUtils.readLines(inputFile, "utf-8");
+			
+			// Create link at the root of the tree for MetaData
+			
+			this.metaDataNode = nodeTree.insertNode(this.nodeTree.root, "MetaData");
 
 			for (String line : documentLines) {
 
@@ -260,6 +267,41 @@ public class MMGenerator {
 					if (!line.contains("<pathDef") && (!line.contains("</pathDef") && (!line.contains("Path:"))))
 						updateElementTreeFromLine(line);
 				}
+				
+				if (stateMachine == GeneratorStateMachine.MetaData) {
+					
+					if (line.contains("Attributes:")) {
+						
+						String lineTokens[] = line.split(":");
+						attributesTag = "<attributes>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</attributes>";
+					}
+					
+					if (line.contains("Attributes Length:")) {
+						
+						String lineTokens[] = line.split(":");
+						String attributesLengthTag = "<attributesLength>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</attributesLength>";
+						
+						nodeTree.insertNode(this.metaDataNode, attributesTag);
+						nodeTree.insertNode(this.metaDataNode, attributesLengthTag);
+					}
+					
+					if (line.contains("Parameters:")) {
+						
+						String lineTokens[] = line.split(":");
+						parametersTag = "<parameters>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</parameters>";
+					}
+					
+					if (line.contains("Parameters Length:")) {
+						
+						String lineTokens[] = line.split(":");
+						String parametersLengthTag = "<parametersLength>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</parametersLength>";
+						
+						nodeTree.insertNode(this.metaDataNode, parametersTag);
+						nodeTree.insertNode(this.metaDataNode, parametersLengthTag);
+					}
+						
+				}
+				
 			}
 
 			this.nodeTree.traverseTree(nodeTree.root);
