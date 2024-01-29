@@ -281,8 +281,10 @@ public class MMGenerator {
 						String lineTokens[] = line.split(":");
 						String attributesLengthTag = "<attributesLength>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</attributesLength>";
 						
-						nodeTree.insertNode(this.metaDataNode, attributesTag);
-						nodeTree.insertNode(this.metaDataNode, attributesLengthTag);
+						nodeTree.insertNode(this.metaDataNode, "<metaData>");
+						nodeTree.insertNode(this.metaDataNode, "   " + attributesTag);
+						nodeTree.insertNode(this.metaDataNode, "   " + attributesLengthTag);
+						nodeTree.insertNode(this.metaDataNode, "</metaData>");
 					}
 					
 					if (line.contains("Parameters:")) {
@@ -296,8 +298,10 @@ public class MMGenerator {
 						String lineTokens[] = line.split(":");
 						String parametersLengthTag = "<parametersLength>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</parametersLength>";
 						
-						nodeTree.insertNode(this.metaDataNode, parametersTag);
-						nodeTree.insertNode(this.metaDataNode, parametersLengthTag);
+						nodeTree.insertNode(this.metaDataNode, "<metaData>");
+						nodeTree.insertNode(this.metaDataNode, "   " + parametersTag);
+						nodeTree.insertNode(this.metaDataNode, "   " + parametersLengthTag);
+						nodeTree.insertNode(this.metaDataNode, "</metaData>");
 					}
 						
 				}

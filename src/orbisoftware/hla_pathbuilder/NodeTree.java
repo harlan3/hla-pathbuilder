@@ -194,7 +194,7 @@ public class NodeTree {
     private String conditionalInsertEndNode(String elementString) {
     	
     	if (elementString.contains("path") || elementString.contains("classHandle") || elementString.contains("attributes") ||
-    		elementString.contains("parameters") || elementString.contains("MetaData"))
+    		elementString.contains("parameters") || elementString.contains("metaData") || elementString.contains("MetaData"))
     		return "";
     	else {
     		String returnVal = "";
@@ -262,6 +262,10 @@ public class NodeTree {
         		System.out.println(node.elementString);
         				
         	} else if (node.elementString.contains("<parameters>") || node.elementString.contains("<parametersLength>")) {
+        		
+        		System.out.println(node.elementString);
+        				
+        	}else if (node.elementString.contains("<metaData>") || node.elementString.contains("</metaData>")) {
         		
         		System.out.println(node.elementString);
         				
