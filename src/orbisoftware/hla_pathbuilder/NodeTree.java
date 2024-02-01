@@ -31,15 +31,14 @@ public class NodeTree {
     private int startNodeCount;
     private int endNodeCount;
     private int pathCount;
-    private int classCount;
     
     public NodeTree(String rootValue) {
+    	
         this.root = new NodeElement(rootValue);
         this.stackDepth = 0;
         this.startNodeCount = 0;
         this.endNodeCount = 0;
         this.pathCount = 0;
-        this.classCount = 0;
     }
 
     public NodeElement insertNode(NodeElement parent, String value) {
@@ -150,7 +149,7 @@ public class NodeTree {
     	stackDepth = stackDepth - 3;
     	
     	if (stackDepth < 1)
-		    stackDepth = 1;
+		    stackDepth = 0;
     }
     
     private String insertIndentSpaces() {
@@ -231,20 +230,16 @@ public class NodeTree {
         		if (node.elementString.contains("path=")) {
 	        		pathCount++;
 	        		
+	        		// indent for path
+        			setStackDepthInc();
+        			
 	        		// inject closing node for path
 	        		if (pathCount > 1) {
 	        			
+	        			setStackDepthDec();
 	            		String format = insertIndentSpaces();
 	            		printContents(format + "</node>");
-	        		}
-        		}
-        		
-        		// don't indent the first line
-        		if (node.elementString.contains("classHandle=")) {
-	        		classCount++;
-	        		
-	        		if (classCount != 1) {
-	        			setStackDepthInc();
+	            		setStackDepthInc();
 	        		}
         		}
         		
@@ -265,7 +260,7 @@ public class NodeTree {
         		
         		System.out.println(node.elementString);
         				
-        	}else if (node.elementString.contains("<metaData>") || node.elementString.contains("</metaData>")) {
+        	} else if (node.elementString.contains("<metaData>") || node.elementString.contains("</metaData>")) {
         		
         		System.out.println(node.elementString);
         				
