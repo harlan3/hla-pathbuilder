@@ -218,13 +218,13 @@ public class NodeTree {
         	
         	String elementNodes[] = node.elementString.split("\\|");
         	
-        	if (node.elementString.contains("TID=Array")) {
+        	if (node.elementString.contains("TID=\"Array\"")) {
         		
             	setStackDepthInc();
             	String format = insertIndentSpaces();
         		
         		printContents(format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\"" + elementNodes[0].trim() + "\" " +
-	        		elementNodes[2].trim() + elementNodes[1].trim() + " FOLDED=\"true\">");
+	        		elementNodes[2].trim() + " " + elementNodes[1].trim() + " FOLDED=\"true\">");
 	        	
         	} else if ((node.elementString.contains("path=")) || (node.elementString.contains("classHandle="))) {
         		

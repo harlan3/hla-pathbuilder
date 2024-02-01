@@ -100,7 +100,7 @@ public class MMGenerator {
 			 */
 
 			returnVal = var.name + " " + elementTokens[1] + " | cardinality=\"" + var.cardinality + "\" encoding=\""
-					+ var.encoding + "\" | " + "TID=Array" + " | " + elementTokens[5];
+					+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
 		}
 
 		return returnVal;
@@ -122,7 +122,7 @@ public class MMGenerator {
 		String simpleEnumSubTokens[] = simpleEnumTokens[0].split(" ");
 		String basicSubTokens[] = basicTokens[0].split(" ");
 
-		returnVal = basicSubTokens[0] + " " + simpleEnumSubTokens[1] + " | " + "TID=Basic" + " | "
+		returnVal = basicSubTokens[0] + " " + simpleEnumSubTokens[1] + " | " + "TID=\"Basic\"" + " | "
 				+ simpleEnumTokens[2];
 
 		return returnVal;
@@ -142,18 +142,18 @@ public class MMGenerator {
 			String nextElementString = elementTokens[i].replaceAll("[\\[\\]]", "").trim();
 			nextElementString = nextElementString.replaceAll("[()]", "");
 
-			if (nextElementString.contains("TID=Array")) {
+			if (nextElementString.contains("TID=\"Array\"")) {
 
 				nextElementString = queryArrayComponents(nextElementString);
-			} else if (nextElementString.contains("TID=Simple") || nextElementString.contains("TID=Enumerated")) {
+			} else if (nextElementString.contains("TID=\"Simple\"") || nextElementString.contains("TID=\"Enumerated\"")) {
 
 				nextSquashAndMergeElement = nextElementString;
 				nextSquashAndMergeElementNum = i;
 				prevElementString = nextElementString;
 				continue;
-			} else if (nextElementString.contains("TID=Basic")) {
+			} else if (nextElementString.contains("TID=\"Basic\"")) {
 
-				if (prevElementString.contains("TID=Simple") || prevElementString.contains("TID=Enumerated"))
+				if (prevElementString.contains("TID=\"Simple\"") || prevElementString.contains("TID=\"Enumerated\""))
 					nextElementString = squashAndMergeSimpleEnum(nextElementString, i);
 			}
 
