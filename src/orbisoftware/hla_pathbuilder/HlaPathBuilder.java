@@ -47,7 +47,6 @@ public class HlaPathBuilder {
 	private static final String fomSupportTypes = "FOM_support_types.xml";
 	public static final String protocolSpecDir = "protocol_specs";
 	private static String elementModel = "";
-	private static String encoderLanguage = "";
 	public static Stack<String> pathBuilderStack = new Stack<String>();
 	public static Stack<String> debugStack = new Stack<String>();
 	public static List<String> elementObjectList = new ArrayList<String>();
@@ -58,7 +57,7 @@ public class HlaPathBuilder {
 	// If true, use memory based database. Otherwise use a file based database.
 	public static boolean useMemoryDb = false;
 
-	// If true, output of pathdefs will contain UUIDs instead of field names
+	// If true, output of pathdefs will contain UUIDs along with the field names
 	public static boolean uuidMarkupOutput = true;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -930,9 +929,7 @@ public class HlaPathBuilder {
 		System.out.println("Generate proto specs and encoder files.");
 		System.out.println();
 		System.out.println("   -f, --fom          FOM file used by HLA federation");
-		System.out.println(
-				"   -e, --element      Element model file which controls which of the FOM models are generated");
-		System.out.println("   -l, --language     Language used for encoders. Either \"java\" or \"c++\" is valid.");
+		System.out.println("   -e, --element      Element model file which controls which of the FOM models are generated");
 		System.out.println("   -h, --help         Show this help message");
 
 	}
@@ -943,13 +940,11 @@ public class HlaPathBuilder {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
 		MMGenerator mmGenerator = new MMGenerator();
-		CodeGenerator codeGenerator = new CodeGenerator();
 
 		CmdLineParser parser = new CmdLineParser();
 
 		CmdLineParser.Option fomOption = parser.addStringOption('f', "fom");
 		CmdLineParser.Option elementOption = parser.addStringOption('e', "element");
-		CmdLineParser.Option languageOption = parser.addStringOption('l', "language");
 		CmdLineParser.Option helpOption = parser.addBooleanOption('h', "help");
 
 		try {
@@ -962,20 +957,15 @@ public class HlaPathBuilder {
 
 		String fomValue = (String) parser.getOptionValue(fomOption);
 		String elementValue = (String) parser.getOptionValue(elementOption);
-		String languageValue = (String) parser.getOptionValue(languageOption);
 		Boolean helpValue = (Boolean) parser.getOptionValue(helpOption);
 
-		if ((helpValue != null) || (fomValue == null || elementValue == null || languageValue == null)) {
-			printUsage();
-			System.exit(0);
-		} else if (!languageValue.equals("java") && !languageValue.equals("c++")) {
+		if ((helpValue != null) || (fomValue == null || elementValue == null)) {
 			printUsage();
 			System.exit(0);
 		}
 
 		fomFilename = fomValue;
 		elementModel = elementValue;
-		encoderLanguage = languageValue;
 
 		try {
 

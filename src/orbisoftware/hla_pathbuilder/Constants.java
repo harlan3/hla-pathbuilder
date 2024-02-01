@@ -22,6 +22,8 @@ package orbisoftware.hla_pathbuilder;
 
 public class Constants {
 
+	public static String NULL_UUID = "00000000-0000-0000-0000-000000000000";
+	
 	// Element type
 	public enum Element { 
 		Object,

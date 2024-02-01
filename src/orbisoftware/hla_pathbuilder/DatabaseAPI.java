@@ -26,6 +26,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +37,6 @@ public class DatabaseAPI {
 	private String connectMemoryStr = "jdbc:derby:memory:myDB;create=true"; // in memory
 	private String connectFileStr = "jdbc:derby:myDB;create=true"; // in file
 	private static Connection conn = null;
-
-	public static String NULL_UUID = "00000000-0000-0000-0000-000000000000";
 	
 	public void initDatabase() {
 		
@@ -784,7 +783,7 @@ public class DatabaseAPI {
     
     public String getUUIDForObject(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM Object WHERE name = '" + searchToken.type + "'";
 		
 		List<DbObject> returnVal = selectFromObjectTable(selectStatement);
@@ -799,7 +798,7 @@ public class DatabaseAPI {
     	
     	String selectStatement;
     	
-    	if (searchToken.uuid != NULL_UUID)
+    	if (searchToken.uuid != Constants.NULL_UUID)
     		selectStatement = "SELECT * FROM Object WHERE id = '" + searchToken.uuid + "'";
     	else
     		selectStatement = "SELECT * FROM Object WHERE name = '" + searchToken.type + "'";
@@ -811,7 +810,7 @@ public class DatabaseAPI {
     
     public String getUUIDForAttribute(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM Attribute WHERE name = '" + searchToken.type + "'";
 		
 		List<DbAttribute> returnVal = selectFromAttributeTable(selectStatement);
@@ -824,7 +823,7 @@ public class DatabaseAPI {
     
     public String getUUIDForInteraction(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM Interaction WHERE name = '" + searchToken.type + "'";
 		
 		List<DbInteraction> returnVal = selectFromInteractionTable(selectStatement);
@@ -839,7 +838,7 @@ public class DatabaseAPI {
     	
     	String selectStatement;
     	
-    	if (searchToken.uuid != NULL_UUID)
+    	if (searchToken.uuid != Constants.NULL_UUID)
     		selectStatement = "SELECT * FROM Interaction WHERE id = '" + searchToken.uuid + "'";
     	else
     		selectStatement = "SELECT * FROM Interaction WHERE name = '" + searchToken.type + "'";
@@ -851,7 +850,7 @@ public class DatabaseAPI {
     
     public String getUUIDForParameter(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM Parameter WHERE name = '" + searchToken.type + "'";
 		
 		List<DbParameter> returnVal = selectFromParameterTable(selectStatement);
@@ -864,7 +863,7 @@ public class DatabaseAPI {
     
     public String getUUIDForFixedRecord(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM FixedRecordDatatype WHERE name = '" + searchToken.type + "'";
 		
 		List<DbFixedRecordDatatype> returnVal = selectFromFixedRecordDatatypeTable(selectStatement);
@@ -879,7 +878,7 @@ public class DatabaseAPI {
     	
     	String selectStatement;
     	
-    	if (searchToken.uuid != NULL_UUID)
+    	if (searchToken.uuid != Constants.NULL_UUID)
     		selectStatement = "SELECT * FROM FixedRecordDatatype WHERE id = '" + searchToken.uuid  + "'";
     	else
     		selectStatement = "SELECT * FROM FixedRecordDatatype WHERE name = '" + searchToken.type + "'";
@@ -891,7 +890,7 @@ public class DatabaseAPI {
     
     public String getUUIDForVariantRecord(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM VariantRecordDatatype WHERE name = '" + searchToken.type + "'";
 		
 		List<DbVariantRecordDatatype> returnVal = selectFromVariantRecordDatatypeTable(selectStatement);
@@ -906,7 +905,7 @@ public class DatabaseAPI {
     	
     	String selectStatement;
     	
-    	if (searchToken.uuid != NULL_UUID)
+    	if (searchToken.uuid != Constants.NULL_UUID)
     		selectStatement = "SELECT * FROM VariantRecordDatatype WHERE id = '" + searchToken.uuid + "'";
     	else
     		selectStatement = "SELECT * FROM VariantRecordDatatype WHERE name = '" + searchToken.type + "'";
@@ -918,7 +917,7 @@ public class DatabaseAPI {
     
     public String getUUIDForArrayRecord(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM ArrayDatatype WHERE name = '" + searchToken.type + "'";
 		
 		List<DbArrayDatatype> returnVal = selectFromArrayDatatypeTable(selectStatement);
@@ -933,7 +932,7 @@ public class DatabaseAPI {
     	
     	String selectStatement;
     	
-    	if (searchToken.uuid != NULL_UUID)
+    	if (searchToken.uuid != Constants.NULL_UUID)
     		selectStatement = "SELECT * FROM ArrayDatatype WHERE id = '" + searchToken.uuid + "'";
     	else
     		selectStatement = "SELECT * FROM ArrayDatatype WHERE name = '" + searchToken.type + "'";
@@ -946,7 +945,7 @@ public class DatabaseAPI {
     
     public String getUUIDForSimpleRecord(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM SimpleDatatype WHERE name = '" + searchToken.type + "'";
 		
 		List<DbSimpleDatatype> returnVal = selectFromSimpleDatatypeTable(selectStatement);
@@ -961,7 +960,7 @@ public class DatabaseAPI {
     	
     	String selectStatement;
     	
-    	if (searchToken.uuid != NULL_UUID)
+    	if (searchToken.uuid != Constants.NULL_UUID)
     		selectStatement = "SELECT * FROM SimpleDatatype WHERE id = '" + searchToken.uuid + "'";
     	else
     		selectStatement = "SELECT * FROM SimpleDatatype WHERE name = '" + searchToken.type + "'";
@@ -973,7 +972,7 @@ public class DatabaseAPI {
     
     public String getUUIDForBasicRecord(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM BasicDatatype WHERE name = '" + searchToken.type + "'";
 		
 		List<DbBasicDatatype> returnVal = selectFromBasicDatatypeTable(selectStatement);
@@ -988,7 +987,7 @@ public class DatabaseAPI {
     	
     	String selectStatement;
     	
-    	if (searchToken.uuid != NULL_UUID)
+    	if (searchToken.uuid != Constants.NULL_UUID)
     		selectStatement = "SELECT * FROM BasicDatatype WHERE id = '" + searchToken.uuid + "'";
     	else
     		selectStatement = "SELECT * FROM BasicDatatype WHERE name = '" + searchToken.type + "'";
@@ -1000,7 +999,7 @@ public class DatabaseAPI {
     
     public String getUUIDForEnumeratedRecord(SearchToken searchToken) {
     	
-    	String returnUUID = NULL_UUID;
+    	String returnUUID = Constants.NULL_UUID;
 		String selectStatement = "SELECT * FROM EnumeratedDatatype WHERE name = '" + searchToken.type + "'";
 		
 		List<DbEnumeratedDatatype> returnVal = selectFromEnumeratedDatatypeTable(selectStatement);
@@ -1015,7 +1014,7 @@ public class DatabaseAPI {
     	
     	String selectStatement;
     	
-    	if (searchToken.uuid != NULL_UUID)
+    	if (searchToken.uuid != Constants.NULL_UUID)
     		selectStatement = "SELECT * FROM EnumeratedDatatype WHERE id = '" + searchToken.uuid + "'";
     	else
     		selectStatement = "SELECT * FROM EnumeratedDatatype WHERE name = '" + searchToken.type + "'";

@@ -75,8 +75,12 @@ public class Utils {
 			returnVal = "NullTerminatedASCIIString";
 			break;
 
-		case "RPRboolean":
-			returnVal = "HLAboolean";
+		case "RPRboolean": // Representation as HLAoctet in FOM
+			returnVal = "HLAoctet";
+			break;
+			
+		case "HLAboolean": // Representation as HLAinteger32BE in HLA standard
+			returnVal = "HLAinteger32BE";
 			break;
 
 		case "Float32":
@@ -120,6 +124,10 @@ public class Utils {
 			returnVal = "NullTerminatedASCIIString";
 			break;
 
+		case "RPRboolean":
+			returnVal = "Octet";
+			break;
+			
 		case "HLAboolean":
 			returnVal = "Boolean";
 			break;

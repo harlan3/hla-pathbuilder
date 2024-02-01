@@ -47,8 +47,6 @@ public class MMGenerator {
 	
 	private String attributesTag;
 	private String parametersTag;
-	
-	public static final String rootNodeUUID = "00000000-0000-0000-0000-000000000000";
 
 	private List<String> documentLines;
 
@@ -173,7 +171,7 @@ public class MMGenerator {
 
 		try {
 			File inputFile = null;
-			nodeTree = new NodeTree(rootNodeUUID);
+			nodeTree = new NodeTree(Constants.NULL_UUID);
 
 			if (!haveRunOnce) {
 

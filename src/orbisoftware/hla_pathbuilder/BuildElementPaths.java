@@ -23,6 +23,7 @@ package orbisoftware.hla_pathbuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import orbisoftware.hla_pathbuilder.db_classes.*;
 
 public class BuildElementPaths {
@@ -82,7 +83,7 @@ public class BuildElementPaths {
 	
 	private SearchResults deepSearchForUUID(SearchToken searchToken) {
 		
-		SearchResults searchResults = new SearchResults(Constants.TID.None, DatabaseAPI.NULL_UUID);
+		SearchResults searchResults = new SearchResults(Constants.TID.None, Constants.NULL_UUID);
 		searchResults.tid = getTID(searchToken);
 		
 		switch(searchResults.tid) {
@@ -263,7 +264,7 @@ public class BuildElementPaths {
     		System.out.println();
     		*/
     		
-    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.origName, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, var.origName, var.type));
     		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.origName, var.type));
     	}
     	
@@ -290,7 +291,7 @@ public class BuildElementPaths {
     		System.out.println();
     		*/
     		
-    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.origName, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, var.origName, var.type));
     		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.origName, var.type));
     	}
     	
@@ -318,7 +319,7 @@ public class BuildElementPaths {
     		System.out.println();
 			*/
     		
-    		SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+    		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, var.name, var.type));
     		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
     	}
     	
@@ -331,7 +332,6 @@ public class BuildElementPaths {
     	
     	List<DbVariantRecordField> list = databaseAPI.selectFromVariantRecordFieldTable(selectStatement);
     	List<SearchToken> uuidRefList = new ArrayList<SearchToken>();
-    	int index = 0;
     	
     	for (DbVariantRecordField var : list) {
     		
@@ -354,11 +354,9 @@ public class BuildElementPaths {
     		
     		if (useVariantRecord) {
 
-    			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+    			SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, var.name, var.type));
 	    		uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
     		}
-    		
-    		index++;
     	}
     	
     	traverseGeneric(uuidRefList);
@@ -382,7 +380,7 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, var.name, var.type));
 			uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
 		}
 
@@ -406,7 +404,7 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, var.name, var.type));
 			uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
 		}
 
@@ -429,7 +427,7 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, var.name, var.type));
 			uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
 		}
 
@@ -454,7 +452,7 @@ public class BuildElementPaths {
 			System.out.println();
 			*/
 			
-			SearchResults searchResults = deepSearchForUUID(new SearchToken(DatabaseAPI.NULL_UUID, Constants.TID.None, var.name, var.type));
+			SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, var.name, var.type));
 			uuidRefList.add(new SearchToken(searchResults.uuid, searchResults.tid, var.name, var.type));
 		}
 

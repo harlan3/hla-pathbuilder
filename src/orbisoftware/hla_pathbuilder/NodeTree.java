@@ -42,12 +42,14 @@ public class NodeTree {
     }
 
     public NodeElement insertNode(NodeElement parent, String value) {
+    	
         NodeElement newNode = new NodeElement(value);
         parent.children.add(newNode);
         return newNode;
     }
 
     public boolean replaceNode(NodeElement parent, String oldValue, String newValue) {
+    	
         for (int i = 0; i < parent.children.size(); i++) {
             NodeElement child = parent.children.get(i);
             if (child.isNodeEqual(oldValue)) {
@@ -63,6 +65,7 @@ public class NodeTree {
     }
 
     public boolean deleteNode(NodeElement parent, String value) {
+    	
         Iterator<NodeElement> iterator = parent.children.iterator();
         while (iterator.hasNext()) {
             NodeElement child = iterator.next();
@@ -79,6 +82,7 @@ public class NodeTree {
     }
 
     public NodeElement getParent(NodeElement root, NodeElement node) {
+    	
         if (root == node) {
             return null; // Root node has no parent
         }
@@ -97,6 +101,7 @@ public class NodeTree {
     }
 
     public NodeElement getNode(NodeElement root, String value) {
+    	
         if (root.isNodeEqual(value)) {
             return root;
         }
@@ -111,6 +116,7 @@ public class NodeTree {
     }
 
     public NodeElement getChild(NodeElement parent, String value) {
+    	
         for (NodeElement child : parent.children) {
             if (child.isNodeEqual(value)) {
                 return child;
@@ -120,6 +126,7 @@ public class NodeTree {
     }
 
     public boolean childNodeExists(NodeElement parent, String value) {
+    	
         for (NodeElement child : parent.children) {
             if (child.isNodeEqual(value) || childNodeExists(child, value)) {
                 return true;
@@ -129,6 +136,7 @@ public class NodeTree {
     }
 
     public boolean parentNodeExists(NodeElement root, NodeElement node) {
+    	
         if (root == node) {
             return true;
         }
@@ -213,7 +221,7 @@ public class NodeTree {
             return;
         }
     	
-        if (node.elementString != MMGenerator.rootNodeUUID) {
+        if (node.elementString != Constants.NULL_UUID) {
         	
         	String elementNodes[] = node.elementString.split("\\|");
         	
@@ -265,14 +273,13 @@ public class NodeTree {
         		System.out.println(node.elementString);
         				
         	} else if (node.elementString.contains("MetaData")) {
-        		// placeholder
+        		// placeholder in tree
         	} else {
         		setStackDepthInc();
         		String format = insertIndentSpaces();
         		
         		printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + elementNodes[0].trim() + "\" " +
-	        		elementNodes[1].trim() + " FOLDED=\"true\">");
-        		
+	        		elementNodes[1].trim() + " FOLDED=\"true\">");		
         	}
         }
 
