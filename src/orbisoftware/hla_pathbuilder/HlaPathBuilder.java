@@ -920,7 +920,7 @@ public class HlaPathBuilder {
 		}
 	}
 
-	void generateDatabase(String fomFilename, String elementModel)
+	public void generateDatabase(String fomFilename, String elementModel)
 	{
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

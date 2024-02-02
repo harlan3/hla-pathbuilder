@@ -21,6 +21,7 @@
 package orbisoftware.hla_pathbuilder;
 
 import jargs.gnu.CmdLineParser;
+import orbisoftware.hla_pathbuilder.HlaPathBuilder;
 
 public class MainApplication {
 	
