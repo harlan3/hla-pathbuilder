@@ -36,17 +36,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import jargs.gnu.CmdLineParser;
 import orbisoftware.hla_pathbuilder.Constants.*;
 import orbisoftware.hla_pathbuilder.db_classes.*;
 
 public class HlaPathBuilder {
 
 	private DatabaseAPI databaseAPI = new DatabaseAPI();
-	private static String fomFilename = "";
 	private static final String fomSupportTypes = "FOM_support_types.xml";
 	public static final String protocolSpecDir = "protocol_specs";
-	private static String elementModel = "";
 	public static Stack<String> pathBuilderStack = new Stack<String>();
 	public static Stack<String> debugStack = new Stack<String>();
 	public static List<String> elementObjectList = new ArrayList<String>();
@@ -923,57 +920,19 @@ public class HlaPathBuilder {
 		}
 	}
 
-	private static void printUsage() {
-
-		System.out.println("Usage: HlaPathBuilder [OPTION]...");
-		System.out.println("Generate proto specs and encoder files.");
-		System.out.println();
-		System.out.println("   -f, --fom          FOM file used by HLA federation");
-		System.out.println("   -e, --element      Element model file which controls which of the FOM models are generated");
-		System.out.println("   -h, --help         Show this help message");
-
-	}
-
-	public static void main(String[] args) {
-
+	void generateDatabase(String fomFilename, String elementModel)
+	{
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
 		MMGenerator mmGenerator = new MMGenerator();
-
-		CmdLineParser parser = new CmdLineParser();
-
-		CmdLineParser.Option fomOption = parser.addStringOption('f', "fom");
-		CmdLineParser.Option elementOption = parser.addStringOption('e', "element");
-		CmdLineParser.Option helpOption = parser.addBooleanOption('h', "help");
-
+		
 		try {
-			parser.parse(args);
-		} catch (CmdLineParser.OptionException e) {
-			System.out.println(e.getMessage());
-			printUsage();
-			System.exit(0);
-		}
-
-		String fomValue = (String) parser.getOptionValue(fomOption);
-		String elementValue = (String) parser.getOptionValue(elementOption);
-		Boolean helpValue = (Boolean) parser.getOptionValue(helpOption);
-
-		if ((helpValue != null) || (fomValue == null || elementValue == null)) {
-			printUsage();
-			System.exit(0);
-		}
-
-		fomFilename = fomValue;
-		elementModel = elementValue;
-
-		try {
-
+			
 			Path myDbPath = Paths.get(System.getProperty("user.dir") + File.separator + "myDB");
 			boolean dbExist = Files.exists(myDbPath);
 
-			hlaPathBuilder.databaseAPI.initDatabase();	
-			
+			databaseAPI.initDatabase();	
 
 			if (useMemoryDb || (!useMemoryDb && !dbExist)) {
 				
@@ -981,7 +940,7 @@ public class HlaPathBuilder {
 				PrintStream console = System.out;
 				System.setOut(outputStream);
 				
-				hlaPathBuilder.databaseAPI.createTables();
+				databaseAPI.createTables();
 
 				// First pass for dataTypes only
 				DocumentBuilder db1 = dbf.newDocumentBuilder();
@@ -995,7 +954,7 @@ public class HlaPathBuilder {
 					String name = nodeChild.getNodeName();
 
 					if (name.equals("dataTypes"))
-						hlaPathBuilder.parseDataTypes(nodeChild);
+						parseDataTypes(nodeChild);
 
 					nodeChild = nodeChild.getNextSibling();
 				}
@@ -1012,7 +971,7 @@ public class HlaPathBuilder {
 					String name = nodeChild.getNodeName();
 
 					if (name.equals("dataTypes"))
-						hlaPathBuilder.parseDataTypes(nodeChild);
+						parseDataTypes(nodeChild);
 
 					nodeChild = nodeChild.getNextSibling();
 				}
@@ -1029,10 +988,10 @@ public class HlaPathBuilder {
 					String name = nodeChild.getNodeName();
 
 					if (name.equals("objects"))
-						hlaPathBuilder.parseObjects(nodeChild);
+						parseObjects(nodeChild);
 
 					if (name.equals("interactions"))
-						hlaPathBuilder.parseInteractions(nodeChild);
+						parseInteractions(nodeChild);
 
 					nodeChild = nodeChild.getNextSibling();
 				}
@@ -1103,7 +1062,7 @@ public class HlaPathBuilder {
 		}
 
 		// Set database API
-		buildElementPaths.setDatabase(hlaPathBuilder.databaseAPI);
+		buildElementPaths.setDatabase(databaseAPI);
 		
 		// Process all objects defined in elementObjectList
 		try {
@@ -1112,7 +1071,7 @@ public class HlaPathBuilder {
 
 					String selectStatement = "SELECT * FROM Object WHERE name='" + elementObject + "'";
 
-					List<DbObject> list = hlaPathBuilder.databaseAPI.selectFromObjectTable(selectStatement);
+					List<DbObject> list = databaseAPI.selectFromObjectTable(selectStatement);
 
 					for (DbObject var : list) {
 
@@ -1139,7 +1098,7 @@ public class HlaPathBuilder {
 						System.out.println("\n");
 						System.setOut(console);
 						
-						mmGenerator.setDatabase(hlaPathBuilder.databaseAPI);
+						mmGenerator.setDatabase(databaseAPI);
 						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Object);
 					}
 				}
@@ -1154,7 +1113,7 @@ public class HlaPathBuilder {
 
 					String selectStatement = "SELECT * FROM Interaction WHERE name='" + elementInteraction + "'";
 
-					List<DbInteraction> list = hlaPathBuilder.databaseAPI.selectFromInteractionTable(selectStatement);
+					List<DbInteraction> list = databaseAPI.selectFromInteractionTable(selectStatement);
 
 					for (DbInteraction var : list) {
 
@@ -1181,7 +1140,7 @@ public class HlaPathBuilder {
 						System.out.println("\n");
 						System.setOut(console);
 						
-						mmGenerator.setDatabase(hlaPathBuilder.databaseAPI);
+						mmGenerator.setDatabase(databaseAPI);
 						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Interaction);
 					}
 				}
