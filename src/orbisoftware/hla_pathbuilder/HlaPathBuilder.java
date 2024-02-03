@@ -41,6 +41,7 @@ import orbisoftware.hla_pathbuilder.db_classes.*;
 
 public class HlaPathBuilder {
 
+	private DatabaseAPI databaseAPI = new DatabaseAPI();
 	private static final String fomSupportTypes = "FOM_support_types.xml";
 	public static final String protocolSpecDir = "protocol_specs";
 	public static Stack<String> pathBuilderStack = new Stack<String>();
@@ -48,9 +49,6 @@ public class HlaPathBuilder {
 	public static List<String> elementObjectList = new ArrayList<String>();
 	public static List<String> elementInteractionList = new ArrayList<String>();
 
-	private DatabaseAPI databaseAPI;
-	private NodeTree mmNodeTree;
-	
 	public Utils utils = new Utils();
 
 	// If true, use memory based database. Otherwise use a file based database.
@@ -924,6 +922,7 @@ public class HlaPathBuilder {
 
 	public void generateDatabase(String fomFilename, String elementModel)
 	{
+		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
 		MMGenerator mmGenerator = new MMGenerator();
@@ -1065,9 +1064,6 @@ public class HlaPathBuilder {
 		// Set database API
 		buildElementPaths.setDatabase(databaseAPI);
 		
-		mmGenerator.setDatabase(databaseAPI);
-		mmGenerator.setMMNodeTree(mmNodeTree);
-		
 		// Process all objects defined in elementObjectList
 		try {
 
@@ -1102,6 +1098,7 @@ public class HlaPathBuilder {
 						System.out.println("\n");
 						System.setOut(console);
 						
+						mmGenerator.setDatabase(databaseAPI);
 						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Object);
 					}
 				}
@@ -1143,21 +1140,12 @@ public class HlaPathBuilder {
 						System.out.println("\n");
 						System.setOut(console);
 						
+						mmGenerator.setDatabase(databaseAPI);
 						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Interaction);
 					}
 				}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public void setDatabase(DatabaseAPI databaseAPI) {
-
-		this.databaseAPI = databaseAPI;
-	}
-	
-	public void setMMNodeTree(NodeTree mmNodeTree) {
-		
-		this.mmNodeTree = mmNodeTree;
 	}
 }

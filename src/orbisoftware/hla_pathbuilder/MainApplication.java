@@ -25,11 +25,8 @@ import orbisoftware.hla_pathbuilder.HlaPathBuilder;
 
 public class MainApplication {
 	
-	private DatabaseAPI databaseAPI = new DatabaseAPI();
-	private NodeTree mmNodeTree = new NodeTree(Constants.NULL_UUID);
-	
-	private String fomFilename = "";
-	private String elementModel = "";
+	private static String fomFilename = "";
+	private static String elementModel = "";
 	
 	private static void printUsage() {
 
@@ -44,7 +41,6 @@ public class MainApplication {
 
 	public static void main(String[] args) {
 
-		MainApplication mainApplication = new MainApplication();
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		CmdLineParser parser = new CmdLineParser();
 
@@ -69,12 +65,9 @@ public class MainApplication {
 			System.exit(0);
 		}
 
-		mainApplication.fomFilename = fomValue;
-		mainApplication.elementModel = elementValue;
+		fomFilename = fomValue;
+		elementModel = elementValue;
 		
-		hlaPathBuilder.setDatabase(mainApplication.databaseAPI);
-		hlaPathBuilder.setMMNodeTree(mainApplication.mmNodeTree);
-				
-		hlaPathBuilder.generateDatabase(mainApplication.fomFilename, mainApplication.elementModel);
+		hlaPathBuilder.generateDatabase(fomFilename, elementModel);
 	}
 }
