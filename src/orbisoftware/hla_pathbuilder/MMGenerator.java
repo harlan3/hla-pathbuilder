@@ -174,6 +174,7 @@ public class MMGenerator {
 			nodeTree = new NodeTree(Constants.NULL_UUID);
 			String treeName[] = filename.split("\\.");
 			
+			// Store trees for use outside of HLA Pathbuilder
 			MMNodeTreeRepository.getInstance().put(treeName[0], nodeTree);
 			
 			if (!haveRunOnce) {
