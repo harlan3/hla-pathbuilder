@@ -53,7 +53,7 @@ public class MMGenerator {
 	private String nextSquashAndMergeElement = "";
 	private int nextSquashAndMergeElementNum = 0;
 
-	private NodeTree nodeTree;
+	private NodeTree mmNodeTree;
 
 	MMGenerator() {
 
@@ -129,11 +129,11 @@ public class MMGenerator {
 	public void updateElementTreeFromLine(String line) {
 
 		String elementTokens[] = line.split(",");
-		NodeElement cursor = nodeTree.root;
+		NodeElement cursor = mmNodeTree.root;
 
 		String prevElementString = "";
 
-		cursor = nodeTree.root;
+		cursor = mmNodeTree.root;
 
 		for (int i = 0; i < elementTokens.length; i++) {
 
@@ -158,11 +158,11 @@ public class MMGenerator {
 			if (i > 0)
 				nextElementString = " " + nextElementString;
 
-			if (nodeTree.childNodeExists(nodeTree.root, nextElementString))
-				cursor = nodeTree.getNode(nodeTree.root, nextElementString);
+			if (mmNodeTree.childNodeExists(mmNodeTree.root, nextElementString))
+				cursor = mmNodeTree.getNode(mmNodeTree.root, nextElementString);
 			else {
 				if (cursor != null)
-					cursor = nodeTree.insertNode(cursor, nextElementString);
+					cursor = mmNodeTree.insertNode(cursor, nextElementString);
 			}
 		}
 	}
@@ -171,7 +171,6 @@ public class MMGenerator {
 
 		try {
 			File inputFile = null;
-			nodeTree = new NodeTree(Constants.NULL_UUID);
 
 			if (!haveRunOnce) {
 
@@ -218,7 +217,7 @@ public class MMGenerator {
 			
 			// Create link at the root of the tree for MetaData
 			
-			this.metaDataNode = nodeTree.insertNode(this.nodeTree.root, "MetaData");
+			this.metaDataNode = mmNodeTree.insertNode(this.mmNodeTree.root, "MetaData");
 
 			for (String line : documentLines) {
 
@@ -279,10 +278,10 @@ public class MMGenerator {
 						String lineTokens[] = line.split(":");
 						String attributesLengthTag = "<attributesLength>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</attributesLength>";
 						
-						nodeTree.insertNode(this.metaDataNode, "<metaData>");
-						nodeTree.insertNode(this.metaDataNode, "   " + attributesTag);
-						nodeTree.insertNode(this.metaDataNode, "   " + attributesLengthTag);
-						nodeTree.insertNode(this.metaDataNode, "</metaData>");
+						mmNodeTree.insertNode(this.metaDataNode, "<metaData>");
+						mmNodeTree.insertNode(this.metaDataNode, "   " + attributesTag);
+						mmNodeTree.insertNode(this.metaDataNode, "   " + attributesLengthTag);
+						mmNodeTree.insertNode(this.metaDataNode, "</metaData>");
 					}
 					
 					if (line.contains("Parameters:")) {
@@ -296,23 +295,23 @@ public class MMGenerator {
 						String lineTokens[] = line.split(":");
 						String parametersLengthTag = "<parametersLength>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</parametersLength>";
 						
-						nodeTree.insertNode(this.metaDataNode, "<metaData>");
-						nodeTree.insertNode(this.metaDataNode, "   " + parametersTag);
-						nodeTree.insertNode(this.metaDataNode, "   " + parametersLengthTag);
-						nodeTree.insertNode(this.metaDataNode, "</metaData>");
+						mmNodeTree.insertNode(this.metaDataNode, "<metaData>");
+						mmNodeTree.insertNode(this.metaDataNode, "   " + parametersTag);
+						mmNodeTree.insertNode(this.metaDataNode, "   " + parametersLengthTag);
+						mmNodeTree.insertNode(this.metaDataNode, "</metaData>");
 					}
 						
 				}
 				
 			}
 
-			this.nodeTree.traverseTree(nodeTree.root);
+			this.mmNodeTree.traverseTree(mmNodeTree.root);
 
-			int startNode = this.nodeTree.getDocMetaDataStartNode();
-			int endNode = this.nodeTree.getDocMetaDataEndNode();
+			int startNode = this.mmNodeTree.getDocMetaDataStartNode();
+			int endNode = this.mmNodeTree.getDocMetaDataEndNode();
 
 			for (int i = 0; i < (startNode - endNode); i++)
-				this.nodeTree.printContents("</node>");
+				this.mmNodeTree.printContents("</node>");
 
 			System.out.println("\n");
 			System.setOut(console);
@@ -325,5 +324,10 @@ public class MMGenerator {
 	public void setDatabase(DatabaseAPI databaseAPI) {
 
 		this.databaseAPI = databaseAPI;
+	}
+	
+	public void setMMNodeTree(NodeTree mmNodeTree) {
+		
+		this.mmNodeTree = mmNodeTree;
 	}
 }
