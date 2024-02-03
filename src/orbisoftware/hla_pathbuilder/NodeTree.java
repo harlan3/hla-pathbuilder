@@ -32,18 +32,20 @@ public class NodeTree {
     private int endNodeCount;
     private int pathCount;
     
-    public NodeTree(String rootValue) {
+    public NodeTree(String rootValue, boolean formatted) {
     	
-        this.root = new NodeElement(rootValue);
+        this.root = new NodeElement(rootValue, formatted);
         this.stackDepth = 0;
         this.startNodeCount = 0;
         this.endNodeCount = 0;
         this.pathCount = 0;
     }
 
-    public NodeElement insertNode(NodeElement parent, String value) {
+    public NodeElement insertNode(NodeElement parent, String value, boolean formatted) {
     	
-        NodeElement newNode = new NodeElement(value);
+        NodeElement newNode = new NodeElement(value, formatted);
+        
+        newNode.formatted = formatted;
         parent.children.add(newNode);
         return newNode;
     }
@@ -53,7 +55,7 @@ public class NodeTree {
         for (int i = 0; i < parent.children.size(); i++) {
             NodeElement child = parent.children.get(i);
             if (child.isNodeEqual(oldValue)) {
-                parent.children.set(i, new NodeElement(newValue));
+                parent.children.set(i, new NodeElement(newValue, false));
                 return true;
             } else {
                 if (replaceNode(child, oldValue, newValue)) {
@@ -201,7 +203,8 @@ public class NodeTree {
     private String conditionalInsertEndNode(String elementString) {
     	
     	if (elementString.contains("path") || elementString.contains("classHandle") || elementString.contains("attributes") ||
-    		elementString.contains("parameters") || elementString.contains("metaData") || elementString.contains("MetaData"))
+    		elementString.contains("parameters") || elementString.contains("metaData") || elementString.contains("MetaData") ||
+    		elementString.contains("map version"))
     		return "";
     	else {
     		String returnVal = "";
@@ -254,11 +257,14 @@ public class NodeTree {
         		String format = insertIndentSpaces();
         		printContents(format + "<node " + node.elementString);
         		
-        	} else if (node.elementString.contains("</node>")) {
+        	} else if (node.elementString.contains("</node>") && (node.formatted==false)) {
         	
         		setStackDepthDec();
         		String format = insertIndentSpaces();
         		printContents(format + "</node>");
+        	} else if (node.elementString.contains("</node>") && (node.formatted==true)) {
+        		
+        		System.out.println(node.elementString);
         		
         	} else if (node.elementString.contains("<attributes>") || node.elementString.contains("<attributesLength>")) {
         		
@@ -272,7 +278,11 @@ public class NodeTree {
         		
         		System.out.println(node.elementString);
         				
-        	} else if (node.elementString.contains("MetaData")) {
+        	} else if (node.elementString.contains("<map version")) {
+        		
+        		System.out.println(node.elementString);
+        	}
+        	else if (node.elementString.contains("MetaData")) {
         		// placeholder in tree
         	} else {
         		setStackDepthInc();
@@ -285,7 +295,8 @@ public class NodeTree {
 
         for (NodeElement child : node.children) {
             traverseTree(child);
-            printContents(conditionalInsertEndNode(child.elementString));
+            if (!child.formatted)
+            	printContents(conditionalInsertEndNode(child.elementString));
         }
     }
 }

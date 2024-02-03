@@ -126,7 +126,7 @@ public class MMGenerator {
 		return returnVal;
 	}
 
-	public void updateElementTreeFromLine(String line) {
+	public void updateElementTreeFromLine(String line, boolean formatted) {
 
 		String elementTokens[] = line.split(",");
 		NodeElement cursor = nodeTree.root;
@@ -137,8 +137,13 @@ public class MMGenerator {
 
 		for (int i = 0; i < elementTokens.length; i++) {
 
-			String nextElementString = elementTokens[i].replaceAll("[\\[\\]]", "").trim();
-			nextElementString = nextElementString.replaceAll("[()]", "");
+			String nextElementString;
+			
+			if (!formatted) {
+				nextElementString = elementTokens[i].replaceAll("[\\[\\]]", "").trim();
+				nextElementString = nextElementString.replaceAll("[()]", "");
+			} else
+				nextElementString = elementTokens[i];
 
 			if (nextElementString.contains("TID=\"Array\"")) {
 
@@ -162,7 +167,7 @@ public class MMGenerator {
 				cursor = nodeTree.getNode(nodeTree.root, nextElementString);
 			else {
 				if (cursor != null)
-					cursor = nodeTree.insertNode(cursor, nextElementString);
+					cursor = nodeTree.insertNode(cursor, nextElementString, formatted);
 			}
 		}
 	}
@@ -171,7 +176,7 @@ public class MMGenerator {
 
 		try {
 			File inputFile = null;
-			nodeTree = new NodeTree(Constants.NULL_UUID);
+			nodeTree = new NodeTree(Constants.NULL_UUID, false);
 			String treeName[] = filename.split("\\.");
 			
 			// Store trees for use outside of HLA Pathbuilder
@@ -221,8 +226,6 @@ public class MMGenerator {
 			documentLines = FileUtils.readLines(inputFile, "utf-8");
 			
 			// Create link at the root of the tree for MetaData
-			
-			this.metaDataNode = nodeTree.insertNode(this.nodeTree.root, "MetaData");
 
 			for (String line : documentLines) {
 
@@ -243,10 +246,13 @@ public class MMGenerator {
 						classHandle = classHandle.replaceAll("\\s+", ""); // remove whitespace
 						classHandle = classHandle.replaceAll(",", "."); // replace commas with periods
 
-						System.out.println("<map version=\"1.0.1\">");
+						updateElementTreeFromLine("<map version=\"1.0.1\">", false);
+						
+						this.metaDataNode = nodeTree.insertNode(this.nodeTree.root, "MetaData", false);
+						
 						updateElementTreeFromLine("ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\"" + classNameShort
 								+ "\"" + " className=\"" + classNameFull + "\"" + " classHandle=\"" + classHandle + "\""
-								+ " FOLDED=\"true\"" + ">");
+								+ " FOLDED=\"true\"" + ">", false);
 					}
 				}
 
@@ -263,11 +269,11 @@ public class MMGenerator {
 						String pathLine = "ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\""
 								+ pathTokens[(pathTokens.length - 1)] + "\"" + " path=\"" + path + "\""
 								+ " FOLDED=\"true\"" + ">";
-						updateElementTreeFromLine(pathLine);
+						updateElementTreeFromLine(pathLine, false);
 					}
 
 					if (!line.contains("<pathDef") && (!line.contains("</pathDef") && (!line.contains("Path:"))))
-						updateElementTreeFromLine(line);
+						updateElementTreeFromLine(line, false);
 				}
 				
 				if (stateMachine == GeneratorStateMachine.MetaData) {
@@ -283,10 +289,10 @@ public class MMGenerator {
 						String lineTokens[] = line.split(":");
 						String attributesLengthTag = "<attributesLength>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</attributesLength>";
 						
-						nodeTree.insertNode(this.metaDataNode, "<metaData>");
-						nodeTree.insertNode(this.metaDataNode, "   " + attributesTag);
-						nodeTree.insertNode(this.metaDataNode, "   " + attributesLengthTag);
-						nodeTree.insertNode(this.metaDataNode, "</metaData>");
+						nodeTree.insertNode(this.metaDataNode, "<metaData>", false);
+						nodeTree.insertNode(this.metaDataNode, "   " + attributesTag, false);
+						nodeTree.insertNode(this.metaDataNode, "   " + attributesLengthTag, false);
+						nodeTree.insertNode(this.metaDataNode, "</metaData>", false);
 					}
 					
 					if (line.contains("Parameters:")) {
@@ -300,25 +306,20 @@ public class MMGenerator {
 						String lineTokens[] = line.split(":");
 						String parametersLengthTag = "<parametersLength>" + lineTokens[1].replaceAll("[\\[\\]]", "").trim() + "</parametersLength>";
 						
-						nodeTree.insertNode(this.metaDataNode, "<metaData>");
-						nodeTree.insertNode(this.metaDataNode, "   " + parametersTag);
-						nodeTree.insertNode(this.metaDataNode, "   " + parametersLengthTag);
-						nodeTree.insertNode(this.metaDataNode, "</metaData>");
-					}
-						
+						nodeTree.insertNode(this.metaDataNode, "<metaData>", false);
+						nodeTree.insertNode(this.metaDataNode, "   " + parametersTag, false);
+						nodeTree.insertNode(this.metaDataNode, "   " + parametersLengthTag, false);
+						nodeTree.insertNode(this.metaDataNode, "</metaData>", false);
+					}		
 				}
-				
 			}
+			
+			// two folding nodes at bottom to complete matching node tags
+			updateElementTreeFromLine("   </node>", true);
+			updateElementTreeFromLine("</node>", true);
 
 			this.nodeTree.traverseTree(nodeTree.root);
-
-			int startNode = this.nodeTree.getDocMetaDataStartNode();
-			int endNode = this.nodeTree.getDocMetaDataEndNode();
-
-			for (int i = 0; i < (startNode - endNode); i++)
-				this.nodeTree.printContents("</node>");
-
-			System.out.println("\n");
+			
 			System.setOut(console);
 
 		} catch (Exception e) {

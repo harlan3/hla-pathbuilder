@@ -28,10 +28,13 @@ class NodeElement {
     List<NodeElement> children;
     
 	String elementString = "";
+	
+	boolean formatted = false;
 
-    public NodeElement(String elementString) {
+    public NodeElement(String elementString, boolean formatted) {
     	
         this.elementString = elementString;
+        this.formatted = formatted;
         
         this.children = new ArrayList<>();
     }
