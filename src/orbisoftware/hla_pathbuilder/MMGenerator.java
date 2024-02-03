@@ -172,7 +172,10 @@ public class MMGenerator {
 		try {
 			File inputFile = null;
 			nodeTree = new NodeTree(Constants.NULL_UUID);
-
+			String treeName[] = filename.split("\\.");
+			
+			MMNodeTreeRepository.getInstance().put(treeName[0], nodeTree);
+			
 			if (!haveRunOnce) {
 
 				File specDir = new File(System.getProperty("user.dir") + File.separator + mmSpecDir);
