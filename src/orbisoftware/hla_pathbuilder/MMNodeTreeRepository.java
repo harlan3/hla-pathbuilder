@@ -46,6 +46,11 @@ public class MMNodeTreeRepository {
 		return elementObjectList.get(index);
 	}
 	
+	public int getObjectArraySize() {
+		
+		return elementObjectList.size();
+	}
+	
 	public void addInteractionName(String name) {
 		
 		elementInteractionList.add(name);
@@ -54,5 +59,10 @@ public class MMNodeTreeRepository {
 	public void getInteractionName(int index) {
 		
 		elementInteractionList.get(index);
+	}
+	
+	public int getInteractionArraySize() {
+		
+		return elementInteractionList.size();
 	}
 }
