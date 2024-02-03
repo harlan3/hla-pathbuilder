@@ -479,7 +479,7 @@
                     "version": __version__
                 },
                 "format": "node_tree",
-                "data": { "id": "root", "topic": "jsMind Example" }
+                "data": { "id": "root", "topic": "Select Model to Load" }
             },
             get_mind: function (source) {
                 var df = jm.format.node_tree;
@@ -580,7 +580,7 @@
                 },
                 "format": "node_array",
                 "data": [
-                    { "id": "root", "topic": "jsMind Example", "isroot": true }
+                    { "id": "root", "topic": "Select Model to Load", "isroot": true }
                 ]
             },
 
