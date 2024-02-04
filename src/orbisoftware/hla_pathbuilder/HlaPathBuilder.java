@@ -1077,6 +1077,7 @@ public class HlaPathBuilder {
 
 						byte[] pathBytes = var.path.getBytes();
 						String cityHashHex = CityHash.cityHash64Hex(pathBytes, 0, pathBytes.length);
+						MMNodeTreeRepository.getInstance().addObjectName(var.name + "_" + cityHashHex);
 						
 						PrintStream outputStream = new PrintStream(new File(System.getProperty("user.dir") + File.separator
 								+ protocolSpecDir + File.separator + "Objects" + File.separator + var.name + "_" + cityHashHex + ".txt"));
@@ -1119,6 +1120,7 @@ public class HlaPathBuilder {
 
 						byte[] pathBytes = var.path.getBytes();
 						String cityHashHex = CityHash.cityHash64Hex(pathBytes, 0, pathBytes.length);
+						MMNodeTreeRepository.getInstance().addInteractionName(var.name + "_" + cityHashHex);
 						
 						PrintStream outputStream = new PrintStream(new File(System.getProperty("user.dir") + File.separator
 								+ protocolSpecDir + File.separator + "Interactions" + File.separator + var.name + "_" + cityHashHex + ".txt"));
