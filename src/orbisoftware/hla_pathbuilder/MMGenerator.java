@@ -52,7 +52,8 @@ public class MMGenerator {
 
 	private String nextSquashAndMergeElement = "";
 	private int nextSquashAndMergeElementNum = 0;
-
+	private boolean mindMapMode = true;
+	
 	private NodeTree nodeTree;
 
 	MMGenerator() {
@@ -317,8 +318,8 @@ public class MMGenerator {
 			// two folding nodes at bottom to complete matching node tags
 			updateElementTreeFromLine("   </node>", true);
 			updateElementTreeFromLine("</node>", true);
-
-			this.nodeTree.traverseTree(nodeTree.root);
+			
+			this.nodeTree.traverseTree(nodeTree.root, mindMapMode); // true specifies mindmap instead of xml format
 			
 			System.setOut(console);
 

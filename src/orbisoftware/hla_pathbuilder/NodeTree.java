@@ -224,7 +224,7 @@ public class NodeTree {
 		}
 	}
 
-	public void traverseTree(NodeElement node) {
+	public void traverseTree(NodeElement node, boolean mindMapMode) {
 
 		if (node == null) {
 			return;
@@ -291,7 +291,12 @@ public class NodeTree {
 
 			} else if (node.elementString.contains("<map version")) {
 
-				System.out.println(node.elementString);
+				if (mindMapMode) // mindmap format
+					System.out.println(node.elementString);
+				else { // xml format
+					System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+					System.out.println("<doc>");
+				}
 			} else if (node.elementString.contains("MetaData")) {
 				// placeholder in tree
 			} else {
@@ -304,7 +309,7 @@ public class NodeTree {
 		}
 
 		for (NodeElement child : node.children) {
-			traverseTree(child);
+			traverseTree(child, mindMapMode);
 			if (!child.formatted)
 				printContents(conditionalInsertEndNode(child.elementString));
 		}
