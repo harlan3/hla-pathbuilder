@@ -98,7 +98,7 @@ public class MMGenerator {
 			 System.out.println();
 			 */
 
-			returnVal = var.name + " " + elementTokens[1] + " | cardinality=\"" + var.cardinality + "\" encoding=\""
+			returnVal = var.name + " " + elementTokens[1] + " | " + "type=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
 					+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
 		}
 
@@ -319,6 +319,7 @@ public class MMGenerator {
 			updateElementTreeFromLine("   </node>", true);
 			updateElementTreeFromLine("</node>", true);
 			
+			this.nodeTree.setDefaults();
 			this.nodeTree.traverseTree(nodeTree.root, mindMapMode); // true specifies mindmap instead of xml format
 			
 			System.setOut(console);

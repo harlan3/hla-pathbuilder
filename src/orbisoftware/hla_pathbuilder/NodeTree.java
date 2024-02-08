@@ -230,7 +230,7 @@ public class NodeTree {
 			return;
 		}
 
-		if (node.elementString != Constants.NULL_UUID) {
+		if (node.elementString != Constants.NULL_UUID && !node.elementString.equals("")) {
 
 			String elementNodes[] = node.elementString.split("\\|");
 
@@ -310,7 +310,7 @@ public class NodeTree {
 
 		for (NodeElement child : node.children) {
 			traverseTree(child, mindMapMode);
-			if (!child.formatted)
+			if ((!child.formatted) && (!child.elementString.equals("")))
 				printContents(conditionalInsertEndNode(child.elementString));
 		}
 	}
