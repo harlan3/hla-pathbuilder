@@ -127,7 +127,7 @@
                 !!callback && callback();
                 this.clean();
             }.bind(this));
-            this._watermark();
+            //this._watermark();
         },
 
         shootDownload: function () {

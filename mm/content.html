@@ -20,8 +20,10 @@
     <input id="file_input_freemind" style="display: none;" type="file"/>
     <input type="button" value="Browse..." onclick="document.getElementById('file_input_freemind').click();" />
     <button class="sub" onclick="open_freemind();">Open Model</button>
+    <button class="sub" onclick="screen_shot();">Screen Shot</button>
 </div>
 <script type="text/javascript" src="../js/jsmind.js"></script>
+<script type="text/javascript" src="../js/jsmind.screenshot.js"></script>
 <script type="text/javascript">
     var _jm = null;
     function open_empty(){
@@ -63,6 +65,10 @@
         }
     }
 
+    function screen_shot() {
+    	_jm.screenshot.shootDownload();
+    }
+    
     function prompt_info(msg){
         alert(msg);
     }
