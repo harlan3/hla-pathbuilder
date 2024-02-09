@@ -98,7 +98,12 @@ public class MMGenerator {
 			 System.out.println();
 			 */
 
-			returnVal = var.name + " " + elementTokens[1] + " | " + "type=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
+			// Ignore 2nd field if it contains Array text
+			if (elementTokens[1].contains("Array"))
+				returnVal = var.name + " | " + "type=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
+						+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
+			else
+				returnVal = var.name + " " + elementTokens[1] + " | " + "type=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
 					+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
 		}
 
@@ -123,6 +128,10 @@ public class MMGenerator {
 
 		returnVal = basicSubTokens[0] + " " + simpleEnumSubTokens[1] + " | " + "TID=\"Basic\"" + " | "
 				+ simpleEnumTokens[2];
+		
+		// Ignore bogus basic element value
+		if (simpleEnumSubTokens[1].contains("Array"))
+			returnVal = "";
 
 		return returnVal;
 	}
@@ -148,6 +157,7 @@ public class MMGenerator {
 
 			if (nextElementString.contains("TID=\"Array\"")) {
 
+				prevElementString = nextElementString;
 				nextElementString = queryArrayComponents(nextElementString);
 			} else if (nextElementString.contains("TID=\"Simple\"") || nextElementString.contains("TID=\"Enumerated\"")) {
 
@@ -157,8 +167,36 @@ public class MMGenerator {
 				continue;
 			} else if (nextElementString.contains("TID=\"Basic\"")) {
 
-				if (prevElementString.contains("TID=\"Simple\"") || prevElementString.contains("TID=\"Enumerated\""))
+				if (prevElementString.contains("TID=\"Simple\"") || prevElementString.contains("TID=\"Enumerated\"")) {
+					
 					nextElementString = squashAndMergeSimpleEnum(nextElementString, i);
+				
+					// Ignore bogus value
+					if (nextElementString.equals(""))
+						continue;
+				}
+				
+				if (prevElementString.contains("TID=\"Array\"")) {
+					
+					String fields[] = nextElementString.split(" ");
+					
+					// Don't display these string basic types
+					if (Character.isUpperCase(fields[1].charAt(0))) {
+						
+						if (fields[0].contains("HLAASCIIchar") || fields[1].contains("Array"))
+							continue;
+					}
+				}
+				
+			} else if (nextElementString.contains("TID=\"FixedRecord\"")) {
+				
+				if (prevElementString.contains("TID=\"Array\"")) {
+					
+					// Remove bogus field name. Struct field only.
+					nextElementString = nextElementString.replaceAll(" \\|", "");
+					String fields[] = nextElementString.split(" ");
+					nextElementString = fields[0] + " | " + fields[2] + " | " + fields[3] + " | " + fields[4];
+				}
 			}
 
 			if (i > 0)
