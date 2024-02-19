@@ -663,7 +663,7 @@ public class HlaPathBuilder {
 			if (name.equals("dataType")) {
 				dataType = nodeChild.getTextContent();
 				encoding = utils.getEncodingType(dataType);
-				primitive = utils.getPrimitiveFromEncodingType(encoding);
+				primitive = utils.getClassFromEncodingType(encoding);
 			}
 
 			nodeChild = nodeChild.getNextSibling();

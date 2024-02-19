@@ -110,7 +110,7 @@ public class Utils {
 		return returnVal;
 	}
 
-	public String getPrimitiveFromEncodingType(String typeName) {
+	public String getClassFromEncodingType(String typeName) {
 
 		String returnVal = "Unknown";
 
@@ -140,16 +140,68 @@ public class Utils {
 			returnVal = "Double";
 			break;
 
+		case "RPRunsignedInteger16BE":
 		case "HLAinteger16BE":
 			returnVal = "Short";
 			break;
 
+		case "RPRunsignedInteger32BE":
 		case "HLAinteger32BE":
 			returnVal = "Integer";
 			break;
 
+		case "RPRunsignedInteger64BE":
 		case "HLAinteger64BE":
 			returnVal = "Long";
+			break;
+		}
+
+		return returnVal;
+	}
+	
+	public String getPrimitiveFromEncodingType(String typeName) {
+
+		String returnVal = "Unknown";
+
+		switch (typeName) {
+
+		case "HLAASCIIchar":
+			returnVal = "byte";
+			break;
+
+		case "NullTerminatedASCIIString":
+			returnVal = "NullTerminatedASCIIString";
+			break;
+
+		case "RPRboolean":
+			returnVal = "octet";
+			break;
+			
+		case "HLAboolean":
+			returnVal = "boolean";
+			break;
+
+		case "HLAfloat32BE":
+			returnVal = "float";
+			break;
+
+		case "HLAfloat64BE":
+			returnVal = "double";
+			break;
+
+		case "RPRunsignedInteger16BE":
+		case "HLAinteger16BE":
+			returnVal = "short";
+			break;
+
+		case "RPRunsignedInteger32BE":
+		case "HLAinteger32BE":
+			returnVal = "int";
+			break;
+
+		case "RPRunsignedInteger64BE":
+		case "HLAinteger64BE":
+			returnVal = "long";
 			break;
 		}
 
