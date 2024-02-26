@@ -75,6 +75,7 @@ public class Utils {
 			returnVal = "NullTerminatedASCIIString";
 			break;
 
+		case "Octet":
 		case "RPRboolean": // Representation as HLAoctet in FOM
 			returnVal = "HLAoctet";
 			break;
@@ -117,6 +118,8 @@ public class Utils {
 		switch (typeName) {
 
 		case "HLAASCIIchar":
+		case "HLAoctet":
+		case "RPRboolean":
 			returnVal = "Byte";
 			break;
 
@@ -124,10 +127,6 @@ public class Utils {
 			returnVal = "NullTerminatedASCIIString";
 			break;
 
-		case "RPRboolean":
-			returnVal = "Octet";
-			break;
-			
 		case "HLAboolean":
 			returnVal = "Boolean";
 			break;
@@ -166,15 +165,13 @@ public class Utils {
 		switch (typeName) {
 
 		case "HLAASCIIchar":
+		case "HLAoctet":
+		case "RPRboolean":
 			returnVal = "byte";
 			break;
 
 		case "NullTerminatedASCIIString":
 			returnVal = "NullTerminatedASCIIString";
-			break;
-
-		case "RPRboolean":
-			returnVal = "octet";
 			break;
 			
 		case "HLAboolean":
