@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Content</title>
+    <link type="text/css" rel="stylesheet" href="jsmind.css" />
+    <style type="text/css">
+        button.sub{width:100px;}
+        #jsmind_container{
+            width:1850px;
+            height:1050px;
+            border:solid 1px #ccc;
+            background:#f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div id="jsmind_container"></div>
+    <input id="file_input_freemind" style="display: none;" type="file"/>
+    <input type="button" value="Browse..." onclick="document.getElementById('file_input_freemind').click();" />
+    <button class="sub" onclick="open_freemind();">Open Model</button>
+    <button class="sub" onclick="expand_all();">Expand All</button>
+    <button class="sub" onclick="collapse_all();">Collapse All</button>
+    <button class="sub" onclick="_jm.expand_to_depth(2);">Expand to level 2</button>
+    <button class="sub" onclick="_jm.expand_to_depth(3);">Expand to level 3</button>
+    <button class="sub" onclick="_jm._reset();">Reset View</button>
+    <button class="sub" onclick="screen_shot();">Screen Shot</button>
+</div>
+</div>
+<script type="text/javascript" src="./js/jsmind.js"></script>
+<script type="text/javascript" src="./js/jsmind.screenshot.js"></script>
+<script type="text/javascript">
+    var _jm = null;
+    function open_empty(){
+        var options = {
+            container:'jsmind_container',
+            theme:'primary',
+            editable:false
+        }
+        _jm = jsMind.show(options);
+    }
+    
+    function open_freemind(){
+        var file_input = document.getElementById('file_input_freemind');
+        var files = file_input.files;
+        if(files.length > 0){
+            var file_data = files[0];
+            jsMind.util.file.read(file_data, function(freemind_data, freemind_name){
+                if(freemind_data){
+                    var mind_name = freemind_name;
+                    if(/.*\.mm$/.test(mind_name)){
+                        mind_name = freemind_name.substring(0,freemind_name.length-3);
+                    }
+                    var mind = {
+                        "meta":{
+                            "name":mind_name,
+                            "author":"hizzgdev@163.com",
+                            "version":"1.0.1"
+                        },
+                        "format":"freemind",
+                        "data":freemind_data
+                    };
+                    _jm.show(mind);
+                }else{
+                    prompt_info('can not open this file as mindmap');
+                }
+            });
+        }else{
+            prompt_info('please choose a file first')
+        }
+    }
+
+    function screen_shot() {
+    	_jm.screenshot.shootDownload();
+    }
+    
+    function collapse_all() {
+    	_jm.collapse_all();
+    }
+    
+    function expand_all() {
+    	_jm.expand_all();
+    }
+    
+    function prompt_info(msg){
+        alert(msg);
+    }
+
+    open_empty();
+</script>
+</body>
+</html>
