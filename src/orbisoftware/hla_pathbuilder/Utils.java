@@ -110,6 +110,28 @@ public class Utils {
 
 		return returnVal;
 	}
+	
+	public String convertFromRPRType(String typeName) {
+		
+		String returnVal = "Unknown";
+		
+		switch(typeName) {
+		
+		case "RPRunsignedInteger16BE":
+			returnVal = "HLAinteger16BE";
+			break;
+			
+		case "RPRunsignedInteger32BE":
+			returnVal = "HLAinteger32BE";
+			break;
+			
+		case "RPRunsignedInteger64BE":
+			returnVal = "HLAinteger64BE";
+			break;
+			
+		}
+		return returnVal;
+	}
 
 	public String getClassFromEncodingType(String typeName) {
 
@@ -147,6 +169,49 @@ public class Utils {
 		case "RPRunsignedInteger32BE":
 		case "HLAinteger32BE":
 			returnVal = "Integer";
+			break;
+
+		case "RPRunsignedInteger64BE":
+		case "HLAinteger64BE":
+			returnVal = "Long";
+			break;
+		}
+
+		return returnVal;
+	}
+	
+	public String getJsonClassFromEncodingType(String typeName) {
+
+		String returnVal = "Unknown";
+
+		switch (typeName) {
+
+		case "HLAASCIIchar":
+		case "HLAoctet":
+		case "RPRboolean":
+			returnVal = "Byte";
+			break;
+
+		case "HLAboolean":
+			returnVal = "Boolean";
+			break;
+
+		case "HLAfloat32BE":
+			returnVal = "Float";
+			break;
+
+		case "HLAfloat64BE":
+			returnVal = "Double";
+			break;
+
+		case "RPRunsignedInteger16BE":
+		case "HLAinteger16BE":
+			returnVal = "Short";
+			break;
+
+		case "RPRunsignedInteger32BE":
+		case "HLAinteger32BE":
+			returnVal = "Int";
 			break;
 
 		case "RPRunsignedInteger64BE":

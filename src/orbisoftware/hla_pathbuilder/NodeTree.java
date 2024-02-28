@@ -32,6 +32,8 @@ public class NodeTree {
 	private int endNodeCount;
 	private int pathCount;
 
+	private Utils utils = new Utils();
+	
 	public NodeTree(String rootValue) {
 
 		this.root = new NodeElement(rootValue, false);
@@ -302,9 +304,21 @@ public class NodeTree {
 			} else {
 				setStackDepthInc();
 				String format = insertIndentSpaces();
-
-				printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-						+ elementNodes[0].trim() + "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+				
+				// Fix nodes that are referencing non existent RPR types in support of codegen
+				String rprRemoval[] = elementNodes[0].trim().split(" ");
+				
+				if (rprRemoval[0].startsWith("RPR")) {
+					
+					String nodeType = utils.convertFromRPRType(rprRemoval[0]);
+					
+					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
+							+ nodeType + " " + rprRemoval[1].trim() + "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+				} else {
+				
+					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
+							+ elementNodes[0].trim() + "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+				}
 			}
 		}
 
