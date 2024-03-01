@@ -99,11 +99,12 @@ public class MMGenerator {
 			 */
 
 			// Ignore 2nd field if it contains Array text
+			// Using name classtype here instead of datatype because the attributes come in alphabetical order and encoding needs to be last
 			if (elementTokens[1].contains("Array"))
-				returnVal = var.name + " | " + "type=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
+				returnVal = var.name + " | " + "classtype=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
 						+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
 			else
-				returnVal = var.name + " " + elementTokens[1] + " | " + "type=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
+				returnVal = var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
 					+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
 		}
 
