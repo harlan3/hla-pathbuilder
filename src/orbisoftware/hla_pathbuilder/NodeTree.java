@@ -242,12 +242,19 @@ public class NodeTree {
 				String format = insertIndentSpaces();
 
 				String nameSplit[] = elementNodes[0].trim().split(" ");
-							
-				printContents(
+						
+				if (nameSplit.length > 1) {
+					printContents(
+							format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
+							+ StringUtils.capitalize(nameSplit[0]) + " " + StringUtils.capitalize(nameSplit[1]) 
+							+ "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() + " FOLDED=\"true\">");
+				} else {
+					printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
-						+ StringUtils.capitalize(nameSplit[0]) + " " + StringUtils.capitalize(nameSplit[1]) 
-						+ "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() + " FOLDED=\"true\">");
-
+						+ StringUtils.capitalize(nameSplit[0]) + "\" " + elementNodes[2].trim() + " " 
+						+ elementNodes[1].trim() + " FOLDED=\"true\">");
+				}
+				
 			} else if (node.elementString.contains("path=")) {
 
 				pathCount++;
@@ -328,7 +335,7 @@ public class NodeTree {
 								+ "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
 					} else {
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-								+ StringUtils.capitalize(nameSplit[0].trim()) + " " + "\" " + elementNodes[1].trim() 
+								+ StringUtils.capitalize(nameSplit[0].trim()) + "\" " + elementNodes[1].trim() 
 								+ " FOLDED=\"true\">");
 					}
 				}
