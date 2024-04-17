@@ -92,6 +92,11 @@ public class Utils {
 			returnVal = "HLAfloat64BE";
 			break;
 
+		case "Integer8":
+		case "UnsignedInteger8":
+			returnVal = "HLAinteger8BE";
+			break;
+			
 		case "Integer16":
 		case "UnsignedInteger16":
 			returnVal = "HLAinteger16BE";
@@ -107,7 +112,7 @@ public class Utils {
 			returnVal = "HLAinteger64BE";
 			break;
 		}
-
+		
 		return returnVal;
 	}
 	
@@ -116,6 +121,10 @@ public class Utils {
 		String returnVal = "Unknown";
 		
 		switch(typeName) {
+		
+		case "RPRunsignedInteger8BE":
+			returnVal = "HLAinteger8BE";
+			break;	
 		
 		case "RPRunsignedInteger16BE":
 			returnVal = "HLAinteger16BE";
@@ -130,6 +139,7 @@ public class Utils {
 			break;
 			
 		}
+		
 		return returnVal;
 	}
 
@@ -161,6 +171,11 @@ public class Utils {
 			returnVal = "Double";
 			break;
 
+		case "RPRunsignedInteger8BE":
+		case "HLAinteger8BE":
+			returnVal = "Byte";
+			break;
+			
 		case "RPRunsignedInteger16BE":
 		case "HLAinteger16BE":
 			returnVal = "Short";
@@ -176,7 +191,7 @@ public class Utils {
 			returnVal = "Long";
 			break;
 		}
-
+		
 		return returnVal;
 	}
 	
@@ -208,6 +223,11 @@ public class Utils {
 			returnVal = "Double";
 			break;
 
+		case "RPRunsignedInteger8BE":
+		case "HLAinteger8BE":
+			returnVal = "Byte";
+			break;
+			
 		case "RPRunsignedInteger16BE":
 		case "HLAinteger16BE":
 			returnVal = "Short";
@@ -223,7 +243,7 @@ public class Utils {
 			returnVal = "Long";
 			break;
 		}
-
+		
 		return returnVal;
 	}
 	
@@ -251,6 +271,11 @@ public class Utils {
 			returnVal = "Double";
 			break;
 
+		case "RPRunsignedInteger8BE":
+		case "HLAinteger8BE":
+			returnVal = "";
+			break;
+			
 		case "RPRunsignedInteger16BE":
 		case "HLAinteger16BE":
 			returnVal = "Short";
@@ -298,6 +323,11 @@ public class Utils {
 			returnVal = "double";
 			break;
 
+		case "RPRunsignedInteger8BE":
+		case "HLAinteger8BE":
+			returnVal = "byte";
+			break;
+			
 		case "RPRunsignedInteger16BE":
 		case "HLAinteger16BE":
 			returnVal = "short";
@@ -313,7 +343,7 @@ public class Utils {
 			returnVal = "long";
 			break;
 		}
-
+		
 		return returnVal;
 	}
 }
