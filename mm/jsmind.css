@@ -47,7 +47,7 @@ jmnodes {
 jmnode {
     position: absolute;
     cursor: default;
-    max-width: 400px;
+    max-width: 1000px;
 }
 jmexpander {
     position: absolute;
