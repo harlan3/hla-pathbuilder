@@ -71,10 +71,6 @@ public class Utils {
 			returnVal = "HLAASCIIchar";
 			break;
 
-		case "NullTerminatedASCIIString":
-			returnVal = "NullTerminatedASCIIString";
-			break;
-
 		case "Octet":
 		case "RPRboolean": // Representation as HLAoctet in FOM
 			returnVal = "HLAoctet";
@@ -155,10 +151,6 @@ public class Utils {
 			returnVal = "Byte";
 			break;
 
-		case "NullTerminatedASCIIString":
-			returnVal = "NullTerminatedASCIIString";
-			break;
-
 		case "HLAboolean":
 			returnVal = "Boolean";
 			break;
@@ -195,58 +187,6 @@ public class Utils {
 		return returnVal;
 	}
 	
-	public String getByteBufferTypeFromEncodingType(String typeName) {
-
-		String returnVal = "Unknown";
-
-		switch (typeName) {
-
-		case "HLAASCIIchar":
-		case "HLAoctet":
-		case "RPRboolean":
-			returnVal = "";
-			break;
-
-		case "NullTerminatedASCIIString":
-			returnVal = "NullTerminatedASCIIString";
-			break;
-
-		case "HLAboolean":
-			returnVal = "Boolean";
-			break;
-
-		case "HLAfloat32BE":
-			returnVal = "Float";
-			break;
-
-		case "HLAfloat64BE":
-			returnVal = "Double";
-			break;
-
-		case "RPRunsignedInteger8BE":
-		case "HLAinteger8BE":
-			returnVal = "Byte";
-			break;
-			
-		case "RPRunsignedInteger16BE":
-		case "HLAinteger16BE":
-			returnVal = "Short";
-			break;
-
-		case "RPRunsignedInteger32BE":
-		case "HLAinteger32BE":
-			returnVal = "Int";
-			break;
-
-		case "RPRunsignedInteger64BE":
-		case "HLAinteger64BE":
-			returnVal = "Long";
-			break;
-		}
-		
-		return returnVal;
-	}
-	
 	public String getPrimitiveFromEncodingType(String typeName) {
 
 		String returnVal = "Unknown";
@@ -257,10 +197,6 @@ public class Utils {
 		case "HLAoctet":
 		case "RPRboolean":
 			returnVal = "byte";
-			break;
-
-		case "NullTerminatedASCIIString":
-			returnVal = "NullTerminatedASCIIString";
 			break;
 			
 		case "HLAboolean":
