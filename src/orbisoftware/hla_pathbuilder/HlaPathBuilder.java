@@ -511,12 +511,14 @@ public class HlaPathBuilder {
 
 	void parseEnumeratedData(Node nodeChild) {
 
+		String currentParentObject = "";
 		String enumeratedType = "";
 		String representation = "";
 		boolean hasData = false;
 
 		nodeChild = nodeChild.getFirstChild();
-
+		currentParentObject = UUID.randomUUID().toString();
+		
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
@@ -525,8 +527,13 @@ public class HlaPathBuilder {
 			if (name.equals("name"))
 				enumeratedType = nodeChild.getTextContent();
 
-			if (name.equals("representation"))
+			if (name.equals("representation")) {
 				representation = nodeChild.getTextContent();
+				System.out.println("enum " + enumeratedType + " : " + representation + ";");
+			}
+			
+			if (name.equals("enumerator"))
+				parseEnumeratorData(nodeChild, currentParentObject);
 
 			nodeChild = nodeChild.getNextSibling();
 		}
@@ -537,15 +544,14 @@ public class HlaPathBuilder {
 
 			DbEnumeratedDatatype var = new DbEnumeratedDatatype();
 
-			var.id = UUID.randomUUID().toString();
+			var.id = currentParentObject;
 			var.name = enumeratedType;
 			var.type = representation;
-
+			currentParentObject = var.id;
+			
 			list.add(var);
 
 			databaseAPI.insertIntoEnumeratedDatatypeTable(list);
-
-			System.out.println("typedef " + representation + " " + enumeratedType + ";");
 		}
 	}
 
@@ -566,6 +572,63 @@ public class HlaPathBuilder {
 		System.out.println("");
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	void parseEnumeratorData(Node nodeChild, String parentObject) {
+
+		String enumeratorType = "";
+		int ordinalValue = 0;
+		boolean hasData = false;
+
+		nodeChild = nodeChild.getFirstChild();
+
+		while (nodeChild != null) {
+
+			String name = nodeChild.getNodeName();
+			hasData = true;
+
+			if (name.equals("name"))
+				enumeratorType = nodeChild.getTextContent();
+
+			if (name.equals("value"))
+				ordinalValue = Integer.parseInt(nodeChild.getTextContent());
+
+			nodeChild = nodeChild.getNextSibling();
+		}
+
+		if (hasData) {
+
+			List<DbEnumeratorDatatype> list = new ArrayList<DbEnumeratorDatatype>();
+
+			DbEnumeratorDatatype var = new DbEnumeratorDatatype();
+
+			var.id = UUID.randomUUID().toString();
+			var.name = enumeratorType;
+			var.ordinalValue = ordinalValue;
+			var.parentObject = parentObject;
+			
+			list.add(var);
+
+			databaseAPI.insertIntoEnumeratorDatatypeTable(list);
+
+			System.out.println("   enumerator " + var.name + " " + var.ordinalValue + " " + var.parentObject + ";");
+		}
+	}
+/*
+	void parseEnumeratorDataTypes(Node node, String parentObject) {
+
+		Node nodeChild = node.getFirstChild();
+
+		while (nodeChild != null) {
+
+			parseEnumeratorData(nodeChild, parentObject);
+
+			nodeChild = nodeChild.getNextSibling();
+		}
+
+		System.out.println("");
+	}
+	*/
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void parseArrayData(Node nodeChild) {

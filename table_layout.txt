@@ -24,26 +24,30 @@ EnumeratedDatatype (TID=6)
 --------------------------
 id(UUID), name(String), type(String)
 
-ArrayDatatype (TID=7)
+EnumeratorDatatype (TID=7)
+--------------------------
+id(UUID), name(String), ordinalValue(Integer), parentObject(UUID)
+
+ArrayDatatype (TID=8)
 ---------------------
 id(UUID), name(String), type(String), cardinality(String), encoding(String)
 
-FixedRecordDatatype (TID=8)
+FixedRecordDatatype (TID=9)
 ---------------------------
 id(UUID), name(String)
 
-FixedRecordField (TID=9)
+FixedRecordField (TID=10)
 ------------------------
 id(UUID), index(Number), origName(String), name(String), type(String), parentObject(UUID)
 
-VariantRecordDatatype (TID=10)
+VariantRecordDatatype (TID=11)
 -----------------------------
 id(UUID), name(String)
 
-VariantRecordField (TID=11)
+VariantRecordField (TID=12)
 --------------------------
 id(UUID), index(Number), origName(String), name(String), type(String), discriminant(Boolean), alternative(Boolean), parentObject(UUID)
 
-BasicDatatype (TID=12)
+BasicDatatype (TID=13)
 ----------------------
 id(UUID), name(String), type(String), size(Number), endian(String)

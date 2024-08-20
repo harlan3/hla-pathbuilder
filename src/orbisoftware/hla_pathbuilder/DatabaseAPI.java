@@ -105,6 +105,12 @@ public class DatabaseAPI {
 				    + "name VARCHAR(80), "
 					+ "type VARCHAR(80))");
 			
+			run("CREATE TABLE EnumeratorDatatype ("
+					+ "id VARCHAR(36) PRIMARY KEY, "
+					+ "name VARCHAR(80), "
+					+ "ordinalValue INTEGER, "
+					+ "parentObject VARCHAR(36))");	
+			
 			run("CREATE TABLE ArrayDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
@@ -279,6 +285,25 @@ public class DatabaseAPI {
 					var.id + "','" + 
 					var.name + "','" +
 					var.type + "')");
+			}
+		} catch (SQLException sqlExcept) {
+			sqlExcept.printStackTrace();
+		}
+	}
+	
+	public void insertIntoEnumeratorDatatypeTable(List<DbEnumeratorDatatype> list) {
+
+		try {
+			Statement stmt = conn.createStatement();
+			String tableName = "EnumeratorDatatype";
+
+			for (DbEnumeratorDatatype var : list) {
+
+				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
+					var.id + "','" + 
+					var.name + "'," +
+					var.ordinalValue + ",'" + 
+					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
