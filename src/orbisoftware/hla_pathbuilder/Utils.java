@@ -186,6 +186,54 @@ public class Utils {
 		
 		return returnVal;
 	}
+
+	public int getNumberBytesFromEncodingType(String typeName) {
+
+		int returnVal = 0;
+
+		switch (typeName) {
+
+		case "HLAASCIIchar":
+		case "HLAoctet":
+		case "RPRboolean":
+			returnVal = 1;
+			break;
+
+		case "HLAboolean":
+			returnVal = 1;
+			break;
+
+		case "HLAfloat32BE":
+			returnVal = 4;
+			break;
+
+		case "HLAfloat64BE":
+			returnVal = 8;
+			break;
+
+		case "RPRunsignedInteger8BE":
+		case "HLAinteger8BE":
+			returnVal = 1;
+			break;
+			
+		case "RPRunsignedInteger16BE":
+		case "HLAinteger16BE":
+			returnVal = 2;
+			break;
+
+		case "RPRunsignedInteger32BE":
+		case "HLAinteger32BE":
+			returnVal = 4;
+			break;
+
+		case "RPRunsignedInteger64BE":
+		case "HLAinteger64BE":
+			returnVal = 8;
+			break;
+		}
+		
+		return returnVal;
+	}
 	
 	public String getPrimitiveFromEncodingType(String typeName) {
 
