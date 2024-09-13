@@ -30,6 +30,7 @@ import org.apache.commons.io.FileUtils;
 
 import orbisoftware.hla_pathbuilder.Constants.GeneratorStateMachine;
 import orbisoftware.hla_pathbuilder.db_classes.DbArrayDatatype;
+import orbisoftware.hla_pathbuilder.db_classes.DbSimpleDatatype;
 
 public class MMGenerator {
 
@@ -103,7 +104,22 @@ public class MMGenerator {
 			if (elementTokens[1].contains("Array"))
 				returnVal = var.name + " | " + "classtype=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
 						+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
-			else
+			else if (var.encoding.equals("HLAfixedArray")) { // Lookup type from SimpleDatatype
+				
+				selectStatement = "SELECT * FROM SimpleDatatype where name = '" + var.type + "'";
+				
+				List<DbSimpleDatatype> list2 = databaseAPI.selectFromSimpleDatatypeTable(selectStatement);
+				
+				for (DbSimpleDatatype var2 : list2) {
+					Utils utils = new Utils();
+					if (var2.type != null)
+						var.type = utils.convertFromRPRType(var2.type);
+				}
+				
+				returnVal = var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
+					+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
+		
+			} else
 				returnVal = var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
 					+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
 		}

@@ -114,7 +114,7 @@ public class Utils {
 	
 	public String convertFromRPRType(String typeName) {
 		
-		String returnVal = "Unknown";
+		String returnVal = typeName; // In case passed in value is not a RPR type
 		
 		switch(typeName) {
 		
