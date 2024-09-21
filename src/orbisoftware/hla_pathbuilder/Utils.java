@@ -60,6 +60,13 @@ public class Utils {
 
 		return returnVal;
 	}
+	
+	public String capitalizeFirstLetter(String name) {
+		
+		String modifiedString = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+		
+		return modifiedString;
+	}
 
 	public String getEncodingType(String typeName) {
 
