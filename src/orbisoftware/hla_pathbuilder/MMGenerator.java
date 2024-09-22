@@ -99,12 +99,7 @@ public class MMGenerator {
 			 System.out.println();
 			 */
 
-			// Ignore 2nd field if it contains Array text
-			// Using name classtype here instead of datatype because the attributes come in alphabetical order and encoding needs to be last
-			if (elementTokens[1].contains("Array"))
-				returnVal = var.name + " | " + "classtype=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
-						+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
-			else if (var.encoding.equals("HLAfixedArray")) { // Lookup type from SimpleDatatype
+			if (var.encoding.equals("HLAfixedArray")) { // Lookup type from SimpleDatatype
 				
 				selectStatement = "SELECT * FROM SimpleDatatype where name = '" + var.type + "'";
 				
