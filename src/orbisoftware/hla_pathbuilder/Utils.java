@@ -67,6 +67,13 @@ public class Utils {
 		
 		return modifiedString;
 	}
+	
+	public String lowercaseFirstLetter(String name) {
+		
+		String modifiedString = Character.toLowerCase(name.charAt(0)) + name.substring(1);
+		
+		return modifiedString;
+	}
 
 	public String getEncodingType(String typeName) {
 
