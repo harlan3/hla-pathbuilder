@@ -640,6 +640,38 @@ public class DatabaseAPI {
         
         return list;
     }
+    
+    public List<DbEnumeratorDatatype> selectFromEnumeratorDatatypeTable(String selectStatement)
+    {
+    	List<DbEnumeratorDatatype> list = new ArrayList<DbEnumeratorDatatype>();
+    	
+        try
+        {
+        	Statement stmt = conn.createStatement();
+        	ResultSet results = stmt.executeQuery(selectStatement);
+        	
+        	while (results.next()) {
+        		
+        		DbEnumeratorDatatype var = new DbEnumeratorDatatype();
+        		
+        		var.id = results.getString("id");
+        		var.name = results.getString("name");
+        		var.ordinalValue = results.getInt("ordinalValue");
+        		var.parentObject = results.getString("parentObject");
+
+        		list.add(var);
+        	}
+        	
+        	results.close();
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+        
+        return list;
+    }
 	
     public List<DbArrayDatatype> selectFromArrayDatatypeTable(String selectStatement)
     {
