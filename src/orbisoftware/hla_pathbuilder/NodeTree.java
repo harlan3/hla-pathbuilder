@@ -246,12 +246,12 @@ public class NodeTree {
 				if (nameSplit.length > 1) {
 					printContents(
 							format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
-							+ StringUtils.capitalize(nameSplit[0]) + " " + StringUtils.capitalize(nameSplit[1]) 
+							+ nameSplit[0] + " " + nameSplit[1]
 							+ "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() + " FOLDED=\"true\">");
 				} else {
 					printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
-						+ StringUtils.capitalize(nameSplit[0]) + "\" " + elementNodes[2].trim() + " " 
+						+ nameSplit[0] + "\" " + elementNodes[2].trim() + " " 
 						+ elementNodes[1].trim() + " FOLDED=\"true\">");
 				}
 				
@@ -323,7 +323,7 @@ public class NodeTree {
 					String nodeType = utils.convertFromRPRType(rprRemoval[0]);
 					
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-							+ nodeType.trim() + " " + StringUtils.capitalize(rprRemoval[1].trim()) 
+							+ nodeType.trim() + " " + rprRemoval[1].trim() 
 							+ "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
 				} else {
 				
@@ -331,11 +331,11 @@ public class NodeTree {
 					
 					if (nameSplit.length > 1) {
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-								+ StringUtils.capitalize(nameSplit[0].trim()) + " " + StringUtils.capitalize(nameSplit[1].trim()) 
+								+ nameSplit[0].trim() + " " + nameSplit[1].trim() 
 								+ "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
 					} else {
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-								+ StringUtils.capitalize(nameSplit[0].trim()) + "\" " + elementNodes[1].trim() 
+								+ nameSplit[0].trim() + "\" " + elementNodes[1].trim() 
 								+ " FOLDED=\"true\">");
 					}
 				}
