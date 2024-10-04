@@ -210,9 +210,11 @@ public class NodeTree {
 	private String conditionalInsertEndNode(String elementString) {
 
 		if (elementString.contains("path") || elementString.contains("classHandle")
-				|| elementString.contains("attributes") || elementString.contains("parameters")
-				|| elementString.contains("metaData") || elementString.contains("MetaData")
-				|| elementString.contains("map version"))
+				|| elementString.contains("<attributes") || elementString.contains("</attributes")
+				|| elementString.contains("<parameters") || elementString.contains("</parameters")
+				|| elementString.contains("<metaData") || elementString.contains("</metaData") 
+				|| elementString.contains("<map version") || elementString.contains("</map version")
+				|| elementString.contains("MetaData"))
 			return "";
 		else {
 			String returnVal = "";
@@ -285,29 +287,29 @@ public class NodeTree {
 				printContents(format + "</node>");
 			} else if (node.elementString.contains("</node>") && (node.formatted == true)) {
 
-				System.out.println(node.elementString);
+				printContents(node.elementString);
 
 			} else if (node.elementString.contains("<attributes>")
 					|| node.elementString.contains("<attributesLength>")) {
 
-				System.out.println(node.elementString);
+				printContents(node.elementString);
 
 			} else if (node.elementString.contains("<parameters>")
 					|| node.elementString.contains("<parametersLength>")) {
 
-				System.out.println(node.elementString);
+				printContents(node.elementString);
 
 			} else if (node.elementString.contains("<metaData>") || node.elementString.contains("</metaData>")) {
 
-				System.out.println(node.elementString);
+				printContents(node.elementString);
 
 			} else if (node.elementString.contains("<map version")) {
 
 				if (mindMapMode) // mindmap format
-					System.out.println(node.elementString);
+					printContents(node.elementString);
 				else { // xml format
-					System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-					System.out.println("<doc>");
+					printContents("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+					printContents("<doc>");
 				}
 			} else if (node.elementString.contains("MetaData")) {
 				// placeholder in tree
