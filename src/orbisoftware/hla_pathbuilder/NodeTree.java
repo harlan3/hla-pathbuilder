@@ -209,12 +209,12 @@ public class NodeTree {
 
 	private String conditionalInsertEndNode(String elementString) {
 
-		if (elementString.contains("path") || elementString.contains("classHandle")
+		if (elementString.contains("path=") || elementString.contains("classHandle=")
 				|| elementString.contains("<attributes") || elementString.contains("</attributes")
 				|| elementString.contains("<parameters") || elementString.contains("</parameters")
 				|| elementString.contains("<metaData") || elementString.contains("</metaData") 
 				|| elementString.contains("<map version") || elementString.contains("</map version")
-				|| elementString.contains("MetaData"))
+				|| elementString.equals("MetaData"))
 			return "";
 		else {
 			String returnVal = "";
