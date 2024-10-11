@@ -152,6 +152,44 @@ public class Utils {
 		
 		return returnVal;
 	}
+	
+	public String getClassFromPrimitive(String primitiveName) {
+		
+		String returnVal = "Unknown";
+
+		switch (primitiveName) {
+
+		case "boolean":
+			returnVal = "Boolean";
+			break;
+
+		case "float":
+			returnVal = "Float";
+			break;
+
+		case "double":
+			returnVal = "Double";
+			break;
+
+		case "byte":
+			returnVal = "Byte";
+			break;
+			
+		case "short":
+			returnVal = "Short";
+			break;
+
+		case "int":
+			returnVal = "Integer";
+			break;
+
+		case "long":
+			returnVal = "Long";
+			break;
+		}
+		
+		return returnVal;
+	}
 
 	public String getClassFromEncodingType(String typeName) {
 
@@ -242,6 +280,44 @@ public class Utils {
 
 		case "RPRunsignedInteger64BE":
 		case "HLAinteger64BE":
+			returnVal = 8;
+			break;
+		}
+		
+		return returnVal;
+	}
+	
+	public int getNumberBytesFromPrimitiveType(String primitiveTypeName) {
+
+		int returnVal = 0;
+
+		switch (primitiveTypeName) {
+
+		case "boolean":
+			returnVal = 1;
+			break;
+
+		case "float":
+			returnVal = 4;
+			break;
+
+		case "double":
+			returnVal = 8;
+			break;
+
+		case "byte":
+			returnVal = 1;
+			break;
+			
+		case "short":
+			returnVal = 2;
+			break;
+
+		case "int":
+			returnVal = 4;
+			break;
+
+		case "long":
 			returnVal = 8;
 			break;
 		}

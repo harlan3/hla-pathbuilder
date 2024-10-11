@@ -122,27 +122,50 @@ public class MMGenerator {
 		return returnVal;
 	}
 
-	private String squashAndMergeSimpleEnum(String basicElement, int basicElementNum) {
+	private String squashAndMergeSimple(String basicElement, int basicElementNum) {
 
 		String returnVal = "";
 
 		if (basicElementNum != (nextSquashAndMergeElementNum + 1)) {
 
-			System.out.println("Something went wrong. SquashAndMerge failed in MMGenerator.");
+			System.out.println("Something went wrong. SquashAndMergeSimple failed in MMGenerator.");
 			return basicElement;
 		}
 
-		String simpleEnumTokens[] = nextSquashAndMergeElement.split("\\|");
+		String simpleTokens[] = nextSquashAndMergeElement.split("\\|");
 		String basicTokens[] = basicElement.split("\\|");
 
-		String simpleEnumSubTokens[] = simpleEnumTokens[0].split(" ");
+		String simpleSubTokens[] = simpleTokens[0].split(" ");
 		String basicSubTokens[] = basicTokens[0].split(" ");
 
-		returnVal = basicSubTokens[0] + " " + simpleEnumSubTokens[1] + " | " + "TID=\"Basic\"" + " | "
-				+ simpleEnumTokens[2];
+		returnVal = basicSubTokens[0] + " " + simpleSubTokens[1] + " | " + "TID=\"Basic\"" + " | "
+				+ simpleTokens[2];
 		
 		// Ignore bogus basic element value
-		if (simpleEnumSubTokens[1].contains("Array"))
+		if (simpleSubTokens[1].contains("Array"))
+			returnVal = "";
+
+		return returnVal;
+	}
+	
+	private String squashAndMergeEnum(String basicElement, int basicElementNum) {
+
+		String returnVal = "";
+
+		if (basicElementNum != (nextSquashAndMergeElementNum + 1)) {
+
+			System.out.println("Something went wrong. SquashAndMergeEnum failed in MMGenerator.");
+			return basicElement;
+		}
+
+		String enumTokens[] = nextSquashAndMergeElement.split("\\|");
+		String enumSubTokens[] = enumTokens[0].split(" ");
+
+		returnVal = enumSubTokens[0] + " " + enumSubTokens[1] + " | " + "TID=\"Enumerated\"" + " | "
+				+ enumTokens[2];
+		
+		// Ignore bogus basic element value
+		if (enumSubTokens[1].contains("Array"))
 			returnVal = "";
 
 		return returnVal;
@@ -179,27 +202,33 @@ public class MMGenerator {
 				continue;
 			} else if (nextElementString.contains("TID=\"Basic\"")) {
 
-				if (prevElementString.contains("TID=\"Simple\"") || prevElementString.contains("TID=\"Enumerated\"")) {
-					
-					nextElementString = squashAndMergeSimpleEnum(nextElementString, i);
-				
+				if (prevElementString.contains("TID=\"Simple\"")) {
+
+					nextElementString = squashAndMergeSimple(nextElementString, i);
+
 					// Ignore bogus value
 					if (nextElementString.equals(""))
 						continue;
-				}
-				
-				if (prevElementString.contains("TID=\"Array\"")) {
-					
+
+				} else if (prevElementString.contains("TID=\"Enumerated\"")) {
+
+					nextElementString = squashAndMergeEnum(nextElementString, i);
+
+					// Ignore bogus value
+					if (nextElementString.equals(""))
+						continue;
+				} else if (prevElementString.contains("TID=\"Array\"")) {
+
 					String fields[] = nextElementString.split(" ");
-					
+
 					// Don't display these string basic types
 					if (Character.isUpperCase(fields[1].charAt(0))) {
-						
+
 						if (fields[0].contains("HLAASCIIchar") || fields[1].contains("Array"))
 							continue;
 					}
 				}
-				
+
 			} else if (nextElementString.contains("TID=\"FixedRecord\"")) {
 				
 				if (prevElementString.contains("TID=\"Array\"")) {
