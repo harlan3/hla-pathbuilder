@@ -43,7 +43,8 @@ public class MMGenerator {
 	private String classNameFull;
 	private String classNameShort;
 	private String classHandle;
-
+	Utils utils = new Utils();
+	
 	private NodeElement metaDataNode;
 	
 	private String attributesTag;
@@ -106,7 +107,7 @@ public class MMGenerator {
 				List<DbSimpleDatatype> list2 = databaseAPI.selectFromSimpleDatatypeTable(selectStatement);
 				
 				for (DbSimpleDatatype var2 : list2) {
-					Utils utils = new Utils();
+
 					if (var2.type != null)
 						var.type = utils.convertFromRPRType(var2.type);
 				}
@@ -231,13 +232,9 @@ public class MMGenerator {
 
 			} else if (nextElementString.contains("TID=\"FixedRecord\"")) {
 				
-				if (prevElementString.contains("TID=\"Array\"")) {
-					
-					// Remove bogus field name. Struct field only.
 					nextElementString = nextElementString.replaceAll(" \\|", "");
 					String fields[] = nextElementString.split(" ");
-					nextElementString = fields[0] + " | " + fields[2] + " | " + fields[3] + " | " + fields[4];
-				}
+					nextElementString = fields[0] + " " + fields[1] + " | " + fields[2] + " | " + fields[3] + " | " + fields[4];
 			}
 
 			if (i > 0)

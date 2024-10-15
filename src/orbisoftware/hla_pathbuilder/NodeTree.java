@@ -21,7 +21,6 @@
 package orbisoftware.hla_pathbuilder;
 
 import java.util.Iterator;
-
 import org.apache.commons.lang3.StringUtils;
 
 public class NodeTree {
@@ -256,7 +255,27 @@ public class NodeTree {
 						+ nameSplit[0] + "\" " + elementNodes[2].trim() + " " 
 						+ elementNodes[1].trim() + " FOLDED=\"true\">");
 				}
-				
+
+			} else if (node.elementString.contains("TID=\"FixedRecord\"")) {
+
+				setStackDepthInc();
+				String format = insertIndentSpaces();
+
+				String nameSplit[] = elementNodes[0].trim().split(" ");
+
+				if (nameSplit.length > 1) {
+
+					if (nameSplit[1].endsWith("Array"))
+						nameSplit[1] = utils.convertToCamelCase(nameSplit[0]);
+
+					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameSplit[0]
+							+ " " + nameSplit[1] + "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+				} else {
+
+					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameSplit[0]
+							+ "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+				}
+
 			} else if (node.elementString.contains("path=")) {
 
 				pathCount++;
