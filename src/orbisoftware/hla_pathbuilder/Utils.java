@@ -238,6 +238,130 @@ public class Utils {
 		
 		return returnVal;
 	}
+	
+	public boolean isPrimitiveClass(String typeName) {
+
+		boolean returnVal = false;
+
+		switch (typeName) {
+
+		case "Byte":
+			returnVal = true;
+			break;
+
+		case "Boolean":
+			returnVal = true;
+			break;
+
+		case "Float":
+			returnVal = true;
+			break;
+
+		case "Double":
+			returnVal = true;
+			break;
+
+		case "Short":
+			returnVal = true;
+			break;
+
+		case "Integer":
+			returnVal = true;
+			break;
+
+		case "Long":
+			returnVal = true;
+			break;
+		}
+		
+		return returnVal;
+	}
+	
+	public boolean isPrimitiveHLAClass(String typeName) {
+
+		boolean returnVal = false;
+
+		switch (typeName) {
+
+		case "HLAASCIIchar":
+		case "HLAoctet":
+		case "RPRboolean":
+			returnVal = true;
+			break;
+			
+		case "HLAboolean":
+			returnVal = true;
+			break;
+
+		case "HLAfloat32BE":
+			returnVal = true;
+			break;
+
+		case "HLAfloat64BE":
+			returnVal = true;
+			break;
+
+		case "RPRunsignedInteger8BE":
+		case "HLAinteger8BE":
+			returnVal = true;
+			break;
+			
+		case "RPRunsignedInteger16BE":
+		case "HLAinteger16BE":
+			returnVal = true;
+			break;
+
+		case "RPRunsignedInteger32BE":
+		case "HLAinteger32BE":
+			returnVal = true;
+			break;
+
+		case "RPRunsignedInteger64BE":
+		case "HLAinteger64BE":
+			returnVal = true;
+			break;
+		}
+		
+		return returnVal;
+	}
+	
+	public String getDataValueFromPrimitiveClass(String primitiveClass) {
+		
+		String returnVal = "Unknown";
+
+		switch (primitiveClass) {
+
+		case "Byte":
+			returnVal = "integer8";
+			break;
+
+		case "Boolean":
+			returnVal = "boolean8";
+			break;
+
+		case "Float":
+			returnVal = "float32";
+			break;
+
+		case "Double":
+			returnVal = "double64";
+			break;
+
+		case "Short":
+			returnVal = "integer16";
+			break;
+
+		case "Integer":
+			returnVal = "integer32";
+			break;
+
+		case "Long":
+			returnVal = "integer64";
+			break;
+		}
+		
+		return returnVal;
+	}
 
 	public int getNumberBytesFromEncodingType(String typeName) {
 

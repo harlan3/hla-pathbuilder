@@ -100,24 +100,20 @@ public class MMGenerator {
 			 System.out.println();
 			 */
 
-			if (var.encoding.equals("HLAfixedArray")) { // Lookup type from SimpleDatatype
-				
-				selectStatement = "SELECT * FROM SimpleDatatype where name = '" + var.type + "'";
-				
-				List<DbSimpleDatatype> list2 = databaseAPI.selectFromSimpleDatatypeTable(selectStatement);
-				
-				for (DbSimpleDatatype var2 : list2) {
+			selectStatement = "SELECT * FROM SimpleDatatype where name = '" + var.type + "'";
 
-					if (var2.type != null)
-						var.type = utils.convertFromRPRType(var2.type);
-				}
-				
-				returnVal = var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
-					+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
-		
-			} else
-				returnVal = var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\"" + var.cardinality + "\" encoding=\""
-					+ var.encoding + "\" | " + "TID=\"Array\"" + " | " + elementTokens[5];
+			List<DbSimpleDatatype> list2 = databaseAPI.selectFromSimpleDatatypeTable(selectStatement);
+
+			for (DbSimpleDatatype var2 : list2) {
+
+				if (var2.type != null)
+					var.type = utils.convertFromRPRType(var2.type);
+			}
+
+			returnVal = var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\""
+					+ var.cardinality + "\" encoding=\"" + var.encoding + "\" | " + "TID=\"Array\"" + " | "
+					+ elementTokens[5];
+
 		}
 
 		return returnVal;
