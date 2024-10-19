@@ -1162,6 +1162,7 @@ public class HlaPathBuilder {
 						System.out.println("\n");
 						System.setOut(console);
 						
+						mmGenerator.resetState();
 						mmGenerator.setDatabase(databaseAPI);
 						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Object);
 					}
@@ -1205,6 +1206,7 @@ public class HlaPathBuilder {
 						System.out.println("\n");
 						System.setOut(console);
 						
+						mmGenerator.resetState();
 						mmGenerator.setDatabase(databaseAPI);
 						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Interaction);
 					}

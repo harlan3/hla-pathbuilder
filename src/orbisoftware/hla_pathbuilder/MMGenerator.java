@@ -56,12 +56,19 @@ public class MMGenerator {
 	private int nextSquashAndMergeElementNum = 0;
 	private boolean mindMapMode = true;
 	
+	private VariantDiscriminantResolver variantDiscriminantResolver = new VariantDiscriminantResolver();
+	
 	private NodeTree nodeTree;
 
 	MMGenerator() {
 
 	}
 
+	void resetState() {
+		
+		variantDiscriminantResolver.variantDiscriminantMap.clear();
+	}
+	
 	private void updateStateMachine(String line) {
 
 		if (line.contains("<info>")) {
@@ -158,8 +165,12 @@ public class MMGenerator {
 		String enumTokens[] = nextSquashAndMergeElement.split("\\|");
 		String enumSubTokens[] = enumTokens[0].split(" ");
 
-		returnVal = enumSubTokens[0] + " " + enumSubTokens[1] + " | " + "TID=\"Enumerated\"" + " | "
-				+ enumTokens[2];
+		if (nextSquashAndMergeElement.contains("isDiscriminant=\"true\""))
+			returnVal = enumSubTokens[0] + " " + enumSubTokens[1] + " | " + "TID=\"Enumerated\"" + " | "
+					+ enumTokens[2] + " | " + enumTokens[3];
+		else
+			returnVal = enumSubTokens[0] + " " + enumSubTokens[1] + " | " + "TID=\"Enumerated\"" + " | "
+					+ enumTokens[2];
 		
 		// Ignore bogus basic element value
 		if (enumSubTokens[1].contains("Array"))
@@ -168,6 +179,18 @@ public class MMGenerator {
 		return returnVal;
 	}
 
+	private String insertDiscriminantAttrib(String line) {
+		
+		String returnValue = "";
+		
+		String elementTokens[] = line.split(" | ");
+		
+		returnValue = elementTokens[0] + " " + elementTokens[1] + " | " + elementTokens[3] + " | " +
+				 elementTokens[5] + " | " + "isDiscriminant=\"true\"" + " | " + elementTokens[7];
+		
+		return returnValue;
+	}
+	
 	public void updateElementTreeFromLine(String line, boolean formatted) {
 
 		String elementTokens[] = line.split(",");
@@ -192,13 +215,29 @@ public class MMGenerator {
 				prevElementString = nextElementString;
 				nextElementString = queryArrayComponents(nextElementString);
 			} else if (nextElementString.contains("TID=\"Simple\"") || nextElementString.contains("TID=\"Enumerated\"")) {
-
+				
+				String enumTokens[] = nextElementString.split("\\|");
+				
+				if (variantDiscriminantResolver.searchingForDiscriminant()) {
+					
+					nextElementString = insertDiscriminantAttrib(nextElementString);
+					variantDiscriminantResolver.discriminantFound(enumTokens[2]);
+				}
+				
 				nextSquashAndMergeElement = nextElementString;
 				nextSquashAndMergeElementNum = i;
 				prevElementString = nextElementString;
 				continue;
 			} else if (nextElementString.contains("TID=\"Basic\"")) {
 
+				String enumTokens[] = nextElementString.split("\\|");
+				
+				if (variantDiscriminantResolver.searchingForDiscriminant()) {
+					
+					nextElementString = insertDiscriminantAttrib(nextElementString);
+					variantDiscriminantResolver.discriminantFound(enumTokens[2]);
+				}
+				
 				if (prevElementString.contains("TID=\"Simple\"")) {
 
 					nextElementString = squashAndMergeSimple(nextElementString, i);
@@ -231,6 +270,17 @@ public class MMGenerator {
 					nextElementString = nextElementString.replaceAll(" \\|", "");
 					String fields[] = nextElementString.split(" ");
 					nextElementString = fields[0] + " " + fields[1] + " | " + fields[2] + " | " + fields[3] + " | " + fields[4];
+			
+			} else if (nextElementString.contains("TID=\"VariantRecord\"")) {
+				
+				String tempString = nextElementString.replaceAll(" \\|", "");
+				String fields[] = tempString.split(" ");
+				
+				if (variantDiscriminantResolver.variantDiscriminantStatus(fields[3])
+						== VariantDiscriminantResolver.Status.Uninitialized) {
+					
+					variantDiscriminantResolver.addNewVariantToResolve(fields[3]);
+				}
 			}
 
 			if (i > 0)

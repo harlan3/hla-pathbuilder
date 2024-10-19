@@ -30,7 +30,7 @@ public class NodeTree {
 	private int startNodeCount;
 	private int endNodeCount;
 	private int pathCount;
-
+	
 	private Utils utils = new Utils();
 	
 	public NodeTree(String rootValue) {
@@ -232,10 +232,25 @@ public class NodeTree {
 		if (node == null) {
 			return;
 		}
-
+		
 		if (node.elementString != Constants.NULL_UUID && !node.elementString.equals("")) {
 
 			String elementNodes[] = node.elementString.split("\\|");
+			
+			if (node.elementString.contains("isDiscriminant=\"true\"")) {
+				
+				setStackDepthInc();
+				String format = insertIndentSpaces();
+				
+				String nameSplit[] = elementNodes[0].trim().split(" | ");
+				
+				printContents(
+						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
+						+ nameSplit[0] + " " + nameSplit[1]
+						+ "\" " + elementNodes[3].trim() + " " + elementNodes[1].trim() + " FOLDED=\"true\">");
+				
+				return;
+			}
 
 			if (node.elementString.contains("TID=\"Array\"")) {
 
@@ -347,7 +362,7 @@ public class NodeTree {
 							+ nodeType.trim() + " " + rprRemoval[1].trim() 
 							+ "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
 				} else {
-				
+									
 					String nameSplit[] = elementNodes[0].trim().split(" ");
 					
 					if (nameSplit.length > 1) {
