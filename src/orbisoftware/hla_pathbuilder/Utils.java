@@ -190,6 +190,44 @@ public class Utils {
 		
 		return returnVal;
 	}
+	
+	public String getPrimitiveFromClass(String primitiveName) {
+		
+		String returnVal = "Unknown";
+
+		switch (primitiveName) {
+
+		case "Boolean":
+			returnVal = "boolean";
+			break;
+
+		case "Float":
+			returnVal = "float";
+			break;
+
+		case "Double":
+			returnVal = "double";
+			break;
+
+		case "Byte":
+			returnVal = "byte";
+			break;
+			
+		case "Short":
+			returnVal = "short";
+			break;
+
+		case "Int":
+			returnVal = "integer";
+			break;
+
+		case "Long":
+			returnVal = "long";
+			break;
+		}
+		
+		return returnVal;
+	}
 
 	public String getClassFromEncodingType(String typeName) {
 
