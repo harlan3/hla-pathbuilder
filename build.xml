@@ -36,9 +36,10 @@
    
    <!--Creates the deployable jar file  -->
    <target name="jar" depends="compile">
-      <jar destfile="${dist.dir}/hla_path_builder.jar" basedir="${build.dir}">
+      <jar destfile="${dist.dir}/hla_path_builder.jar">
+         <fileset dir="${build.dir}"/>
          <manifest>
-            <attribute name="Main-Class" value="orbisoftware.hla_pathbuilder.HlaPathBuilder"/>
+            <attribute name="Main-Class" value="orbisoftware.hla_pathbuilder.MainApplication"/>
          </manifest>
       </jar>
    </target>

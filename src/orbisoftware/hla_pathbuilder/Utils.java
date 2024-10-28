@@ -218,7 +218,8 @@ public class Utils {
 			break;
 
 		case "Int":
-			returnVal = "integer";
+		case "Integer":
+			returnVal = "int";
 			break;
 
 		case "Long":
