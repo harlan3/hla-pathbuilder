@@ -108,11 +108,13 @@ public class Utils {
 			break;
 			
 		case "Integer16":
+		case "UnsignedShort":
 		case "UnsignedInteger16":
 			returnVal = "HLAinteger16BE";
 			break;
 
 		case "Integer32":
+		case "UnsignedInt":
 		case "UnsignedInteger32":
 			returnVal = "HLAinteger32BE";
 			break;
@@ -260,11 +262,13 @@ public class Utils {
 			break;
 			
 		case "RPRunsignedInteger16BE":
+		case "UnsignedShort":
 		case "HLAinteger16BE":
 			returnVal = "Short";
 			break;
 
 		case "RPRunsignedInteger32BE":
+		case "UnsignedInt":
 		case "HLAinteger32BE":
 			returnVal = "Integer";
 			break;
@@ -346,11 +350,13 @@ public class Utils {
 			break;
 			
 		case "RPRunsignedInteger16BE":
+		case "UnsignedShort":
 		case "HLAinteger16BE":
 			returnVal = true;
 			break;
 
 		case "RPRunsignedInteger32BE":
+		case "UnsignedInt":
 		case "HLAinteger32BE":
 			returnVal = true;
 			break;
@@ -432,11 +438,13 @@ public class Utils {
 			break;
 			
 		case "RPRunsignedInteger16BE":
+		case "UnsignedShort":
 		case "HLAinteger16BE":
 			returnVal = 2;
 			break;
 
 		case "RPRunsignedInteger32BE":
+		case "UnsignedInt":
 		case "HLAinteger32BE":
 			returnVal = 4;
 			break;
@@ -518,11 +526,13 @@ public class Utils {
 			break;
 			
 		case "RPRunsignedInteger16BE":
+		case "UnsignedShort":
 		case "HLAinteger16BE":
 			returnVal = "short";
 			break;
 
 		case "RPRunsignedInteger32BE":
+		case "UnsignedInt":
 		case "HLAinteger32BE":
 			returnVal = "int";
 			break;

@@ -230,12 +230,13 @@ public class MMGenerator {
 				continue;
 			} else if (nextElementString.contains("TID=\"Basic\"")) {
 
-				String enumTokens[] = nextElementString.split("\\|");
+				String splitTokens[] = nextElementString.split("\\|");
+				String splitType[] = splitTokens[0].split(" ");
 				
 				if (variantDiscriminantResolver.searchingForDiscriminant()) {
 					
 					nextElementString = insertDiscriminantAttrib(nextElementString);
-					variantDiscriminantResolver.discriminantFound(enumTokens[2]);
+					variantDiscriminantResolver.discriminantFound(splitTokens[2]);
 				}
 				
 				if (prevElementString.contains("TID=\"Simple\"")) {

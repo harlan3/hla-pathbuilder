@@ -251,6 +251,22 @@ public class NodeTree {
 				
 				return;
 			}
+			
+			if (elementNodes[0].contains("HLAASCIIstring ")) {
+				
+				setStackDepthInc();
+				String format = insertIndentSpaces();
+				
+				String nameSplit[] = elementNodes[0].trim().split(" ");
+				
+				printContents(
+						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
+						+ nameSplit[0] + "Imp " + nameSplit[1]
+						+ "\" " + "TID=\"Array\"" + " " + "classtype=\"HLAASCIIchar\" cardinality=\"Dynamic\" "
+						+ "encoding=\"HLAvariableArray\" FOLDED=\"true\">");
+				
+				return;
+			}
 
 			if (node.elementString.contains("TID=\"Array\"")) {
 
