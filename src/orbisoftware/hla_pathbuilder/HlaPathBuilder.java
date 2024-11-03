@@ -983,7 +983,7 @@ public class HlaPathBuilder {
 		}
 	}
 
-	public void generateDatabase(String fomFilename, String elementModel)
+	public void generateDatabase(String fomFilename, String elementModel, String postfixString)
 	{
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -1140,16 +1140,16 @@ public class HlaPathBuilder {
 
 						byte[] pathBytes = var.path.getBytes();
 						String cityHashHex = CityHash.cityHash64Hex(pathBytes, 0, pathBytes.length);
-						MMNodeTreeRepository.getInstance().addObjectName(var.name + "_" + cityHashHex);
+						MMNodeTreeRepository.getInstance().addObjectName(var.name + "_" + cityHashHex + "_" + postfixString);
 						
 						PrintStream outputStream = new PrintStream(new File(System.getProperty("user.dir") + File.separator
-								+ protocolSpecDir + File.separator + "Objects" + File.separator + var.name + "_" + cityHashHex + ".txt"));
+								+ protocolSpecDir + File.separator + "Objects" + File.separator + var.name + "_" + cityHashHex + "_" + postfixString + ".txt"));
 						PrintStream console = System.out;
 						System.setOut(outputStream);
 						
 						System.out.println("<info>");
 						System.out.println("id = " + var.id);
-						System.out.println("name = " + var.name + "_" + cityHashHex);
+						System.out.println("name = " + var.name + "_" + cityHashHex + "_" + postfixString);
 						System.out.println("path = " + var.path);
 						if (uuidMarkupOutput)
 							System.out.println("debugPath = " + var.debugPath);
@@ -1164,7 +1164,7 @@ public class HlaPathBuilder {
 						
 						mmGenerator.resetState();
 						mmGenerator.setDatabase(databaseAPI);
-						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Object);
+						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + "_" + postfixString + ".txt", Element.Object);
 					}
 				}
 		} catch (Exception e) {
@@ -1184,16 +1184,16 @@ public class HlaPathBuilder {
 
 						byte[] pathBytes = var.path.getBytes();
 						String cityHashHex = CityHash.cityHash64Hex(pathBytes, 0, pathBytes.length);
-						MMNodeTreeRepository.getInstance().addInteractionName(var.name + "_" + cityHashHex);
+						MMNodeTreeRepository.getInstance().addInteractionName(var.name + "_" + cityHashHex + "_" + postfixString);
 						
 						PrintStream outputStream = new PrintStream(new File(System.getProperty("user.dir") + File.separator
-								+ protocolSpecDir + File.separator + "Interactions" + File.separator + var.name + "_" + cityHashHex + ".txt"));
+								+ protocolSpecDir + File.separator + "Interactions" + File.separator + var.name + "_" + cityHashHex + "_" + postfixString + ".txt"));
 						PrintStream console = System.out;
 						System.setOut(outputStream);
 						
 						System.out.println("<info>");
 						System.out.println("id = " + var.id);
-						System.out.println("name = " + var.name + "_" + cityHashHex);
+						System.out.println("name = " + var.name + "_" + cityHashHex + "_" + postfixString);
 						System.out.println("path = " + var.path);
 						if (uuidMarkupOutput)
 							System.out.println("debugPath = " + var.debugPath);
@@ -1208,7 +1208,7 @@ public class HlaPathBuilder {
 						
 						mmGenerator.resetState();
 						mmGenerator.setDatabase(databaseAPI);
-						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + ".txt", Element.Interaction);
+						mmGenerator.generateFromFile(var.name + "_" + cityHashHex + "_" + postfixString + ".txt", Element.Interaction);
 					}
 				}
 		} catch (Exception e) {

@@ -68,6 +68,6 @@ public class MainApplication {
 		fomFilename = fomValue;
 		elementModel = elementValue;
 		
-		hlaPathBuilder.generateDatabase(fomFilename, elementModel);
+		hlaPathBuilder.generateDatabase(fomFilename, elementModel, "Paths");
 	}
 }
