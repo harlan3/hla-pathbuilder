@@ -377,11 +377,11 @@ public class Utils {
 		switch (primitiveClass) {
 
 		case "Byte":
-			returnVal = "integer8";
+			returnVal = "int8";
 			break;
 
 		case "Boolean":
-			returnVal = "boolean8";
+			returnVal = "bool8";
 			break;
 
 		case "Float":
@@ -393,15 +393,15 @@ public class Utils {
 			break;
 
 		case "Short":
-			returnVal = "integer16";
+			returnVal = "int16";
 			break;
 
 		case "Integer":
-			returnVal = "integer32";
+			returnVal = "int32";
 			break;
 
 		case "Long":
-			returnVal = "integer64";
+			returnVal = "int64";
 			break;
 		}
 		
