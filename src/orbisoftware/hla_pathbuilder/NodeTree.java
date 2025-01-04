@@ -260,7 +260,7 @@ public class NodeTree {
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
 				printContents(
-						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
+						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 						+ nameSplit[0] + "Imp " + nameSplit[1]
 						+ "\" " + "TID=\"Array\"" + " " + "classtype=\"HLAASCIIchar\" cardinality=\"Dynamic\" "
 						+ "encoding=\"HLAvariableArray\" FOLDED=\"true\">");
