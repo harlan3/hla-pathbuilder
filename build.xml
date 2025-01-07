@@ -6,12 +6,18 @@
    <property name="build.dir" location="bin" />
    <property name="lib.dir" location="lib" />
    <property name="dist.dir" location="dist" />
+   <property name="mm_specs.dir" value="mm_specs"/>
+   <property name="protocol_specs.dir" value="protocol_specs"/>
+   <property name="myDB.dir" value="myDB"/>
    <property name="debuglevel" value="source,lines,vars"/>
    
    <!-- Deletes the existing docs, build and dist directory-->
    <target name="clean">
       <delete dir="${build.dir}" />
       <delete dir="${dist.dir}" />
+      <delete dir="${mm_specs.dir}" />
+      <delete dir="${protocol_specs.dir}" />
+      <delete dir="${myDB.dir}" />
    </target>
    
    <!-- Creates the docs, build and dist directory-->
