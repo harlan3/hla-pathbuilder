@@ -261,10 +261,8 @@ public class NodeTree {
 				
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-						+ nameSplit[0] + "Imp " + nameSplit[1]
-						+ "\" " + "TID=\"Array\"" + " " + "classtype=\"HLAASCIIchar\" cardinality=\"Dynamic\" "
-						+ "encoding=\"HLAvariableArray\" FOLDED=\"true\">");
-				
+						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
+						" TID=\"SimpleDatatype\"" + " FOLDED=\"true\">");
 				return;
 			}
 
