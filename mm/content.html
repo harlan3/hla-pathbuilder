@@ -4,34 +4,50 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Content</title>
-    <link type="text/css" rel="stylesheet" href="jsmind.css" />
-    <style type="text/css">
-        button.sub{width:100px;}
-        #jsmind_container{
-            width:1850px;
-            height:1050px;
-            border:solid 1px #ccc;
-            background:#f4f4f4;
-        }
-    </style>
-</head>
-<body>
-    <div id="jsmind_container"></div>
+    
     <input id="file_input_freemind" style="display: none;" type="file"/>
     <input type="button" value="Browse..." onclick="document.getElementById('file_input_freemind').click();" />
     <button class="sub" onclick="open_freemind();">Open Model</button>
     <button class="sub" onclick="expand_all();">Expand All</button>
     <button class="sub" onclick="collapse_all();">Collapse All</button>
-    <button class="sub" onclick="_jm.expand_to_depth(2);">Expand to level 2</button>
-    <button class="sub" onclick="_jm.expand_to_depth(3);">Expand to level 3</button>
+    <button class="sub" onclick="_jm.expand_to_depth(2);">Level 2 Expand</button>
+    <button class="sub" onclick="_jm.expand_to_depth(3);">Level 3 Expand</button>
     <button class="sub" onclick="_jm._reset();">Reset View</button>
     <button class="sub" onclick="screen_shot();">Screen Shot</button>
-</div>
-</div>
+    
+    <div class="semantics-fixed-div" id="semanticsFixedId">Semantics:</div>
+    <div class="semantics-dynamic-div" id="semanticsDynamicId"></div>
+    
+    <div id="jsmind_container"></div>
+    
+    <link type="text/css" rel="stylesheet" href="jsmind.css" />
+    <style type="text/css">
+    	.semantics-fixed-div {
+    		display: inline-block;
+    		padding-left: 10px;
+    		font: 14px/1.125 Verdana, Arial, Helvetica, sans-serif;
+    	}
+    	.semantics-dynamic-div {
+    		display: inline-block;
+    		padding-left: 0px;
+    		font: 14px/1.125 Verdana, Arial, Helvetica, sans-serif;
+    	}
+        button.sub{width:115px;}
+        #jsmind_container{
+            width:1850px;
+            height:1000px;
+            border:solid 1px #ccc;
+            background:#f4f4f4;
+        }
+    </style>
+</head>
+<body>  
 <script type="text/javascript" src="./js/jsmind.js"></script>
 <script type="text/javascript" src="./js/jsmind.screenshot.js"></script>
 <script type="text/javascript">
+
     var _jm = null;
+       
     function open_empty(){
         var options = {
             container:'jsmind_container',
@@ -41,6 +57,22 @@
         _jm = jsMind.show(options);
     }
     
+     function display_semantics(semanticsText) {
+
+     	 var semantics = document.getElementById("semanticsDynamicId");
+     	 
+     	 if ((semanticsText === "undefined" || semanticsText === "null" || semanticsText === null || semanticsText.trim() === ""))
+     	 	semantics.textContent = "";
+     	 else
+     	    semantics.textContent = semanticsText;
+     }
+    
+    function clear_semantics() {
+
+    	 var semantics = document.getElementById("semanticsDynamicId");
+     	 semantics.textContent = "";
+    }
+        
     function open_freemind(){
         var file_input = document.getElementById('file_input_freemind');
         var files = file_input.files;
