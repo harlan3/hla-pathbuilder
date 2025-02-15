@@ -21,10 +21,15 @@
 package orbisoftware.hla_pathbuilder;
 
 import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
+
+import orbisoftware.hla_pathbuilder.db_classes.DbObject;
 
 public class NodeTree {
 
+	private DatabaseAPI databaseAPI = new DatabaseAPI();
 	public NodeElement root;
 	private int stackDepth;
 	private int startNodeCount;
@@ -244,10 +249,13 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" | ");
 				
+				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
+				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-						+ nameSplit[0] + " " + nameSplit[1]
-						+ "\" " + elementNodes[3].trim() + " " + elementNodes[1].trim() + " FOLDED=\"true\">");
+						+ nameSplit[0] + " " + nameSplit[1] + "\" " + elementNodes[3].trim() + " " + 
+						elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				
 				return;
 			}
@@ -259,10 +267,13 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
+				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.Simple, nameSplit[1].trim(), nameSplit[0].trim() + "Imp"));
+				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+				
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
-						" TID=\"SimpleDatatype\"" + " FOLDED=\"true\">");
+						" TID=\"SimpleDatatype\"" + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				return;
 			}
 
@@ -272,17 +283,23 @@ public class NodeTree {
 				String format = insertIndentSpaces();
 
 				String nameSplit[] = elementNodes[0].trim().split(" ");
-						
+				
+				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[2].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
+				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+				
 				if (nameSplit.length > 1) {
+					
 					printContents(
 							format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
 							+ nameSplit[0] + " " + nameSplit[1]
-							+ "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() + " FOLDED=\"true\">");
+							+ "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() 
+							+  " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				} else {
+	
 					printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
 						+ nameSplit[0] + "\" " + elementNodes[2].trim() + " " 
-						+ elementNodes[1].trim() + " FOLDED=\"true\">");
+						+ elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				}
 
 			} else if (node.elementString.contains("TID=\"FixedRecord\"")) {
@@ -291,18 +308,26 @@ public class NodeTree {
 				String format = insertIndentSpaces();
 
 				String nameSplit[] = elementNodes[0].trim().split(" ");
-
+				
+				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
+				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+				
 				if (nameSplit.length > 1) {
+					
+					if (semanticsText.equals("")) {
+						semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
+					}
 
 					if (nameSplit[1].endsWith("Array"))
 						nameSplit[1] = utils.convertToCamelCase(nameSplit[0]);
 
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameSplit[0]
-							+ " " + nameSplit[1] + "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+							+ " " + nameSplit[1] + "\" " + elementNodes[1].trim() 
+							+ " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				} else {
 
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameSplit[0]
-							+ "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				}
 
 			} else if (node.elementString.contains("path=")) {
@@ -364,6 +389,7 @@ public class NodeTree {
 			} else {
 				setStackDepthInc();
 				String format = insertIndentSpaces();
+				String semanticsText = "";
 				
 				// Fix nodes that are referencing non existent RPR types in support of codegen
 				String rprRemoval[] = elementNodes[0].trim().split(" ");
@@ -372,21 +398,48 @@ public class NodeTree {
 					
 					String nodeType = utils.convertFromRPRType(rprRemoval[0]);
 					
+					semanticsText = databaseAPI.getSemanticsDatatypeForName(rprRemoval[1].trim());
+
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 							+ nodeType.trim() + " " + rprRemoval[1].trim() 
-							+ "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				} else {
 									
 					String nameSplit[] = elementNodes[0].trim().split(" ");
 					
-					if (nameSplit.length > 1) {
+					if (nameSplit.length > 1 && elementNodes.length > 2) {
+						
+						if (elementNodes[1].trim().equals("TID=\"Basic\""))
+						{
+							semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
+							//semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+						} else if (elementNodes[1].trim().equals("TID=\"Enumerated\""))
+						{
+							SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
+							semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+						} else if (elementNodes[1].trim().equals("TID=\"VariantRecord\""))
+						{
+							SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
+							semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+							
+							if (semanticsText.equals(""))
+								semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
+						}
+
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 								+ nameSplit[0].trim() + " " + nameSplit[1].trim() 
-								+ "\" " + elementNodes[1].trim() + " FOLDED=\"true\">");
+								+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 					} else {
+						
+						if (nameSplit.length > 1 && elementNodes.length > 1) {
+							
+							SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), elementNodes[1].trim(), nameSplit[0].trim()));
+							semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+						}
+						
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 								+ nameSplit[0].trim() + "\" " + elementNodes[1].trim() 
-								+ " FOLDED=\"true\">");
+								+ " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 					}
 				}
 			}

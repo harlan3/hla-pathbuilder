@@ -74,6 +74,45 @@ public class Utils {
 		
 		return modifiedString;
 	}
+	
+	public String truncateString(String input, int length) {
+		
+        if (input == null) {
+            return null;
+        }
+        
+		// Remove single quotes (') and double quotes (")
+        input = input.replaceAll("['\"]", "");
+        
+        // Remove commas
+        input = input.replaceAll(",", "");
+        
+        return input.length() <= length ? input : input.substring(0, length);
+    }
+	
+	public Constants.TID getTIDFromText(String tidText) {
+		
+		Constants.TID returnTID = Constants.TID.None;
+		
+		if (tidText.equals("TID=\"Object\""))
+			returnTID = Constants.TID.Object;
+		else if (tidText.equals("TID=\"Interaction\""))
+			returnTID = Constants.TID.Interaction;
+		else if (tidText.equals("TID=\"FixedRecord\""))
+			returnTID = Constants.TID.FixedRecord;
+		else if (tidText.equals("TID=\"VariantRecord\""))
+			returnTID = Constants.TID.VariantRecord;
+		else if (tidText.equals("TID=\"Array\""))
+			returnTID = Constants.TID.Array;
+		else if (tidText.equals("TID=\"Basic\""))
+			returnTID = Constants.TID.Basic;
+		else if (tidText.equals("TID=\"Simple\""))
+			returnTID = Constants.TID.Simple;
+		else if (tidText.equals("TID=\"Enumerated\""))
+			returnTID = Constants.TID.Enumerated;
+		
+		return returnTID;
+	}
 
 	public String getEncodingType(String typeName) {
 

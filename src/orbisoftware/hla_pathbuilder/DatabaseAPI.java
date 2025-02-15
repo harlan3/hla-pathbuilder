@@ -29,6 +29,7 @@ import java.sql.Statement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import orbisoftware.hla_pathbuilder.db_classes.*;
 
@@ -37,6 +38,8 @@ public class DatabaseAPI {
 	private String connectMemoryStr = "jdbc:derby:memory:myDB;create=true"; // in memory
 	private String connectFileStr = "jdbc:derby:myDB;create=true"; // in file
 	private static Connection conn = null;
+	
+	private Constants.Element elementIsType;
 	
 	public void initDatabase() {
 		
@@ -146,11 +149,103 @@ public class DatabaseAPI {
 					+ "alternative BOOLEAN, "				    
 				    + "parentObject VARCHAR(36))");	
 			
+			run("CREATE TABLE SemanticsDatatype ("
+					+ "id VARCHAR(36) PRIMARY KEY, "
+					+ "name VARCHAR(80), "
+				    + "semantics VARCHAR(400))");	
+					
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void setElementIsType(Constants.Element elementIsType) {
+		
+		this.elementIsType = elementIsType;
+	}
+	
+	// SQL Table ID
+	public Constants.TID getTID(SearchToken searchToken) {
+		
+		Constants.TID tid = Constants.TID.None;
+		
+		if (searchToken.tid != Constants.TID.None) {
+			
+			tid = searchToken.tid;
+			return searchToken.tid;
+		}
+			
+		if ((elementIsType == Constants.Element.Object) && (isObject(searchToken)))
+			tid = Constants.TID.Object;
+		else if ((elementIsType == Constants.Element.Interaction) && (isInteraction(searchToken)))
+			tid = Constants.TID.Interaction;
+		else if (isFixedRecord(searchToken))
+			tid = Constants.TID.FixedRecord;
+		else if (isVariantRecord(searchToken))
+			tid = Constants.TID.VariantRecord;
+		else if (isArrayRecord(searchToken))
+			tid = Constants.TID.Array;
+		else if (isBasicRecord(searchToken))
+			tid = Constants.TID.Basic;
+		else if (isSimpleRecord(searchToken))
+			tid = Constants.TID.Simple;
+		else if (isEnumeratedRecord(searchToken))
+			tid = Constants.TID.Enumerated;
+		
+		return tid;
+	}
+	
+	public SearchResults deepSearchForUUID(SearchToken searchToken) {
+		
+		SearchResults searchResults = new SearchResults(Constants.TID.None, Constants.NULL_UUID);
+		searchResults.tid = getTID(searchToken);
+		
+		switch(searchResults.tid) {
+		
+		case Object:
+			searchResults.uuid = getUUIDForObject(searchToken);
+			break;
+			
+		case Interaction:
+			searchResults.uuid = getUUIDForInteraction(searchToken);
+			break;
+			
+		case FixedRecord:
+			searchResults.uuid = getUUIDForFixedRecord(searchToken);
+			break;
+			
+		case FixedRecordField:
+			searchResults.uuid = getUUIDForFixedRecordField(searchToken);
+			break;
+			
+		case VariantRecord:
+			searchResults.uuid = getUUIDForVariantRecord(searchToken);
+			break;
+			
+		case Array:
+			searchResults.uuid = getUUIDForArrayRecord(searchToken);
+			break;
+			
+		case Simple:
+			searchResults.uuid = getUUIDForSimpleRecord(searchToken);
+			break;
+			
+		case Enumerated:
+			searchResults.uuid = getUUIDForEnumeratedRecord(searchToken);
+			break;
+			
+		case Basic:
+			searchResults.uuid = getUUIDForBasicRecord(searchToken);
+			break;			
+			
+		case None:
+		default:
+			break;
+		}
+		
+		return searchResults;
+	}
+	
 	public void insertIntoObjectTable(List<DbObject> list) {
 
 		try {
@@ -408,6 +503,65 @@ public class DatabaseAPI {
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
 		}
+	}
+	
+	public void insertIntoSemanticsDatatypeTable(List<DbSemanticsDatatype> list) {
+
+		try {
+			Statement stmt = conn.createStatement();
+			String tableName = "SemanticsDatatype";
+
+			for (DbSemanticsDatatype var : list) {
+
+				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
+					var.id + "','" + 
+					var.name + "','" +
+					var.semantics + "')");
+			}
+		} catch (SQLException sqlExcept) {
+			sqlExcept.printStackTrace();
+		}
+	}
+	
+	void insertExtendsAttribute(int index, String origVariableName, String variableName, String dataType,
+			UUID parentUUID) {
+
+		// Insert attribute into database
+		List<DbAttribute> list = new ArrayList<DbAttribute>();
+		DbAttribute var = new DbAttribute();
+
+		var.id = UUID.randomUUID().toString();
+		var.index = index;
+		var.origName = origVariableName;
+		var.name = variableName;
+		var.type = dataType;
+		var.inherited = true;
+		var.parentObject = parentUUID.toString();
+
+		list.add(var);
+
+		insertIntoAttributeTable(list);
+	}
+	
+	void insertExtendsParameter(int index, String origVariableName, String variableName, String dataType,
+			UUID parentUUID) {
+
+		// Insert parameter into database
+		List<DbParameter> list = new ArrayList<DbParameter>();
+
+		DbParameter var = new DbParameter();
+
+		var.id = UUID.randomUUID().toString();
+		var.index = index;
+		var.origName = origVariableName;
+		var.name = variableName;
+		var.type = dataType;
+		var.inherited = true;
+		var.parentObject = parentUUID.toString();
+
+		list.add(var);
+
+		insertIntoParameterTable(list);
 	}
 	
     public List<DbObject> selectFromObjectTable(String selectStatement)
@@ -838,6 +992,63 @@ public class DatabaseAPI {
         return list;
     }
     
+    public List<DbSemanticsDatatype> selectFromSemanticsDatatypeTable(String selectStatement)
+    {
+    	List<DbSemanticsDatatype> list = new ArrayList<DbSemanticsDatatype>();
+    	
+        try
+        {
+        	Statement stmt = conn.createStatement();
+        	ResultSet results = stmt.executeQuery(selectStatement);
+        	
+        	while (results.next()) {
+        		
+        		DbSemanticsDatatype var = new DbSemanticsDatatype();
+        		
+        		var.id = results.getString("id");
+        		var.name = results.getString("name");
+        		var.semantics = results.getString("semantics"); 
+        		
+        		list.add(var);
+        	}
+        	
+        	results.close();
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+        
+        return list;
+    }
+    
+    public String getSemanticsDatatypeForName(String name) {
+    	
+    	String returnSemanticsField = "";
+		String selectStatement = "SELECT * FROM SemanticsDatatype WHERE name = '" + name + "'";
+		
+		List<DbSemanticsDatatype> returnVal = selectFromSemanticsDatatypeTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnSemanticsField = returnVal.get(0).semantics;
+		
+		return returnSemanticsField;
+    }
+    
+    public String getSemanticsDatatypeForUUID(String uuidString) {
+    	
+    	String returnSemanticsField = "";
+		String selectStatement = "SELECT * FROM SemanticsDatatype WHERE id = '" + uuidString + "'";
+		
+		List<DbSemanticsDatatype> returnVal = selectFromSemanticsDatatypeTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnSemanticsField = returnVal.get(0).semantics;
+		
+		return returnSemanticsField;
+    }
+    
     public String getUUIDForObject(SearchToken searchToken) {
     	
     	String returnUUID = Constants.NULL_UUID;
@@ -924,6 +1135,19 @@ public class DatabaseAPI {
 		String selectStatement = "SELECT * FROM FixedRecordDatatype WHERE name = '" + searchToken.type + "'";
 		
 		List<DbFixedRecordDatatype> returnVal = selectFromFixedRecordDatatypeTable(selectStatement);
+		
+		if (returnVal.size() >= 1)
+			returnUUID = returnVal.get(0).id;
+		
+		return returnUUID;
+    }
+    
+    public String getUUIDForFixedRecordField(SearchToken searchToken) {
+    	
+    	String returnUUID = Constants.NULL_UUID;
+		String selectStatement = "SELECT * FROM FixedRecordField WHERE name = '" + searchToken.name + "' and type = '" + searchToken.type + "'";
+		
+		List<DbFixedRecordField> returnVal = selectFromFixedRecordFieldTable(selectStatement);
 		
 		if (returnVal.size() >= 1)
 			returnUUID = returnVal.get(0).id;
@@ -1030,7 +1254,8 @@ public class DatabaseAPI {
     public String getUUIDForBasicRecord(SearchToken searchToken) {
     	
     	String returnUUID = Constants.NULL_UUID;
-		String selectStatement = "SELECT * FROM BasicDatatype WHERE name = '" + searchToken.type + "'";
+		String selectStatement = "SELECT * FROM BasicDatatype WHERE name = '" + 
+				searchToken.name.substring(0, 1).toUpperCase() + searchToken.name.substring(1) +  "'";
 		
 		List<DbBasicDatatype> returnVal = selectFromBasicDatatypeTable(selectStatement);
 		

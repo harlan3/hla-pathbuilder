@@ -51,3 +51,7 @@ id(UUID), index(Number), origName(String), name(String), type(String), discrimin
 BasicDatatype (TID=13)
 ----------------------
 id(UUID), name(String), type(String), size(Number), endian(String)
+
+Semantics (TID=14)
+-----------------
+id(UUID), name(String), semantics(String)
