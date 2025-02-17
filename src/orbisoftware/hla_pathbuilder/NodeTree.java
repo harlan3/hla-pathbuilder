@@ -21,11 +21,7 @@
 package orbisoftware.hla_pathbuilder;
 
 import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
-
-import orbisoftware.hla_pathbuilder.db_classes.DbObject;
 
 public class NodeTree {
 
@@ -260,7 +256,7 @@ public class NodeTree {
 				return;
 			}
 			
-			if (elementNodes[0].contains("HLAASCIIstring ")) {
+			if (elementNodes[0].contains("HLAASCIIstring")) {
 				
 				setStackDepthInc();
 				String format = insertIndentSpaces();
@@ -412,7 +408,6 @@ public class NodeTree {
 						if (elementNodes[1].trim().equals("TID=\"Basic\""))
 						{
 							semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
-							//semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
 						} else if (elementNodes[1].trim().equals("TID=\"Enumerated\""))
 						{
 							SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
