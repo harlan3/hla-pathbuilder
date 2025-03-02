@@ -263,13 +263,19 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
-				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.Simple, nameSplit[1].trim(), nameSplit[0].trim() + "Imp"));
+				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.Array, nameSplit[1].trim(), nameSplit[0].trim()));
 				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+				
+				if (nameSplit.length > 1) {
+					
+					if (semanticsText.equals(""))
+						semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
+				}
 				
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
-						" TID=\"SimpleDatatype\"" + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+						+ nameSplit[0] + " " + nameSplit[1] + "\"" +
+						" TID=\"Array\" classtype=\"HLAASCIIchar\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				return;
 			}
 
@@ -430,6 +436,9 @@ public class NodeTree {
 							
 							SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), elementNodes[1].trim(), nameSplit[0].trim()));
 							semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+							
+							if (semanticsText.equals(""))
+								semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
 						}
 						
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""

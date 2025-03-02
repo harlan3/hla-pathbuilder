@@ -862,6 +862,7 @@ public class HlaPathBuilder {
 		int fixedRecordFieldIndex = 0;
 		String semanticsUUID = "";
 		String semantics = "";
+		String varName = "";
 		
 		Node nodeChild = node.getFirstChild();
 
@@ -884,7 +885,8 @@ public class HlaPathBuilder {
 
 				var.id = objectUUID.toString();
 				var.name = fixedRecordName;
-
+				varName = fixedRecordName;
+				
 				list.add(var);
 
 				databaseAPI.insertIntoFixedRecordDatatypeTable(list);
@@ -899,7 +901,7 @@ public class HlaPathBuilder {
 				DbSemanticsDatatype var2 = new DbSemanticsDatatype();
 				
 				var2.id = semanticsUUID;
-				var2.name = "NA";
+				var2.name = varName;
 				var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
 				
 				list2.add(var2);
