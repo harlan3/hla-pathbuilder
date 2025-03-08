@@ -245,8 +245,7 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" | ");
 				
-				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
-				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+				String semanticsText = databaseAPI.getSemanticsText(elementNodes[1], nameSplit[0], nameSplit[1]);
 
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
@@ -263,15 +262,8 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
-				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.Array, nameSplit[1].trim(), nameSplit[0].trim() + "Imp"));
-				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
-				
-				if (nameSplit.length > 1) {
-					
-					if (semanticsText.equals(""))
-						semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
-				}
-				
+				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0] + "Imp", nameSplit[1]);
+
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
@@ -286,10 +278,9 @@ public class NodeTree {
 
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
-				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[2].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
-				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
-				
 				if (nameSplit.length > 1) {
+					
+					String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0], nameSplit[1]);
 					
 					printContents(
 							format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
@@ -298,6 +289,8 @@ public class NodeTree {
 							+  " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				} else {
 	
+					String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0]);
+							
 					printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
 						+ nameSplit[0] + "\" " + elementNodes[2].trim() + " " 
@@ -311,14 +304,9 @@ public class NodeTree {
 
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
-				SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
-				String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
-				
 				if (nameSplit.length > 1) {
 					
-					if (semanticsText.equals("")) {
-						semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
-					}
+					String semanticsText = databaseAPI.getSemanticsText("TID=\"FixedRecord\"", nameSplit[0], nameSplit[1]);
 
 					if (nameSplit[1].endsWith("Array"))
 						nameSplit[1] = utils.convertToCamelCase(nameSplit[0]);
@@ -327,6 +315,8 @@ public class NodeTree {
 							+ " " + nameSplit[1] + "\" " + elementNodes[1].trim() 
 							+ " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				} else {
+					
+					String semanticsText = databaseAPI.getSemanticsText("TID=\"FixedRecord\"", nameSplit[0]);
 
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameSplit[0]
 							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
@@ -399,47 +389,22 @@ public class NodeTree {
 				if (rprRemoval[0].startsWith("RPR")) {
 					
 					String nodeType = utils.convertFromRPRType(rprRemoval[0]);
-					
-					semanticsText = databaseAPI.getSemanticsDatatypeForName(rprRemoval[1].trim());
 
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 							+ nodeType.trim() + " " + rprRemoval[1].trim() 
-							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"\" FOLDED=\"true\">");
 				} else {
 									
 					String nameSplit[] = elementNodes[0].trim().split(" ");
 					
+					semanticsText = databaseAPI.getSemanticsText(elementNodes[1], nameSplit[0], nameSplit[1]);
+					
 					if (nameSplit.length > 1 && elementNodes.length > 2) {
 						
-						if (elementNodes[1].trim().equals("TID=\"Basic\""))
-						{
-							semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
-						} else if (elementNodes[1].trim().equals("TID=\"Enumerated\""))
-						{
-							SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
-							semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
-						} else if (elementNodes[1].trim().equals("TID=\"VariantRecord\""))
-						{
-							SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), nameSplit[1].trim(), nameSplit[0].trim()));
-							semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
-							
-							if (semanticsText.equals(""))
-								semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
-						}
-
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 								+ nameSplit[0].trim() + " " + nameSplit[1].trim() 
 								+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 					} else {
-						
-						if (nameSplit.length > 1 && elementNodes.length > 1) {
-							
-							SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(elementNodes[1].trim()), elementNodes[1].trim(), nameSplit[0].trim()));
-							semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
-							
-							if (semanticsText.equals(""))
-								semanticsText = databaseAPI.getSemanticsDatatypeForName(nameSplit[1].trim());
-						}
 						
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 								+ nameSplit[0].trim() + "\" " + elementNodes[1].trim() 

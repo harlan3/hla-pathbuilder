@@ -1023,7 +1023,7 @@ public class DatabaseAPI {
         return list;
     }
     
-    public String getSemanticsDatatypeForName(String name) {
+    private String getSemanticsDatatypeForName(String name) {
     	
     	String returnSemanticsField = "";
 		String selectStatement = "SELECT * FROM SemanticsDatatype WHERE name = '" + name + "'";
@@ -1036,7 +1036,7 @@ public class DatabaseAPI {
 		return returnSemanticsField;
     }
     
-    public String getSemanticsDatatypeForUUID(String uuidString) {
+    private String getSemanticsDatatypeForUUID(String uuidString) {
     	
     	String returnSemanticsField = "";
 		String selectStatement = "SELECT * FROM SemanticsDatatype WHERE id = '" + uuidString + "'";
@@ -1048,6 +1048,34 @@ public class DatabaseAPI {
 		
 		return returnSemanticsField;
     }
+    
+	public String getSemanticsText(String tid, String type, String name) {
+		
+		Utils utils = new Utils();
+		
+		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, 
+				utils.getTIDFromText(tid.trim()), name.trim(), type.trim()));
+		
+		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid);
+		
+		if (!name.equals("")) {
+			
+			if (semanticsText.equals(""))
+				semanticsText = getSemanticsDatatypeForName(name.trim());
+		}
+		
+		return semanticsText;
+	}
+	
+	public String getSemanticsText(String tid, String type) {
+		
+		Utils utils = new Utils();
+		
+		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(tid.trim()), "", type));
+		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid);
+		
+		return semanticsText;
+	}
     
     public String getUUIDForObject(SearchToken searchToken) {
     	

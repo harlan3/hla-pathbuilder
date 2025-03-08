@@ -374,8 +374,7 @@ public class MMGenerator {
 						
 						this.metaDataNode = nodeTree.insertNode(this.nodeTree.root, "MetaData", false);
 						
-						SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, "", classNameShort));
-						String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+						String semanticsText = databaseAPI.getSemanticsText("", classNameShort);
 						
 						updateElementTreeFromLine("ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\"" + classNameShort
 								+ "\"" + " className=\"" + classNameFull + "\"" + " classHandle=\"" + classHandle + "\""
@@ -393,8 +392,7 @@ public class MMGenerator {
 						path = path.replaceAll(",", "."); // replace commas with periods
 						pathTokens = path.split("\\.");
 
-						SearchResults searchResults = databaseAPI.deepSearchForUUID(new SearchToken(Constants.NULL_UUID, Constants.TID.None, "", pathTokens[(pathTokens.length - 1)]));
-						String semanticsText = databaseAPI.getSemanticsDatatypeForUUID(searchResults.uuid);
+						String semanticsText = databaseAPI.getSemanticsText("", pathTokens[(pathTokens.length - 1)]);
 						
 						String pathLine = "ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\""
 								+ pathTokens[(pathTokens.length - 1)] + "\"" + " path=\"" + path + "\""
