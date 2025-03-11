@@ -389,10 +389,12 @@ public class NodeTree {
 				if (rprRemoval[0].startsWith("RPR")) {
 					
 					String nodeType = utils.convertFromRPRType(rprRemoval[0]);
+					
+					semanticsText = databaseAPI.getSemanticsText(elementNodes[1], "", rprRemoval[1].trim());
 
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 							+ nodeType.trim() + " " + rprRemoval[1].trim() 
-							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"\" FOLDED=\"true\">");
+							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				} else {
 									
 					String nameSplit[] = elementNodes[0].trim().split(" ");
