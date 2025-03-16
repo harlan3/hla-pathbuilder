@@ -152,7 +152,13 @@ public class DatabaseAPI {
 			run("CREATE TABLE SemanticsDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 					+ "name VARCHAR(80), "
-				    + "semantics VARCHAR(400))");	
+				    + "semantics VARCHAR(400))");
+			
+			run("CREATE TABLE VariantOrdering ("
+					+ "id VARCHAR(36) PRIMARY KEY, "
+					+ "variant VARCHAR(80), "
+					+ "discriminant VARCHAR(80), "
+				    + "ordering VARCHAR(80))");
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -517,6 +523,25 @@ public class DatabaseAPI {
 					var.id + "','" + 
 					var.name + "','" +
 					var.semantics + "')");
+			}
+		} catch (SQLException sqlExcept) {
+			sqlExcept.printStackTrace();
+		}
+	}
+	
+	public void insertIntoVariantOrdering(List<DbVariantOrderingDatatype> list) {
+
+		try {
+			Statement stmt = conn.createStatement();
+			String tableName = "VariantOrdering";
+
+			for (DbVariantOrderingDatatype var : list) {
+
+				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
+					var.id + "','" + 
+					var.variant + "','" +
+					var.discriminant + "','" +
+					var.ordering + "')");
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -1008,6 +1033,38 @@ public class DatabaseAPI {
         		var.id = results.getString("id");
         		var.name = results.getString("name");
         		var.semantics = results.getString("semantics"); 
+        		
+        		list.add(var);
+        	}
+        	
+        	results.close();
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+        
+        return list;
+    }
+    
+    public List<DbVariantOrderingDatatype> selectFromVariantOrderingDatatypeTable(String selectStatement)
+    {
+    	List<DbVariantOrderingDatatype> list = new ArrayList<DbVariantOrderingDatatype>();
+    	
+        try
+        {
+        	Statement stmt = conn.createStatement();
+        	ResultSet results = stmt.executeQuery(selectStatement);
+        	
+        	while (results.next()) {
+        		
+        		DbVariantOrderingDatatype var = new DbVariantOrderingDatatype();
+        		
+        		var.id = results.getString("id");
+        		var.variant = results.getString("variant");
+        		var.discriminant = results.getString("discriminant");
+        		var.ordering = results.getString("ordering");
         		
         		list.add(var);
         	}

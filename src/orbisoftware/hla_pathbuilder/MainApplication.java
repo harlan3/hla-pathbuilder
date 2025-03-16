@@ -21,7 +21,6 @@
 package orbisoftware.hla_pathbuilder;
 
 import jargs.gnu.CmdLineParser;
-import orbisoftware.hla_pathbuilder.HlaPathBuilder;
 
 public class MainApplication {
 	
@@ -68,6 +67,6 @@ public class MainApplication {
 		fomFilename = fomValue;
 		elementModel = elementValue;
 		
-		hlaPathBuilder.generateDatabase(fomFilename, elementModel, "Paths");
+		hlaPathBuilder.generateDatabase(fomFilename, elementModel, "Paths", false);
 	}
 }

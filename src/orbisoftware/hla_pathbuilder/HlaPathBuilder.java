@@ -1142,8 +1142,11 @@ public class HlaPathBuilder {
 			nodeChild = nodeChild.getNextSibling();
 		}
 	}
-
-	public void generateDatabase(String fomFilename, String elementModel, String postfixString)
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public void generateDatabase(String fomFilename, String elementModel, 
+			String postfixString, boolean processVariantOrdering)
 	{
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -1164,7 +1167,14 @@ public class HlaPathBuilder {
 				System.setOut(outputStream);
 				
 				databaseAPI.createTables();
-
+				
+				if (processVariantOrdering) {
+					// Parse the variant orderings file and import into table
+					// This is used by hla-codegen1516e-encoding.
+					VariantOrdering variantOrdering = new VariantOrdering();
+					variantOrdering.populateTable();
+				}
+				
 				// First pass for dataTypes only
 				DocumentBuilder db1 = dbf.newDocumentBuilder();
 				Document doc1 = db1.parse(new File(fomFilename));
