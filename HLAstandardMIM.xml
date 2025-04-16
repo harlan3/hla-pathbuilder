@@ -32,7 +32,7 @@
             <semantics>This object class is the root class of all MOM object classes</semantics>
             <attribute>
                <name>HLAprivilegeToDeleteObject</name>
-               <dataType>HLAtokenImp</dataType>
+               <dataType>HLAtoken</dataType>
                <updateType>Static</updateType>
                <updateCondition>NA</updateCondition>
                <ownership>DivestAcquire</ownership>
