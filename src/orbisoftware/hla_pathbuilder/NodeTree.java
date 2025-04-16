@@ -49,7 +49,7 @@ public class NodeTree {
 	}
 
 	public NodeElement insertNode(NodeElement parent, String value, boolean formatted) {
-
+		
 		NodeElement newNode = new NodeElement(value, formatted);
 
 		newNode.formatted = formatted;
@@ -252,6 +252,38 @@ public class NodeTree {
 						+ nameSplit[0] + " " + nameSplit[1] + "\" " + elementNodes[3].trim() + " " + 
 						elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				
+				return;
+			}
+			
+			if (elementNodes[0].contains("HLAopaqueData")) {
+				
+				setStackDepthInc();
+				String format = insertIndentSpaces();
+				
+				String nameSplit[] = elementNodes[0].trim().split(" ");
+				
+				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0] + "Imp", nameSplit[1]);
+
+				printContents(
+						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
+						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
+						" TID=\"Array\" classtype=\"HLAbyte\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+				return;
+			}
+			
+			if (elementNodes[0].contains("HLAunicodeString")) {
+				
+				setStackDepthInc();
+				String format = insertIndentSpaces();
+				
+				String nameSplit[] = elementNodes[0].trim().split(" ");
+				
+				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0] + "Imp", nameSplit[1]);
+
+				printContents(
+						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
+						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
+						" TID=\"Array\" classtype=\"HLAoctetPairBE\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
 				return;
 			}
 			

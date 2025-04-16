@@ -264,6 +264,13 @@ public class MMGenerator {
 						if (fields[0].contains("HLAASCIIchar") || fields[1].contains("Array"))
 							continue;
 					}
+					
+					// Remove references to HLAunicodeChar
+					if (Character.isUpperCase(fields[1].charAt(0))) {
+
+						if (fields[0].contains("HLAunicodeChar"))
+							continue;
+					}
 				}
 
 			} else if (nextElementString.contains("TID=\"FixedRecord\"")) {

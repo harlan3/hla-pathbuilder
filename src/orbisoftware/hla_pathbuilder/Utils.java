@@ -129,6 +129,10 @@ public class Utils {
 			returnVal = "HLAoctet";
 			break;
 			
+		case "HLAbyte":	
+			returnVal = "HLAbyte";
+			break;
+			
 		case "HLAboolean": // Representation as HLAinteger32BE in HLA standard
 			returnVal = "HLAinteger32BE";
 			break;
@@ -280,6 +284,7 @@ public class Utils {
 		case "HLAASCIIchar":
 		case "HLAoctet":
 		case "RPRboolean":
+		case "HLAbyte":	
 			returnVal = "Byte";
 			break;
 
@@ -303,6 +308,7 @@ public class Utils {
 		case "RPRunsignedInteger16BE":
 		case "UnsignedShort":
 		case "HLAinteger16BE":
+		case "HLAoctetPairBE":
 			returnVal = "Short";
 			break;
 
@@ -368,6 +374,7 @@ public class Utils {
 		case "HLAASCIIchar":
 		case "HLAoctet":
 		case "RPRboolean":
+		case "HLAbyte":	
 			returnVal = true;
 			break;
 			
@@ -391,6 +398,7 @@ public class Utils {
 		case "RPRunsignedInteger16BE":
 		case "UnsignedShort":
 		case "HLAinteger16BE":
+		case "HLAoctetPairBE":
 			returnVal = true;
 			break;
 
@@ -456,6 +464,7 @@ public class Utils {
 		case "HLAASCIIchar":
 		case "HLAoctet":
 		case "RPRboolean":
+		case "HLAbyte":
 			returnVal = 1;
 			break;
 
@@ -479,6 +488,7 @@ public class Utils {
 		case "RPRunsignedInteger16BE":
 		case "UnsignedShort":
 		case "HLAinteger16BE":
+		case "HLAoctetPairBE":
 			returnVal = 2;
 			break;
 
@@ -544,6 +554,7 @@ public class Utils {
 		case "HLAASCIIchar":
 		case "HLAoctet":
 		case "RPRboolean":
+		case "HLAbyte":	
 			returnVal = "byte";
 			break;
 			
@@ -567,6 +578,7 @@ public class Utils {
 		case "RPRunsignedInteger16BE":
 		case "UnsignedShort":
 		case "HLAinteger16BE":
+		case "HLAoctetPairBE":
 			returnVal = "short";
 			break;
 

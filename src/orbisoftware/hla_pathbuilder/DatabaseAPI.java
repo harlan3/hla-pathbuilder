@@ -1113,12 +1113,12 @@ public class DatabaseAPI {
 		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, 
 				utils.getTIDFromText(tid.trim()), name.trim(), type.trim()));
 		
-		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid);
+		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid).trim();
 		
 		if (!name.equals("")) {
 			
 			if (semanticsText.equals(""))
-				semanticsText = getSemanticsDatatypeForName(name.trim());
+				semanticsText = getSemanticsDatatypeForName(name.trim()).trim();
 		}
 		
 		return semanticsText;
@@ -1129,7 +1129,7 @@ public class DatabaseAPI {
 		Utils utils = new Utils();
 		
 		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(tid.trim()), "", type));
-		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid);
+		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid).trim();
 		
 		return semanticsText;
 	}
