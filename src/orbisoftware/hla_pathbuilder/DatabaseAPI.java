@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import orbisoftware.hla_pathbuilder.Constants.Element;
 import orbisoftware.hla_pathbuilder.db_classes.*;
 
 // This provides access to/from the database defined by the Database API
@@ -615,6 +616,37 @@ public class DatabaseAPI {
 
 		insertIntoParameterTable(list);
 	}
+	
+    public String getLineNumberForElement(Constants.Element elementType, String uuid) {
+    	
+    	String tableString = "";
+    	String lineNumberStr = "";
+    	
+    	if (elementType == Element.Object)
+    		tableString = "Object";
+    	else if (elementType == Element.Interaction)
+    		tableString = "Interaction";
+    	
+        try
+        {
+        	Statement stmt = conn.createStatement();
+        	ResultSet results = stmt.executeQuery("SELECT * FROM " + tableString + " WHERE id='" + uuid + "'");
+        	
+        	while (results.next()) {
+        		
+        		lineNumberStr = results.getString("lineNum");
+        	}
+        	
+        	results.close();
+            stmt.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+        
+        return lineNumberStr;
+    }
 	
     public List<DbObject> selectFromObjectTable(String selectStatement)
     {

@@ -671,12 +671,7 @@ public class HlaPathBuilder {
 			var.type = representation;
 			var.lineNum = lineNumberStr;
 			currentParentObject = var.id;
-			
-			if (var.name.contains("DeadReckoningAlgorithmEnum8")) {
-				int x=0;
-				x++;
-			}
-			
+
 			list.add(var);
 
 			databaseAPI.insertIntoEnumeratedDatatypeTable(list);
@@ -1419,7 +1414,7 @@ public class HlaPathBuilder {
 						System.out.println("</info>");
 						
 						buildElementPaths.resetState();
-						buildElementPaths.startTraversal(Element.Object, var.id);
+						buildElementPaths.startTraversal(Element.Object, var.id, var.debugPath);
 						
 						System.out.println("\n");
 						System.setOut(console);
@@ -1463,7 +1458,7 @@ public class HlaPathBuilder {
 						System.out.println("</info>");
 						
 						buildElementPaths.resetState();
-						buildElementPaths.startTraversal(Element.Interaction, var.id);
+						buildElementPaths.startTraversal(Element.Interaction, var.id, var.debugPath);
 						
 						System.out.println("\n");
 						System.setOut(console);

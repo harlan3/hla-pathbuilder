@@ -31,6 +31,8 @@ public class BuildElementPaths {
 	private Stack<String> pathFollowStack = new Stack<String>();
 	private ArrayList<String> attrParams = new ArrayList<String>();
 	private DatabaseAPI databaseAPI;
+	private Constants.Element elementIsType;
+	private String[] uuidDebugPath;
 	
 	private String[] rootElementPathArray;
 	private int currentRootPathIndex = 0;
@@ -158,9 +160,21 @@ public class BuildElementPaths {
 			currentPath = "Path: [";
 			
 			for (int i=0; i<foundIndex; i++) {
-				currentPath += rootElementPathArray[i];
-				if (i != (foundIndex-1))
-					currentPath += (", ");
+				
+				// Insert line number
+				if (i == (foundIndex-1)) {
+					
+					String lineNumberStr = "";
+					
+					lineNumberStr = databaseAPI.getLineNumberForElement(elementIsType, uuidDebugPath[i]);
+
+					currentPath += "{" + lineNumberStr + "}" + rootElementPathArray[i];
+				}
+				else { // Concatenate element path
+					currentPath += rootElementPathArray[i];
+					if (i != (foundIndex-1))
+						currentPath += (", ");
+				}
 			}
 			
 			currentRootPathIndex = foundIndex - 1;
@@ -450,11 +464,15 @@ public class BuildElementPaths {
 		}
 	}
 	
-	public void startTraversal(Constants.Element element, String elementUUID) {
+	public void startTraversal(Constants.Element element, String elementUUID, String debugPath) {
+		
+		uuidDebugPath = debugPath.replaceAll("\\[", "").
+				replaceAll("\\]", "").replaceAll(" ", "").split(",");
 		
 		if (element == Constants.Element.Object) {
 			
 			databaseAPI.setElementIsType(Constants.Element.Object);
+			this.elementIsType = Constants.Element.Object;
 			
 			rootElementPathArray = getObjectPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
@@ -469,6 +487,7 @@ public class BuildElementPaths {
 		} else if (element == Constants.Element.Interaction) {
 			
 			databaseAPI.setElementIsType(Constants.Element.Interaction);
+			this.elementIsType = Constants.Element.Interaction;
 			
 			rootElementPathArray = getInteractionPath(elementUUID).replaceAll("\\[", "").
 					replaceAll("\\]", "").replaceAll(" ", "").split(",");
