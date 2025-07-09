@@ -2,27 +2,27 @@ Tables
 
 Object (TID=1)
 --------------
-id(UUID), name(String), path(String), debugPath(String),parentObject(UUID)
+id(UUID), name(String), path(String), debugPath(String), lineNum(String), parentObject(UUID)
 
 Attribute (TID=2)
 -----------------
-id(UUID), index(Number), origName(String), name(String), type(String), inherited(Boolean), parentObject(UUID)
+id(UUID), index(Number), origName(String), name(String), type(String), inherited(Boolean), lineNum(String), parentObject(UUID)
 
 Interaction (TID=3)
 -------------------
-id(UUID), name(String), path(String), debugPath(String), parentObject(UUID)
+id(UUID), name(String), path(String), debugPath(String), lineNum(String), parentObject(UUID)
 
 Parameter (TID=4)
 -----------------
-id(UUID), index(Number), origName(String), name(String), type(String), inherited(Boolean), parentObject(UUID)
+id(UUID), index(Number), origName(String), name(String), type(String), inherited(Boolean), lineNum(String), parentObject(UUID)
 
 SimpleDatatype (TID=5)
 ----------------------
-id(UUID), name(String), type(String)
+id(UUID), name(String), type(String), lineNum(String)
 
 EnumeratedDatatype (TID=6)
 --------------------------
-id(UUID), name(String), type(String)
+id(UUID), name(String), type(String), lineNum(String)
 
 EnumeratorDatatype (TID=7)
 --------------------------
@@ -30,27 +30,27 @@ id(UUID), name(String), ordinalValue(Integer), parentObject(UUID)
 
 ArrayDatatype (TID=8)
 ---------------------
-id(UUID), name(String), type(String), cardinality(String), encoding(String)
+id(UUID), name(String), type(String), cardinality(String), encoding(String), lineNum(String)
 
 FixedRecordDatatype (TID=9)
 ---------------------------
-id(UUID), name(String)
+id(UUID), name(String), lineNum(String)
 
 FixedRecordField (TID=10)
 ------------------------
-id(UUID), index(Number), origName(String), name(String), type(String), parentObject(UUID)
+id(UUID), index(Number), origName(String), name(String), type(String), encoding(String), primitive(String), lineNum(String), parentObject(UUID)
 
 VariantRecordDatatype (TID=11)
 -----------------------------
-id(UUID), name(String)
+id(UUID), name(String), lineNum(String)
 
 VariantRecordField (TID=12)
 --------------------------
-id(UUID), index(Number), origName(String), name(String), type(String), discriminant(Boolean), alternative(Boolean), parentObject(UUID)
+id(UUID), index(Number), origName(String), name(String), type(String), discriminant(Boolean), alternative(Boolean), lineNum(String), parentObject(UUID)
 
 BasicDatatype (TID=13)
 ----------------------
-id(UUID), name(String), type(String), size(Number), endian(String)
+id(UUID), name(String), type(String), size(Number), endian(String), lineNum(String)
 
 Semantics (TID=14)
 -----------------

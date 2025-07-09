@@ -33,12 +33,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import orbisoftware.hla_pathbuilder.Constants.*;
 import orbisoftware.hla_pathbuilder.db_classes.*;
 
+// This class traverses the FOM and populates the database with the various record types.
+// It also generates the protocol text files that contain the raw path definitions that
+// represent the static types that are not yet object implementations for both the objects
+// and interactions.
 public class HlaPathBuilder {
 
 	private DatabaseAPI databaseAPI = new DatabaseAPI();
@@ -68,14 +73,19 @@ public class HlaPathBuilder {
 		String variableName = "";
 		String origVariableName = "";
 		String semantics = "";
+		String lineNumberStr = "";
 		
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
-
+			
 			if (name.equals("name")) {
 				origVariableName = nodeChild.getTextContent();
 				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
 			}
 
 			if (name.equals("dataType")) {
@@ -99,6 +109,7 @@ public class HlaPathBuilder {
 		var.name = variableName;
 		var.type = dataType;
 		var.inherited = false;
+		var.lineNum = lineNumberStr;
 		var.parentObject = parentUUID.toString();
 
 		list.add(var);
@@ -138,6 +149,10 @@ public class HlaPathBuilder {
 			if (name.equals("name")) {
 
 				objectName = nodeChild.getTextContent();
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				String lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
 
 				System.out.println("// Start Object");
 				System.out.println("// " + objectName);
@@ -159,6 +174,7 @@ public class HlaPathBuilder {
 				var.name = objectName;
 				var.path = pathBuilderStack.toString();
 				var.debugPath = debugStack.toString();
+				var.lineNum = lineNumberStr;
 				var.parentObject = parentUUID.toString();
 
 				list.add(var);
@@ -171,7 +187,7 @@ public class HlaPathBuilder {
 					attributeIndex++;
 
 					System.out.println("   " + parentClass + " " + origVariableName + "; // extends");
-					databaseAPI.insertExtendsAttribute(attributeIndex, origVariableName, variableName, parentClass, objectUUID);
+					databaseAPI.insertExtendsAttribute(attributeIndex, origVariableName, variableName, parentClass, lineNumberStr, objectUUID);
 
 				}
 			}
@@ -247,12 +263,18 @@ public class HlaPathBuilder {
 		String variableName = "";
 		String origVariableName = "";
 		String semantics = "";
+		String lineNumberStr = "";
 		
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
-
+			
 			if (name.equals("name")) {
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
 				origVariableName = nodeChild.getTextContent();
 				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
 			}
@@ -277,6 +299,7 @@ public class HlaPathBuilder {
 		var.name = variableName;
 		var.type = dataType;
 		var.inherited = false;
+		var.lineNum = lineNumberStr;
 		var.parentObject = parentUUID.toString();
 
 		list.add(var);
@@ -319,6 +342,10 @@ public class HlaPathBuilder {
 				System.out.println("// Start Interaction");
 				System.out.println("// " + interactionName);
 				System.out.println("typedef struct {");
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				String lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
 
 				// Insert interaction into database
 				interactionUUID = UUID.randomUUID();
@@ -336,6 +363,7 @@ public class HlaPathBuilder {
 				var.name = interactionName;
 				var.path = pathBuilderStack.toString();
 				var.debugPath = debugStack.toString();
+				var.lineNum = lineNumberStr;
 				var.parentObject = parentUUID.toString();
 
 				list.add(var);
@@ -349,7 +377,7 @@ public class HlaPathBuilder {
 					parameterIndex++;
 
 					System.out.println("   " + parentClass + " " + origVariableName + "; // extends");
-					databaseAPI.insertExtendsParameter(parameterIndex, origVariableName, variableName, parentClass,
+					databaseAPI.insertExtendsParameter(parameterIndex, origVariableName, variableName, parentClass, lineNumberStr,
 							interactionUUID);
 				}
 			}
@@ -421,6 +449,7 @@ public class HlaPathBuilder {
 		String size = "";
 		String endian = "";
 		String semantics = "";
+		String lineNumberStr = "";
 		
 		boolean hasData = false;
 
@@ -431,8 +460,17 @@ public class HlaPathBuilder {
 			String name = nodeChild.getNodeName();
 			hasData = true;
 
-			if (name.equals("name"))
+			if (name.equals("name")) {
 				basicType = nodeChild.getTextContent();
+
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				
+				if (nodeAttributes.getNamedItem("line") != null) {
+					
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
+			}
 
 			if (name.equals("size"))
 				size = nodeChild.getTextContent();
@@ -457,7 +495,8 @@ public class HlaPathBuilder {
 			var1.type = "";
 			var1.size = size;
 			var1.endian = endian;
-
+			var1.lineNum = lineNumberStr;
+			
 			list.add(var1);
 
 			databaseAPI.insertIntoBasicDatatypeTable(list);
@@ -504,6 +543,7 @@ public class HlaPathBuilder {
 		String representation = "";
 		boolean hasData = false;
 		String semantics = "";
+		String lineNumberStr = "";
 		
 		nodeChild = nodeChild.getFirstChild();
 
@@ -512,8 +552,13 @@ public class HlaPathBuilder {
 			String name = nodeChild.getNodeName();
 			hasData = true;
 
-			if (name.equals("name"))
+			if (name.equals("name")) {
 				simpleType = nodeChild.getTextContent();
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+			}
 
 			if (name.equals("representation"))
 				representation = nodeChild.getTextContent();
@@ -533,7 +578,8 @@ public class HlaPathBuilder {
 			var1.id = UUID.randomUUID().toString();
 			var1.name = simpleType;
 			var1.type = representation;
-
+			var1.lineNum = lineNumberStr;
+			
 			list.add(var1);
 
 			databaseAPI.insertIntoSimpleDatatypeTable(list);
@@ -580,6 +626,8 @@ public class HlaPathBuilder {
 		String enumeratedType = "";
 		String representation = "";
 		String semantics = "";
+		String lineNumberStr = "";
+		
 		boolean hasData = false;
 
 		nodeChild = nodeChild.getFirstChild();
@@ -590,8 +638,13 @@ public class HlaPathBuilder {
 			String name = nodeChild.getNodeName();
 			hasData = true;
 
-			if (name.equals("name"))
+			if (name.equals("name")) {
 				enumeratedType = nodeChild.getTextContent();
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+			}
 
 			if (name.equals("representation")) {
 				representation = nodeChild.getTextContent();
@@ -612,11 +665,17 @@ public class HlaPathBuilder {
 			List<DbEnumeratedDatatype> list = new ArrayList<DbEnumeratedDatatype>();
 
 			DbEnumeratedDatatype var = new DbEnumeratedDatatype();
-
+			
 			var.id = currentParentObject;
 			var.name = enumeratedType;
 			var.type = representation;
+			var.lineNum = lineNumberStr;
 			currentParentObject = var.id;
+			
+			if (var.name.contains("DeadReckoningAlgorithmEnum8")) {
+				int x=0;
+				x++;
+			}
 			
 			list.add(var);
 
@@ -706,6 +765,7 @@ public class HlaPathBuilder {
 		String cardinality = "";
 		String encoding = "";
 		String semantics = "";
+		String lineNumberStr = "";
 		
 		boolean hasData = false;
 
@@ -716,8 +776,13 @@ public class HlaPathBuilder {
 			String name = nodeChild.getNodeName();
 			hasData = true;
 
-			if (name.equals("name"))
+			if (name.equals("name")) {
 				arrayType = nodeChild.getTextContent();
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+			}
 
 			if (name.equals("dataType"))
 				dataType = nodeChild.getTextContent();
@@ -745,7 +810,8 @@ public class HlaPathBuilder {
 			var1.type = dataType;
 			var1.cardinality = cardinality;
 			var1.encoding = encoding;
-
+			var1.lineNum = lineNumberStr;
+			
 			list.add(var1);
 
 			databaseAPI.insertIntoArrayDatatypeTable(list);
@@ -795,6 +861,7 @@ public class HlaPathBuilder {
 		String origVariableName = "";
 		String encoding = "";
 		String primitive = "";
+		String lineNumberStr = "";
 		String semantics = "";
 		
 		while (nodeChild != null) {
@@ -805,6 +872,10 @@ public class HlaPathBuilder {
 				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
 				origVariableName = nodeChild.getTextContent();
 
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
 				if (variableName.equals("class"))
 					variableName = "classValue";
 			}
@@ -832,6 +903,7 @@ public class HlaPathBuilder {
 		var.type = dataType;
 		var.encoding = encoding;
 		var.primitive = primitive;
+		var.lineNum = lineNumberStr;
 		var.parentObject = parentUUID.toString();
 
 		list.add(var);
@@ -872,6 +944,11 @@ public class HlaPathBuilder {
 			hasData = true;
 
 			if (name.equals("name")) {
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				String lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+		        
 				fixedRecordName = nodeChild.getTextContent();
 				System.out.println("// Start Fixed Record");
 				System.out.println("// " + fixedRecordName);
@@ -886,6 +963,7 @@ public class HlaPathBuilder {
 				var.id = objectUUID.toString();
 				var.name = fixedRecordName;
 				varName = fixedRecordName;
+				var.lineNum = lineNumberStr;
 				
 				list.add(var);
 
@@ -940,7 +1018,7 @@ public class HlaPathBuilder {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	void parseDiscriminant(String dataType, String origDiscriminantName, String discriminantName, int index,
-			UUID parentUUID) {
+			String lineNumberStr, UUID parentUUID) {
 
 		List<DbVariantRecordField> list = new ArrayList<DbVariantRecordField>();
 
@@ -953,6 +1031,7 @@ public class HlaPathBuilder {
 		var.type = dataType;
 		var.discriminant = true;
 		var.alternative = false;
+		var.lineNum = lineNumberStr;
 		var.parentObject = parentUUID.toString();
 
 		list.add(var);
@@ -967,13 +1046,19 @@ public class HlaPathBuilder {
 		String dataType = "";
 		String variableName = "";
 		String semantics = "";
+		String lineNumberStr = "";
 		
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
 
-			if (name.equals("name"))
+			if (name.equals("name")) {
 				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+			}
 
 			if (name.equals("dataType"))
 				dataType = nodeChild.getTextContent();
@@ -994,6 +1079,7 @@ public class HlaPathBuilder {
 		var.type = dataType;
 		var.discriminant = false;
 		var.alternative = true;
+		var.lineNum = lineNumberStr;
 		var.parentObject = parentUUID.toString();
 
 		list.add(var);
@@ -1025,6 +1111,7 @@ public class HlaPathBuilder {
 		boolean hasData = false;
 		UUID objectUUID = null;
 		int variantRecordFieldIndex = 0;
+		String lineNumberStr = "";
 		String semanticsUUID = "";
 		
 		Node nodeChild = node.getFirstChild();
@@ -1039,6 +1126,10 @@ public class HlaPathBuilder {
 				System.out.println("// Start Variant Record");
 				System.out.println("// " + variantRecordName);
 				System.out.println("typedef struct {");
+				
+				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
+				String lineNumber = nodeAttributes.getNamedItem("line").toString();
+				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
 
 				objectUUID = UUID.randomUUID();
 				semanticsUUID = objectUUID.toString();
@@ -1049,7 +1140,8 @@ public class HlaPathBuilder {
 
 				var.id = objectUUID.toString();
 				var.name = variantRecordName;
-
+				var.lineNum = lineNumberStr;
+				
 				list.add(var);
 
 				databaseAPI.insertIntoVariantRecordDatatypeTable(list);
@@ -1063,7 +1155,7 @@ public class HlaPathBuilder {
 			if (name.equals("dataType")) {
 				variantRecordFieldIndex++;
 				dataType = nodeChild.getTextContent();
-				parseDiscriminant(dataType, origDiscriminantName, discriminantName, variantRecordFieldIndex,
+				parseDiscriminant(dataType, origDiscriminantName, discriminantName, variantRecordFieldIndex, lineNumberStr,
 						objectUUID);
 				System.out.println("   " + dataType + " " + discriminantName + "; // Discriminant");
 			}

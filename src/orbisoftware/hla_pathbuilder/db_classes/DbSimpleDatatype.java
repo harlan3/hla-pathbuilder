@@ -25,4 +25,5 @@ public class DbSimpleDatatype {
 	public String id; // UUID
 	public String name;
 	public String type;
+	public String lineNum;
 }

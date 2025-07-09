@@ -28,5 +28,6 @@ public class DbParameter {
 	public String name;
 	public String type;
 	public boolean inherited;
+	public String lineNum;
 	public String parentObject; //UUID
 }

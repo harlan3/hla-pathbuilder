@@ -26,5 +26,6 @@ public class DbArrayDatatype {
 	public String name;
 	public String type;
 	public String cardinality;
+	public String lineNum;
 	public String encoding;
 }

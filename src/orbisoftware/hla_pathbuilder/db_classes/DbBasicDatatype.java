@@ -27,4 +27,5 @@ public class DbBasicDatatype {
 	public String type; //blank
 	public String size;
 	public String endian;
+	public String lineNum;
 }

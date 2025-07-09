@@ -29,5 +29,6 @@ public class DbFixedRecordField {
 	public String type;
 	public String encoding;
 	public String primitive;
+	public String lineNum;
 	public String parentObject; //UUID
 }

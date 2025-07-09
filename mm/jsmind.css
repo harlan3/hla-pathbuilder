@@ -136,8 +136,8 @@ jmnodes.theme-primary jmnode:hover {
     border-color: #285e8e;
 }
 jmnodes.theme-primary jmnode.selected {
-    background-color: #f1c40f;
-    color: #fff;
+    background-color: #bed8e8;
+    color: #000;
 }
 jmnodes.theme-primary jmnode.root {
 }

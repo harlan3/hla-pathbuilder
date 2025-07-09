@@ -24,4 +24,5 @@ public class DbFixedRecordDatatype {
 
 	public String id; //UUID
 	public String name;
+	public String lineNum;
 }

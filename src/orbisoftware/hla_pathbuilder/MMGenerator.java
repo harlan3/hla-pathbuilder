@@ -104,6 +104,7 @@ public class MMGenerator {
 			 System.out.println("type = " + var.type);
 			 System.out.println("cardinality = " + var.cardinality);
 			 System.out.println("encoding = " + var.encoding); 
+			 System.out.println("lineNum = " + var.lineNum);
 			 System.out.println();
 			 */
 
@@ -117,7 +118,7 @@ public class MMGenerator {
 					var.type = utils.convertFromRPRType(var2.type);
 			}
 
-			returnVal = var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\""
+			returnVal = utils.extractLineNumberContent(element) + var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\""
 					+ var.cardinality + "\" encoding=\"" + var.encoding + "\" | " + "TID=\"Array\"" + " | "
 					+ elementTokens[5];
 
@@ -241,7 +242,9 @@ public class MMGenerator {
 				
 				if (prevElementString.contains("TID=\"Simple\"")) {
 
-					nextElementString = squashAndMergeSimple(nextElementString, i);
+					String lineNumStr = utils.extractLineNumberContent(prevElementString);
+					
+					nextElementString = squashAndMergeSimple(lineNumStr + utils.removeLineNumberContent(prevElementString), i);
 
 					// Ignore bogus value
 					if (nextElementString.equals(""))
@@ -249,7 +252,9 @@ public class MMGenerator {
 
 				} else if (prevElementString.contains("TID=\"Enumerated\"")) {
 
-					nextElementString = squashAndMergeEnum(nextElementString, i);
+					String lineNumStr = utils.extractLineNumberContent(prevElementString);
+					
+					nextElementString = squashAndMergeEnum(lineNumStr + utils.removeLineNumberContent(prevElementString), i);
 
 					// Ignore bogus value
 					if (nextElementString.equals(""))

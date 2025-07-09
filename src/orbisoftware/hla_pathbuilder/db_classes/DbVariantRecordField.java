@@ -29,5 +29,6 @@ public class DbVariantRecordField {
 	public String type;
 	public boolean discriminant;
 	public boolean alternative;
+	public String lineNum;
 	public String parentObject;
 }

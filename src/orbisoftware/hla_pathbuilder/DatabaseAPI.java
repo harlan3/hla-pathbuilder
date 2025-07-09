@@ -33,6 +33,7 @@ import java.util.UUID;
 
 import orbisoftware.hla_pathbuilder.db_classes.*;
 
+// This provides access to/from the database defined by the Database API
 public class DatabaseAPI {
 
 	private String connectMemoryStr = "jdbc:derby:memory:myDB;create=true"; // in memory
@@ -64,6 +65,7 @@ public class DatabaseAPI {
 			    + "name VARCHAR(80), "
 				+ "path VARCHAR(400), "
 				+ "debugPath VARCHAR(400), "
+				+ "lineNum VARCHAR(16), "
 				+ "parentObject VARCHAR(36))");
 			
 			run("CREATE TABLE Attribute ("
@@ -73,6 +75,7 @@ public class DatabaseAPI {
 					+ "name VARCHAR(80), "
 				    + "type VARCHAR(80), "
 					+ "inherited BOOLEAN, "
+					+ "lineNum VARCHAR(16), "
 				    + "parentObject VARCHAR(36))");			
 
 			run("CREATE TABLE Interaction ("
@@ -80,6 +83,7 @@ public class DatabaseAPI {
 				    + "name VARCHAR(80), "
 					+ "path VARCHAR(400), "
 				    + "debugPath VARCHAR(400), "
+					+ "lineNum VARCHAR(16), "
 					+ "parentObject VARCHAR(36))");
 			
 			run("CREATE TABLE Parameter ("
@@ -89,24 +93,28 @@ public class DatabaseAPI {
 					+ "name VARCHAR(80), "
 				    + "type VARCHAR(80), "
 					+ "inherited BOOLEAN, "
+					+ "lineNum VARCHAR(16), "
 				    + "parentObject VARCHAR(36))");	
 
 			run("CREATE TABLE BasicDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
-					+ "type VARCHAR(80),"
-					+ "size VARCHAR(80),"
+					+ "type VARCHAR(80), "
+					+ "size VARCHAR(80), "
+					+ "lineNum VARCHAR(16), "
 					+ "endian VARCHAR(80))");    		
 
 			run("CREATE TABLE SimpleDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
-					+ "type VARCHAR(80))");
+					+ "type VARCHAR(80), "
+					+ "lineNum VARCHAR(16))");
 			
 			run("CREATE TABLE EnumeratedDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
-					+ "type VARCHAR(80))");
+					+ "type VARCHAR(80),"
+					+ "lineNum VARCHAR(16))");
 			
 			run("CREATE TABLE EnumeratorDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
@@ -118,12 +126,14 @@ public class DatabaseAPI {
 					+ "id VARCHAR(36) PRIMARY KEY, "
 				    + "name VARCHAR(80), "
 					+ "type VARCHAR(80), "
-					+ "cardinality VARCHAR(80),"
-					+ "encoding VARCHAR(80))");
+					+ "cardinality VARCHAR(80), "
+					+ "encoding VARCHAR(80), "
+					+ "lineNum VARCHAR(16))");
 			
 			run("CREATE TABLE FixedRecordDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
-				    + "name VARCHAR(80))");
+				    + "name VARCHAR(80), "
+					+ "lineNum VARCHAR(16))");
 			
 			run("CREATE TABLE FixedRecordField ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
@@ -133,11 +143,13 @@ public class DatabaseAPI {
 				    + "type VARCHAR(80), "
 				    + "encoding VARCHAR(80), "
 				    + "primitive VARCHAR(80), "
-				    + "parentObject VARCHAR(36))");	
+				    + "lineNum VARCHAR(16), "
+				    + "parentObject VARCHAR(36))");
 			
 			run("CREATE TABLE VariantRecordDatatype ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
-				    + "name VARCHAR(80))");
+				    + "name VARCHAR(80), "
+					+ "lineNum VARCHAR(16))");
 			
 			run("CREATE TABLE VariantRecordField ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
@@ -146,7 +158,8 @@ public class DatabaseAPI {
 					+ "name VARCHAR(80), "
 				    + "type VARCHAR(80), "
 					+ "discriminant BOOLEAN, "					
-					+ "alternative BOOLEAN, "				    
+					+ "alternative BOOLEAN, "
+					+ "lineNum VARCHAR(16), "
 				    + "parentObject VARCHAR(36))");	
 			
 			run("CREATE TABLE SemanticsDatatype ("
@@ -265,6 +278,7 @@ public class DatabaseAPI {
 					var.name + "','" +
 					var.path + "','" +
 					var.debugPath + "','" +
+					var.lineNum + "','" +
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -287,6 +301,7 @@ public class DatabaseAPI {
 					var.name + "','" +
 					var.type + "'," +
 					var.inherited + ",'" +
+					var.lineNum + "','" +
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -307,6 +322,7 @@ public class DatabaseAPI {
 					var.name + "','" +
 					var.path + "','" +
 					var.debugPath + "','" +
+					var.lineNum + "','" +
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -329,6 +345,7 @@ public class DatabaseAPI {
 					var.name + "','" +
 					var.type + "'," +
 					var.inherited + ",'" +
+					var.lineNum + "','" +
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -349,7 +366,8 @@ public class DatabaseAPI {
 					var.name + "','" +
 					var.type + "','" +
 					var.size + "','" +
-					var.endian + "')");		
+					var.endian + "','" +
+					var.lineNum + "')");		
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -367,7 +385,8 @@ public class DatabaseAPI {
 				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
 					var.id + "','" + 
 					var.name + "','" +
-					var.type + "')");
+					var.type + "','" +
+					var.lineNum + "')");	
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -385,7 +404,8 @@ public class DatabaseAPI {
 				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
 					var.id + "','" + 
 					var.name + "','" +
-					var.type + "')");
+					var.type + "','" +
+					var.lineNum + "')");
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -424,7 +444,8 @@ public class DatabaseAPI {
 					var.name + "','" +
 					var.type + "','" +
 					var.cardinality + "','" + 
-					var.encoding + "')");
+					var.encoding + "','" + 
+					var.lineNum + "')");
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -441,7 +462,8 @@ public class DatabaseAPI {
 
 				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
 					var.id + "','" + 
-					var.name + "')");
+					var.name + "','" +  
+					var.lineNum + "')");
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -464,6 +486,7 @@ public class DatabaseAPI {
 					var.type + "','" +
 					var.encoding + "','" +
 					var.primitive + "','" +
+					var.lineNum + "','" + 
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -481,7 +504,8 @@ public class DatabaseAPI {
 
 				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
 					var.id + "','" + 
-					var.name + "')");
+					var.name + "','" + 
+					var.lineNum + "')");
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -504,6 +528,7 @@ public class DatabaseAPI {
 					var.type + "'," +
 					var.discriminant + "," +
 					var.alternative + ",'" +
+					var.lineNum + "','" +
 					var.parentObject + "')");
 			}
 		} catch (SQLException sqlExcept) {
@@ -548,7 +573,7 @@ public class DatabaseAPI {
 		}
 	}
 	
-	void insertExtendsAttribute(int index, String origVariableName, String variableName, String dataType,
+	void insertExtendsAttribute(int index, String origVariableName, String variableName, String dataType, String lineNumberStr,
 			UUID parentUUID) {
 
 		// Insert attribute into database
@@ -561,6 +586,7 @@ public class DatabaseAPI {
 		var.name = variableName;
 		var.type = dataType;
 		var.inherited = true;
+		var.lineNum = lineNumberStr;
 		var.parentObject = parentUUID.toString();
 
 		list.add(var);
@@ -568,7 +594,7 @@ public class DatabaseAPI {
 		insertIntoAttributeTable(list);
 	}
 	
-	void insertExtendsParameter(int index, String origVariableName, String variableName, String dataType,
+	void insertExtendsParameter(int index, String origVariableName, String variableName, String dataType, String lineNumberStr,
 			UUID parentUUID) {
 
 		// Insert parameter into database
@@ -582,6 +608,7 @@ public class DatabaseAPI {
 		var.name = variableName;
 		var.type = dataType;
 		var.inherited = true;
+		var.lineNum = lineNumberStr;
 		var.parentObject = parentUUID.toString();
 
 		list.add(var);
@@ -606,6 +633,7 @@ public class DatabaseAPI {
         		var.name = results.getString("name");
         		var.path = results.getString("path");
         		var.debugPath = results.getString("debugPath");
+        		var.lineNum = results.getString("lineNum");
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);
@@ -641,6 +669,7 @@ public class DatabaseAPI {
         		var.name = results.getString("name");
         		var.type = results.getString("type");
         		var.inherited = results.getBoolean("inherited");
+        		var.lineNum = results.getString("lineNum");
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);
@@ -674,6 +703,7 @@ public class DatabaseAPI {
         		var.name = results.getString("name");
         		var.path = results.getString("path");
         		var.debugPath = results.getString("debugPath");
+        		var.lineNum = results.getString("lineNum"); 
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);
@@ -709,6 +739,7 @@ public class DatabaseAPI {
         		var.name = results.getString("name");
         		var.type = results.getString("type");
         		var.inherited = results.getBoolean("inherited");
+        		var.lineNum = results.getString("lineNum"); 
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);
@@ -741,6 +772,7 @@ public class DatabaseAPI {
         		var.id = results.getString("id");
         		var.name = results.getString("name");
         		var.type = results.getString("type");
+        		var.lineNum = results.getString("lineNum"); 
         		
         		list.add(var);
         	}
@@ -774,6 +806,7 @@ public class DatabaseAPI {
         		var.type = "";
         		var.size = results.getString("size");
         		var.endian = results.getString("endian");
+        		var.lineNum = results.getString("lineNum"); 
         		
         		list.add(var);
         	}
@@ -805,6 +838,7 @@ public class DatabaseAPI {
         		var.id = results.getString("id");
         		var.name = results.getString("name");
         		var.type = results.getString("type");
+        		var.lineNum = results.getString("lineNum");
         		
         		list.add(var);
         	}
@@ -870,6 +904,7 @@ public class DatabaseAPI {
         		var.type = results.getString("type");
         		var.cardinality = results.getString("cardinality");
         		var.encoding = results.getString("encoding");
+        		var.lineNum = results.getString("lineNum"); 
         		
         		list.add(var);
         	}
@@ -900,6 +935,7 @@ public class DatabaseAPI {
         		
         		var.id = results.getString("id");
         		var.name = results.getString("name");
+        		var.lineNum = results.getString("lineNum");
         		
         		list.add(var);
         	}
@@ -935,6 +971,7 @@ public class DatabaseAPI {
         		var.type = results.getString("type");
         		var.encoding = results.getString("encoding");
         		var.primitive = results.getString("primitive");
+        		var.lineNum = results.getString("lineNum");
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);
@@ -966,6 +1003,7 @@ public class DatabaseAPI {
         		
         		var.id = results.getString("id");
         		var.name = results.getString("name");
+        		var.lineNum = results.getString("lineNum"); 
         		
         		list.add(var);
         	}
@@ -1001,6 +1039,7 @@ public class DatabaseAPI {
         		var.type = results.getString("type");
         		var.discriminant = results.getBoolean("discriminant");
         		var.alternative = results.getBoolean("alternative");
+        		var.lineNum = results.getString("lineNum"); 
         		var.parentObject = results.getString("parentObject");
         		
         		list.add(var);
@@ -1110,7 +1149,7 @@ public class DatabaseAPI {
 		
 		Utils utils = new Utils();
 		
-		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, 
+		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, "",
 				utils.getTIDFromText(tid.trim()), name.trim(), type.trim()));
 		
 		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid).trim();
@@ -1128,7 +1167,7 @@ public class DatabaseAPI {
 		
 		Utils utils = new Utils();
 		
-		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, utils.getTIDFromText(tid.trim()), "", type));
+		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, "", utils.getTIDFromText(tid.trim()), "", type));
 		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid).trim();
 		
 		return semanticsText;

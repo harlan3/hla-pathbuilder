@@ -23,6 +23,8 @@ package orbisoftware.hla_pathbuilder;
 import java.util.Iterator;
 import org.apache.commons.lang3.StringUtils;
 
+// This class traverses the FOM tree and generates the xml or mindmap file for each 
+// of the objects and interactions
 public class NodeTree {
 
 	private DatabaseAPI databaseAPI = new DatabaseAPI();
