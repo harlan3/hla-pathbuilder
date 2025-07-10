@@ -247,12 +247,23 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" | ");
 				
-				String semanticsText = databaseAPI.getSemanticsText(elementNodes[1], nameSplit[0], nameSplit[1]);
+				String nameStr = "";
+				String lineNumberStr = "";
+				
+				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				
+				if (MMGenerator.debugLineNumbersInOutput)
+					nameStr = nameSplit[0];
+				else
+					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+				
+				String semanticsText = databaseAPI.getSemanticsText(elementNodes[1], nameStr, nameSplit[1]);
 
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-						+ nameSplit[0] + " " + nameSplit[1] + "\" " + elementNodes[3].trim() + " " + 
-						elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+						+ nameStr + " " + nameSplit[1] + "\" " + elementNodes[3].trim() + " " + 
+						elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOM_LINE_NUMBER=\"" + lineNumberStr
+						+ "\" FOLDED=\"true\">");
 				
 				return;
 			}
@@ -264,12 +275,23 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
-				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0] + "Imp", nameSplit[1]);
+				String nameStr = "";
+				String lineNumberStr = "";
+				
+				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				
+				if (MMGenerator.debugLineNumbersInOutput)
+					nameStr = nameSplit[0];
+				else
+					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+				
+				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameStr + "Imp", nameSplit[1]);
 
 				printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
-						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
-						" TID=\"Array\" classtype=\"HLAbyte\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+						+ nameStr + "Imp " + nameSplit[1] + "\"" +
+						" TID=\"Array\" classtype=\"HLAbyte\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + 
+						" SEMANTICS=\"" + semanticsText + "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
 				return;
 			}
 			
@@ -280,12 +302,23 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
-				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0] + "Imp", nameSplit[1]);
+				String nameStr = "";
+				String lineNumberStr = "";
+				
+				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				
+				if (MMGenerator.debugLineNumbersInOutput)
+					nameStr = nameSplit[0];
+				else
+					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+				
+				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameStr + "Imp", nameSplit[1]);
 
 				printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
-						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
-						" TID=\"Array\" classtype=\"HLAoctetPairBE\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+						+ nameStr + "Imp " + nameSplit[1] + "\"" +
+						" TID=\"Array\" classtype=\"HLAoctetPairBE\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + 
+						" SEMANTICS=\"" + semanticsText + "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
 				return;
 			}
 			
@@ -296,12 +329,22 @@ public class NodeTree {
 				
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
-				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0] + "Imp", nameSplit[1]);
+				String nameStr = "";
+				String lineNumberStr = "";
+				
+				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				
+				if (MMGenerator.debugLineNumbersInOutput)
+					nameStr = nameSplit[0];
+				else
+					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+				
+				String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameStr + "Imp", nameSplit[1]);
 
 				printContents(
-						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-						+ nameSplit[0] + "Imp " + nameSplit[1] + "\"" +
-						" TID=\"Array\" classtype=\"HLAASCIIchar\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameStr + "Imp " + nameSplit[1] + "\"" +
+						" TID=\"Array\" classtype=\"HLAASCIIchar\" cardinality=\"Dynamic\" encoding=\"HLAvariableArray\"" + 
+						" SEMANTICS=\"" + semanticsText + "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
 				return;
 			}
 
@@ -312,23 +355,34 @@ public class NodeTree {
 
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
+				String nameStr = "";
+				String lineNumberStr = "";
+				
+				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				
+				if (MMGenerator.debugLineNumbersInOutput)
+					nameStr = nameSplit[0];
+				else
+					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+				
 				if (nameSplit.length > 1) {
 					
-					String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0], nameSplit[1]);
+					String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameStr, nameSplit[1]);
 					
 					printContents(
 							format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
-							+ nameSplit[0] + " " + nameSplit[1]
-							+ "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() 
-							+  " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+							+ nameStr + " " + nameSplit[1] + "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() 
+							+  " SEMANTICS=\"" + semanticsText + "\" FOM_LINE_NUMBER=\"" + lineNumberStr
+							+ "\" FOLDED=\"true\">");
 				} else {
 	
-					String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameSplit[0]);
+					String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameStr);
 							
 					printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
-						+ nameSplit[0] + "\" " + elementNodes[2].trim() + " " 
-						+ elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+						+ nameStr + "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() 
+						+ " SEMANTICS=\"" + semanticsText + "\" FOM_LINE_NUMBER=\"" + lineNumberStr
+						+ "\" FOLDED=\"true\">");
 				}
 
 			} else if (node.elementString.contains("TID=\"FixedRecord\"")) {
@@ -338,22 +392,34 @@ public class NodeTree {
 
 				String nameSplit[] = elementNodes[0].trim().split(" ");
 				
+				String nameStr = "";
+				String lineNumberStr = "";
+
+				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				
+				if (MMGenerator.debugLineNumbersInOutput)
+					nameStr = nameSplit[0];
+				else
+					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+				
 				if (nameSplit.length > 1) {
 					
-					String semanticsText = databaseAPI.getSemanticsText("TID=\"FixedRecord\"", nameSplit[0], nameSplit[1]);
+					String semanticsText = databaseAPI.getSemanticsText("TID=\"FixedRecord\"", nameStr, nameSplit[1]);
 
 					if (nameSplit[1].endsWith("Array"))
-						nameSplit[1] = utils.convertToCamelCase(nameSplit[0]);
+						nameSplit[1] = utils.convertToCamelCase(nameStr);
 
-					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameSplit[0]
+					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameStr
 							+ " " + nameSplit[1] + "\" " + elementNodes[1].trim() 
-							+ " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+							+ " SEMANTICS=\"" + semanticsText + "\" FOM_LINE_NUMBER=\"" + lineNumberStr
+							+ "\" FOLDED=\"true\">");
 				} else {
 					
-					String semanticsText = databaseAPI.getSemanticsText("TID=\"FixedRecord\"", nameSplit[0]);
+					String semanticsText = databaseAPI.getSemanticsText("TID=\"FixedRecord\"", nameStr);
 
-					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameSplit[0]
-							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameStr
+							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText 
+							+ "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
 				}
 
 			} else if (node.elementString.contains("path=")) {
@@ -422,29 +488,53 @@ public class NodeTree {
 				
 				if (rprRemoval[0].startsWith("RPR")) {
 					
-					String nodeType = utils.convertFromRPRType(rprRemoval[0]);
+					String nameStr = "";
+					String lineNumberStr = "";
+
+					lineNumberStr = utils.extractLineNumberContentNoBraces(rprRemoval[0]);
+					
+					if (MMGenerator.debugLineNumbersInOutput)
+						nameStr = rprRemoval[0];
+					else
+						nameStr = utils.removeLineNumberContent(rprRemoval[0]);
+					
+					String nodeType = utils.convertFromRPRType(nameStr);
 					
 					semanticsText = databaseAPI.getSemanticsText(elementNodes[1], "", rprRemoval[1].trim());
 
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 							+ nodeType.trim() + " " + rprRemoval[1].trim() 
-							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+							+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText 
+							+ "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
 				} else {
 									
 					String nameSplit[] = elementNodes[0].trim().split(" ");
 					
-					semanticsText = databaseAPI.getSemanticsText(elementNodes[1], nameSplit[0], nameSplit[1]);
+					
+					String nameStr = "";
+					String lineNumberStr = "";
+
+					lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+					
+					if (MMGenerator.debugLineNumbersInOutput)
+						nameStr = nameSplit[0];
+					else
+						nameStr = utils.removeLineNumberContent(nameSplit[0]);
+					
+					semanticsText = databaseAPI.getSemanticsText(elementNodes[1], nameStr, nameSplit[1]);
 					
 					if (nameSplit.length > 1 && elementNodes.length > 2) {
 						
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-								+ nameSplit[0].trim() + " " + nameSplit[1].trim() 
-								+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+								+ nameStr.trim() + " " + nameSplit[1].trim() 
+								+ "\" " + elementNodes[1].trim() + " SEMANTICS=\"" + semanticsText 
+								+ "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
 					} else {
 						
 						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-								+ nameSplit[0].trim() + "\" " + elementNodes[1].trim() 
-								+ " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\">");
+								+ nameStr.trim() + "\" " + elementNodes[1].trim() 
+								+ " SEMANTICS=\"" + semanticsText 
+								+ "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
 					}
 				}
 			}

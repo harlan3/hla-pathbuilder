@@ -90,7 +90,25 @@ public class Utils {
         return input.length() <= length ? input : input.substring(0, length);
     }
 	
-    public String extractLineNumberContent(String input) {
+    public String extractLineNumberContentNoBraces(String input) {
+    	
+        StringBuilder result = new StringBuilder();
+        boolean insideBrackets = false;
+
+        for (char c : input.toCharArray()) {
+            if (c == '{') {
+                insideBrackets = true;
+            } else if (c == '}') {
+                insideBrackets = false;
+            } else if (insideBrackets) {
+                result.append(c);
+            }
+        }
+
+        return result.toString();
+    }
+    
+    public String extractLineNumberContentWithBraces(String input) {
     	
         StringBuilder result = new StringBuilder();
         boolean insideBrackets = false;

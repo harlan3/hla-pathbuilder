@@ -35,7 +35,8 @@ import orbisoftware.hla_pathbuilder.db_classes.DbSimpleDatatype;
 public class MMGenerator {
 
 	private GeneratorStateMachine stateMachine;
-
+	
+	public static boolean debugLineNumbersInOutput = false;
 	public static boolean haveRunOnce = false;
 
 	private DatabaseAPI databaseAPI;
@@ -118,7 +119,7 @@ public class MMGenerator {
 					var.type = utils.convertFromRPRType(var2.type);
 			}
 
-			returnVal = utils.extractLineNumberContent(element) + var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\""
+			returnVal = utils.extractLineNumberContentWithBraces(element) + var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\""
 					+ var.cardinality + "\" encoding=\"" + var.encoding + "\" | " + "TID=\"Array\"" + " | "
 					+ elementTokens[5];
 
@@ -242,7 +243,7 @@ public class MMGenerator {
 				
 				if (prevElementString.contains("TID=\"Simple\"")) {
 
-					String lineNumStr = utils.extractLineNumberContent(prevElementString);
+					String lineNumStr = utils.extractLineNumberContentWithBraces(prevElementString);
 					
 					nextElementString = squashAndMergeSimple(lineNumStr + utils.removeLineNumberContent(prevElementString), i);
 
@@ -252,7 +253,7 @@ public class MMGenerator {
 
 				} else if (prevElementString.contains("TID=\"Enumerated\"")) {
 
-					String lineNumStr = utils.extractLineNumberContent(prevElementString);
+					String lineNumStr = utils.extractLineNumberContentWithBraces(prevElementString);
 					
 					nextElementString = squashAndMergeEnum(lineNumStr + utils.removeLineNumberContent(prevElementString), i);
 
@@ -403,12 +404,24 @@ public class MMGenerator {
 						path = path.replaceAll("\\s+", ""); // remove whitespace
 						path = path.replaceAll(",", "."); // replace commas with periods
 						pathTokens = path.split("\\.");
-
-						String semanticsText = databaseAPI.getSemanticsText("", pathTokens[(pathTokens.length - 1)]);
+						
+						String lineNumberStr = "";
+						String pathTokenString = "";
+								
+						lineNumberStr = utils.extractLineNumberContentNoBraces(pathTokens[(pathTokens.length - 1)]);
+						
+						if (debugLineNumbersInOutput)
+							pathTokenString = pathTokens[(pathTokens.length - 1)];
+						else {
+							pathTokenString = utils.removeLineNumberContent(pathTokens[(pathTokens.length - 1)]);
+							path = utils.removeLineNumberContent(path);
+						}
+						
+						String semanticsText = databaseAPI.getSemanticsText("", pathTokenString);
 						
 						String pathLine = "ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\""
-								+ pathTokens[(pathTokens.length - 1)] + "\"" + " path=\"" + path + "\""
-								+ " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\"" + ">";
+								+ pathTokenString + "\"" + " path=\"" + path + "\"" + " SEMANTICS=\"" + semanticsText 
+								+ "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\"" + ">";
 						updateElementTreeFromLine(pathLine, false);
 					}
 

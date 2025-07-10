@@ -34,17 +34,13 @@ def embed_line_numbers_plaintext(input_path, output_path):
             new_line = tag_pattern.sub(insert_line_attr, line)
             outfile.write(new_line)
 
-# Example usage
 if __name__ == "__main__":
 
-    #if len(sys.argv) < 3:
-    #    print("Usage: python embed_line_numbers.py <input_file> <output_file>")
-    #    sys.exit(1)
+    if len(sys.argv) < 3:
+        print("Usage: python embed_line_numbers.py <input_file> <output_file>")
+        sys.exit(1)
 
-    #input_file = sys.argv[1]
-    #output_file = sys.argv[2]
-
-    input_file = "NISv2.2.0-monolithicNTF.xml"
-    output_file = "NISv2.2.0_with_lines.xml"
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
 
     embed_line_numbers_plaintext(input_file, output_file)
