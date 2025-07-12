@@ -486,7 +486,7 @@ public class NodeTree {
 				// Fix nodes that are referencing non existent RPR types in support of codegen
 				String rprRemoval[] = elementNodes[0].trim().split(" ");
 				
-				if (rprRemoval[0].startsWith("RPR")) {
+				if (utils.removeLineNumberContent(rprRemoval[0]).startsWith("RPR")) {
 					
 					String nameStr = "";
 					String lineNumberStr = "";

@@ -245,7 +245,7 @@ public class MMGenerator {
 
 					String lineNumStr = utils.extractLineNumberContentWithBraces(prevElementString);
 					
-					nextElementString = squashAndMergeSimple(lineNumStr + utils.removeLineNumberContent(prevElementString), i);
+					nextElementString = squashAndMergeSimple(lineNumStr + utils.removeLineNumberContent(nextElementString), i);
 
 					// Ignore bogus value
 					if (nextElementString.equals(""))
@@ -255,7 +255,7 @@ public class MMGenerator {
 
 					String lineNumStr = utils.extractLineNumberContentWithBraces(prevElementString);
 					
-					nextElementString = squashAndMergeEnum(lineNumStr + utils.removeLineNumberContent(prevElementString), i);
+					nextElementString = squashAndMergeEnum(lineNumStr + utils.removeLineNumberContent(nextElementString), i);
 
 					// Ignore bogus value
 					if (nextElementString.equals(""))

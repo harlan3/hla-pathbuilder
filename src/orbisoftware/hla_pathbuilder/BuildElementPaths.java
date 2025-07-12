@@ -26,6 +26,7 @@ import java.util.Stack;
 
 import orbisoftware.hla_pathbuilder.db_classes.*;
 
+// This class builds the element paths defined by the protocol specs
 public class BuildElementPaths {
 
 	private Stack<String> pathFollowStack = new Stack<String>();

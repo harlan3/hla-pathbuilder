@@ -23,6 +23,7 @@ package orbisoftware.hla_pathbuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+// This class is of type NodeElement which is used in constructing the NodeTree
 class NodeElement {
 	
     List<NodeElement> children;
