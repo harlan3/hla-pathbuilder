@@ -369,9 +369,14 @@ public class NodeTree {
 					
 					String semanticsText = databaseAPI.getSemanticsText("TID=\"Array\"", nameStr, nameSplit[1]);
 					
+					String classEncodingType = elementNodes[1].trim();
+					
+					if (classEncodingType.contains("HLAunicodeString"))
+						classEncodingType = classEncodingType.replaceAll("HLAunicodeString", "HLAunicodeStringImp");
+					
 					printContents(
 							format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
-							+ nameStr + " " + nameSplit[1] + "\" " + elementNodes[2].trim() + " " + elementNodes[1].trim() 
+							+ nameStr + " " + nameSplit[1] + "\" " + elementNodes[2].trim() + " " + classEncodingType 
 							+  " SEMANTICS=\"" + semanticsText + "\" FOM_LINE_NUMBER=\"" + lineNumberStr
 							+ "\" FOLDED=\"true\">");
 				} else {
