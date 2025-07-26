@@ -1,6 +1,6 @@
 (federation
   (name "FoodFOM")
-
+  (description "FOM module for HLA 1.3")
   (objects
     (object
       (name "FoodItem1")
