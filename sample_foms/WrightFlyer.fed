@@ -1,1101 +1,367 @@
-(
-  FED
-  (
-    Federation WrightFlyerFederation
-  )
-  (
-    FEDversion v1.3
-  )
-  (
-    spaces
-  )
-  (
-    objects
-    (
-      class ObjectRoot
-      (
-        attribute privilegeToDelete reliable timestamp
-      )
-      (
-        class RTIprivate
-      )
-      (
-        class FlyerApp
-      )
-      (
-        class FlyerDoc
-      )
-      (
-        class CView
-        (
-          class InstrumentView
-          (
-            attribute FlyerHandle best_effort receive
-          )
-        )
-        (
-          class CGLView
-          (
-            class FlyerView
-            (
-              attribute lookAt best_effort receive
-            )
-            (
-              attribute lookAtRelToFlyer best_effort receive
-            )
-            (
-              attribute lookFrom best_effort receive
-            )
-            (
-              attribute lookFromRelToFlyer best_effort receive
-            )
-            (
-              class PilotFlyerView
-              (
-                attribute FlyerHandle best_effort receive
-              )
-            )
-            (
-              class WingmanFlyerView
-              (
-                attribute FlyerHandle best_effort receive
-              )
-            )
-            (
-              class SpotFlyerView
-              (
-                attribute FlyerHandle best_effort receive
-              )
-            )
-            (
-              class ConstantFlyerView
-            )
-            (
-              class RadarFlyerView
-            )
-          )
-        )
-        (
-          class DebugView
-        )
-      )
-      (
-        class UserEventHandler
-        (
-          attribute EventMappings best_effort receive
-        )
-        (
-          attribute EventQueue best_effort receive
-        )
-      )
-      (
-        class RTIamb
-      )
-      (
-        class UIambassador
-      )
-      (
-        class FlyerStatus
-        (
-          attribute FlyerHandle best_effort receive
-        )
-        (
-          attribute Position best_effort receive
-        )
-        (
-          attribute Orientation best_effort receive
-        )
-        (
-          attribute HipSaddlePos best_effort receive
-        )
-        (
-          attribute CanardStickPos best_effort receive
-        )
-        (
-          attribute CanardAngle best_effort receive
-        )
-        (
-          attribute RudderAngle best_effort receive
-        )
-        (
-          attribute WingWarpFactor best_effort receive
-        )
-      )
-      (
-        class EnvironmentCache
-      )
-      (
-        class FlyerModel
-      )
-      (
-        class Flyer
-        (
-          attribute PilotID best_effort receive
-        )
-        (
-          attribute Position best_effort receive
-        )
-        (
-          attribute OrientationAxis best_effort receive
-        )
-        (
-          attribute OrientationUp best_effort receive
-        )
-        (
-          attribute Velocity best_effort receive
-        )
-        (
-          attribute AngularVelocity best_effort receive
-        )
-        (
-          attribute Status best_effort receive
-        )
-        (
-          attribute FuelLevel best_effort receive
-        )
-        (
-          attribute HipSaddleSetting best_effort receive
-        )
-        (
-          attribute CanardControlSetting best_effort receive
-        )
-        (
-          attribute CanardAngle best_effort receive
-        )
-        (
-          attribute RudderAngle best_effort receive
-        )
-        (
-          attribute WingWarpFactor best_effort receive
-        )
-      )
-      (
-        class ControlObject
-      )
-      (
-        class Engine
-      )
-      (
-        class PhysicalPilot
-      )
-      (
-        class FlightState
-        (
-          attribute PilotID best_effort receive
-        )
-        (
-          attribute Position best_effort receive
-        )
-        (
-          attribute Velocity best_effort receive
-        )
-        (
-          attribute AngularVelocity best_effort receive
-        )
-        (
-          attribute OrientationAxis best_effort receive
-        )
-        (
-          attribute OrientationUp best_effort receive
-        )
-        (
-          attribute CanardControlSetting best_effort receive
-        )
-        (
-          attribute HipSaddleSetting best_effort receive
-        )
-        (
-          attribute FuelLevel best_effort receive
-        )
-        (
-          attribute Status best_effort receive
-        )
-        (
-          attribute CanardAngle best_effort receive
-        )
-        (
-          attribute RudderAngle best_effort receive
-        )
-        (
-          attribute WingWarpFactor best_effort receive
-        )
-      )
-      (
-        class WFFederate
-      )
-      (
-        class Scripts
-      )
-      (
-        class Environment
-        (
-          class Terrain
-          (
-            class Map
-            (
-              attribute Coordinate_Data best_effort receive
-            )
-          )
-          (
-            class Feature_List
-            (
-              attribute List best_effort receive
-            )
-          )
-        )
-        (
-          class Weather
-          (
-            attribute Wind best_effort receive
-          )
-          (
-            attribute Precipitation best_effort receive
-          )
-          (
-            attribute Temperature best_effort receive
-          )
-          (
-            attribute Pressure best_effort receive
-          )
-        )
-      )
-      (
-        class Manager
-        (
-          class Federation
-          (
-            attribute FederationName reliable receive
-          )
-          (
-            attribute FederatesInFederation reliable receive
-          )
-          (
-            attribute RTIversion reliable receive
-          )
-          (
-            attribute FEDid reliable receive
-          )
-          (
-            attribute LastSaveName reliable receive
-          )
-          (
-            attribute LastSaveTime reliable receive
-          )
-          (
-            attribute NextSaveName reliable receive
-          )
-          (
-            attribute NextSaveTime reliable receive
-          )
-        )
-        (
-          class Federate
-          (
-            attribute FederateHandle reliable receive
-          )
-          (
-            attribute FederateType reliable receive
-          )
-          (
-            attribute FederateHost reliable receive
-          )
-          (
-            attribute RTIversion reliable receive
-          )
-          (
-            attribute FEDid reliable receive
-          )
-          (
-            attribute TimeConstrained reliable receive
-          )
-          (
-            attribute TimeRegulating reliable receive
-          )
-          (
-            attribute AsynchronousDelivery reliable receive
-          )
-          (
-            attribute FederateState reliable receive
-          )
-          (
-            attribute TimeManagerState reliable receive
-          )
-          (
-            attribute FederateTime reliable receive
-          )
-          (
-            attribute Lookahead reliable receive
-          )
-          (
-            attribute LBTS reliable receive
-          )
-          (
-            attribute MinNextEventTime reliable receive
-          )
-          (
-            attribute ROlength reliable receive
-          )
-          (
-            attribute TSOlength reliable receive
-          )
-          (
-            attribute ReflectionsReceived reliable receive
-          )
-          (
-            attribute UpdatesSent reliable receive
-          )
-          (
-            attribute InteractionsReceived reliable receive
-          )
-          (
-            attribute InteractionsSent reliable receive
-          )
-          (
-            attribute ObjectsOwned reliable receive
-          )
-          (
-            attribute ObjectsUpdated reliable receive
-          )
-          (
-            attribute ObjectsReflected reliable receive
-          )
-        )
-      )
-    )
-  )
-  (
-    interactions
-    (
-      class InteractionRoot reliable timestamp
-      (
-        class RTIprivate reliable timestamp
-      )
-      (
-        class MoveHipSaddle best_effort receive
-        (
-          parameter FlyerID
-        )
-        (
-          parameter PilotID
-        )
-        (
-          parameter Delta
-        )
-      )
-      (
-        class MoveCanardControl best_effort receive
-        (
-          parameter FlyerID
-        )
-        (
-          parameter PilotID
-        )
-        (
-          parameter Delta
-        )
-      )
-      (
-        class MakeNewFlyer best_effort receive
-        (
-          parameter PilotID
-        )
-        (
-          parameter Position
-        )
-        (
-          parameter OrientationAxis
-        )
-        (
-          parameter OrientationUp
-        )
-        (
-          parameter Velocity
-        )
-        (
-          parameter FuelLevel
-        )
-        (
-          parameter PilotMass
-        )
-      )
-      (
-        class RelinquishFlyerControl best_effort receive
-        (
-          parameter Flyer
-        )
-      )
-      (
-        class FlyerControlRelinquished best_effort receive
-        (
-          parameter Flyer
-        )
-      )
-      (
-        class CollisionDetected best_effort receive
-        (
-          parameter Flyer
-        )
-      )
-      (
-        class DestroyFlyer best_effort receive
-        (
-          parameter FlyerID
-        )
-        (
-          parameter PilotID
-        )
-      )
-      (
-        class IsPresent best_effort receive
-        (
-          parameter Federate
-        )
-      )
-      (
-        class Present best_effort receive
-        (
-          parameter Federate
-        )
-      )
-      (
-        class RequestEnvDump best_effort receive
-      )
-      (
-        class EnvDump best_effort receive
-        (
-          parameter MapWidth
-        )
-        (
-          parameter MapHeight
-        )
-        (
-          parameter GridWidth
-        )
-        (
-          parameter GridHeight
-        )
-        (
-          parameter GroundHeights
-        )
-      )
-      (
-        class GetFileList best_effort receive
-        (
-          parameter Category
-        )
-      )
-      (
-        class FileList best_effort receive
-        (
-          parameter Category
-        )
-        (
-          parameter NumFiles
-        )
-        (
-          parameter FileNames
-        )
-      )
-      (
-        class ChooseFile best_effort receive
-        (
-          parameter Category
-        )
-        (
-          parameter FileName
-        )
-      )
-      (
-        class UseRandomTerrain best_effort receive
-        (
-          parameter MaxHeight
-        )
-        (
-          parameter MinHeight
-        )
-      )
-      (
-        class UseRandomFeatures best_effort receive
-      )
-      (
-        class UseRandomWind best_effort receive
-        (
-          parameter MaxSpeed
-        )
-        (
-          parameter MinSpeed
-        )
-        (
-          parameter MaxOrient
-        )
-        (
-          parameter MinOrient
-        )
-      )
-      (
-        class UseRandomTemp best_effort receive
-        (
-          parameter MaxTemp
-        )
-        (
-          parameter MinTemp
-        )
-      )
-      (
-        class UseRandomAtmosPressure best_effort receive
-        (
-          parameter MaxPres
-        )
-        (
-          parameter MinPres
-        )
-      )
-      (
-        class StartRecording best_effort receive
-        (
-          parameter FlyerID
-        )
-        (
-          parameter PilotID
-        )
-        (
-          parameter FileName
-        )
-      )
-      (
-        class StopRecording best_effort receive
-        (
-          parameter FlyerID
-        )
-        (
-          parameter PilotID
-        )
-      )
-      (
-        class StartPlayback best_effort receive
-        (
-          parameter FlyerID
-        )
-        (
-          parameter FileName
-        )
-      )
-      (
-        class RequestEnv best_effort receive
-        (
-          parameter x
-        )
-        (
-          parameter z
-        )
-      )
-      (
-        class PublishEnv best_effort receive
-        (
-          parameter Elevation
-        )
-        (
-          parameter Wind
-        )
-        (
-          parameter Pressure
-        )
-        (
-          parameter Temperature
-        )
-        (
-          parameter Precipitation
-        )
-        (
-          parameter x
-        )
-        (
-          parameter z
-        )
-      )
-      (
-        class RequestMapDump best_effort receive
-      )
-      (
-        class MapDump best_effort receive
-        (
-          parameter MapWidth
-        )
-        (
-          parameter MapHeight
-        )
-        (
-          parameter GridWidth
-        )
-        (
-          parameter GridHeight
-        )
-        (
-          parameter GroundHeights
-        )
-      )
-      (
-        class TerrainDump best_effort receive
-        (
-          parameter Feature
-        )
-      )
-      (
-        class Manager reliable receive
-        (
-          class Federate reliable receive
-          (
-            parameter Federate
-          )
-          (
-            class Request reliable receive
-            (
-              class RequestPublications reliable receive
-            )
-            (
-              class RequestSubscriptions reliable receive
-            )
-            (
-              class RequestObjectsOwned reliable receive
-            )
-            (
-              class RequestObjectsUpdated reliable receive
-            )
-            (
-              class RequestObjectsReflected reliable receive
-            )
-            (
-              class RequestUpdatesSent reliable receive
-            )
-            (
-              class RequestInteractionsSent reliable receive
-            )
-            (
-              class RequestReflectionsReceived reliable receive
-            )
-            (
-              class RequestInteractionsReceived reliable receive
-            )
-            (
-              class RequestObjectInformation reliable receive
-              (
-                parameter ObjectInstance
-              )
-            )
-          )
-          (
-            class Report reliable receive
-            (
-              class ReportObjectPublication reliable receive
-              (
-                parameter NumberOfClasses
-              )
-              (
-                parameter ObjectClass
-              )
-              (
-                parameter AttributeList
-              )
-            )
-            (
-              class ReportObjectSubscription reliable receive
-              (
-                parameter NumberOfClasses
-              )
-              (
-                parameter ObjectClass
-              )
-              (
-                parameter Active
-              )
-              (
-                parameter AttributeList
-              )
-            )
-            (
-              class ReportInteractionPublication reliable receive
-              (
-                parameter InteractionClassList
-              )
-            )
-            (
-              class ReportInteractionSubscription reliable receive
-              (
-                parameter InteractionClassList
-              )
-            )
-            (
-              class ReportObjectsOwned reliable receive
-              (
-                parameter ObjectCounts
-              )
-            )
-            (
-              class ReportObjectsUpdated reliable receive
-              (
-                parameter ObjectCounts
-              )
-            )
-            (
-              class ReportObjectsReflected reliable receive
-              (
-                parameter ObjectCounts
-              )
-            )
-            (
-              class ReportUpdatesSent reliable receive
-              (
-                parameter TransportationType
-              )
-              (
-                parameter UpdateCounts
-              )
-            )
-            (
-              class ReportReflectionsReceived reliable receive
-              (
-                parameter TransportationType
-              )
-              (
-                parameter ReflectCounts
-              )
-            )
-            (
-              class ReportInteractionsSent reliable receive
-              (
-                parameter TransportationType
-              )
-              (
-                parameter InteractionCounts
-              )
-            )
-            (
-              class ReportInteractionsReceived reliable receive
-              (
-                parameter TransportationType
-              )
-              (
-                parameter InteractionCounts
-              )
-            )
-            (
-              class ReportObjectInformation reliable receive
-              (
-                parameter ObjectInstance
-              )
-              (
-                parameter OwnedAttributeList
-              )
-              (
-                parameter RegisteredClass
-              )
-              (
-                parameter KnownClass
-              )
-            )
-            (
-              class Alert reliable receive
-              (
-                parameter AlertSeverity
-              )
-              (
-                parameter AlertDescription
-              )
-              (
-                parameter AlertID
-              )
-            )
-            (
-              class ReportServiceInvocation reliable receive
-              (
-                parameter Service
-              )
-              (
-                parameter Initiator
-              )
-              (
-                parameter SuccessIndicator
-              )
-              (
-                parameter SuppliedArgument1
-              )
-              (
-                parameter SuppliedArgument2
-              )
-              (
-                parameter SuppliedArgument3
-              )
-              (
-                parameter SuppliedArgument4
-              )
-              (
-                parameter SuppliedArgument5
-              )
-              (
-                parameter ReturnedArgument
-              )
-              (
-                parameter ExceptionDescription
-              )
-              (
-                parameter ExceptionID
-              )
-            )
-          )
-          (
-            class Adjust reliable receive
-            (
-              class SetTiming reliable receive
-              (
-                parameter ReportPeriod
-              )
-            )
-            (
-              class ModifyAttributeState reliable receive
-              (
-                parameter ObjectInstance
-              )
-              (
-                parameter Attribute
-              )
-              (
-                parameter AttributeState
-              )
-            )
-            (
-              class SetServiceReporting reliable receive
-              (
-                parameter ReportingState
-              )
-            )
-            (
-              class SetExceptionLogging reliable receive
-              (
-                parameter LoggingState
-              )
-            )
-          )
-          (
-            class Service reliable receive
-            (
-              class ResignFederationExecution reliable receive
-              (
-                parameter ResignAction
-              )
-            )
-            (
-              class SynchronizationPointAchieved reliable receive
-              (
-                parameter Label
-              )
-            )
-            (
-              class FederateSaveBegun reliable receive
-            )
-            (
-              class FederateSaveComplete reliable receive
-              (
-                parameter SuccessIndicator
-              )
-            )
-            (
-              class FederateRestoreComplete reliable receive
-              (
-                parameter SuccessIndicator
-              )
-            )
-            (
-              class PublishObjectClass reliable receive
-              (
-                parameter ObjectClass
-              )
-              (
-                parameter AttributeList
-              )
-            )
-            (
-              class UnpublishObjectClass reliable receive
-              (
-                parameter ObjectClass
-              )
-            )
-            (
-              class PublishInteractionClass reliable receive
-              (
-                parameter InteractionClass
-              )
-            )
-            (
-              class UnpublishInteractionClass reliable receive
-              (
-                parameter InteractionClass
-              )
-            )
-            (
-              class SubscribeObjectClassAttributes reliable receive
-              (
-                parameter ObjectClass
-              )
-              (
-                parameter AttributeList
-              )
-              (
-                parameter Active
-              )
-            )
-            (
-              class UnsubscribeObjectClass reliable receive
-              (
-                parameter ObjectClass
-              )
-            )
-            (
-              class SubscribeInteractionClass reliable receive
-              (
-                parameter InteractionClass
-              )
-              (
-                parameter Active
-              )
-            )
-            (
-              class UnsubscribeInteractionClass reliable receive
-              (
-                parameter InteractionClass
-              )
-            )
-            (
-              class DeleteObjectInstance reliable receive
-              (
-                parameter ObjectInstance
-              )
-              (
-                parameter Tag
-              )
-              (
-                parameter FederationTime
-              )
-            )
-            (
-              class LocalDeleteObjectInstance reliable receive
-              (
-                parameter ObjectInstance
-              )
-            )
-            (
-              class ChangeAttributeTransportationType reliable receive
-              (
-                parameter ObjectInstance
-              )
-              (
-                parameter AttributeList
-              )
-              (
-                parameter TransportationType
-              )
-            )
-            (
-              class ChangeAttributeOrderType reliable receive
-              (
-                parameter ObjectInstance
-              )
-              (
-                parameter AttributeList
-              )
-              (
-                parameter OrderingType
-              )
-            )
-            (
-              class ChangeInteractionTransportationType reliable receive
-              (
-                parameter InteractionClass
-              )
-              (
-                parameter TransportationType
-              )
-            )
-            (
-              class ChangeInteractionOrderType reliable receive
-              (
-                parameter InteractionClass
-              )
-              (
-                parameter OrderingType
-              )
-            )
-            (
-              class UnconditionalAttributeOwnershipDivestiture reliable receive
-              (
-                parameter ObjectInstance
-              )
-              (
-                parameter AttributeList
-              )
-            )
-            (
-              class EnableTimeRegulation reliable receive
-              (
-                parameter FederationTime
-              )
-              (
-                parameter Lookahead
-              )
-            )
-            (
-              class DisableTimeRegulation reliable receive
-            )
-            (
-              class EnableTimeConstrained reliable receive
-            )
-            (
-              class DisableTimeConstrained reliable receive
-            )
-            (
-              class EnableAsynchronousDelivery reliable receive
-            )
-            (
-              class DisableAsynchronousDelivery reliable receive
-            )
-            (
-              class ModifyLookahead reliable receive
-              (
-                parameter Lookahead
-              )
-            )
-            (
-              class TimeAdvanceRequest reliable receive
-              (
-                parameter FederationTime
-              )
-            )
-            (
-              class TimeAdvanceRequestAvailable reliable receive
-              (
-                parameter FederationTime
-              )
-            )
-            (
-              class NextEventRequest reliable receive
-              (
-                parameter FederationTime
-              )
-            )
-            (
-              class NextEventRequestAvailable reliable receive
-              (
-                parameter FederationTime
-              )
-            )
-            (
-              class FlushQueueRequest reliable receive
-              (
-                parameter FederationTime
-              )
-            )
-          )
-        )
-      )
-    )
-  )
-)
+(FED
+  (Federation WrightFlyerFederation)
+(FEDversion v1.3)
+(spaces)
+(objects
+  (class ObjectRoot
+  (attribute privilegeToDelete reliable timestamp)
+(class RTIprivate)
+(class FlyerApp)
+(class FlyerDoc)
+(class CView
+  (class InstrumentView
+  (attribute FlyerHandle best_effort receive))
+(class CGLView
+  (class FlyerView
+  (attribute lookAt best_effort receive)
+(attribute lookAtRelToFlyer best_effort receive)
+(attribute lookFrom best_effort receive)
+(attribute lookFromRelToFlyer best_effort receive)
+(class PilotFlyerView
+  (attribute FlyerHandle best_effort receive))
+(class WingmanFlyerView
+  (attribute FlyerHandle best_effort receive))
+(class SpotFlyerView
+  (attribute FlyerHandle best_effort receive))
+(class ConstantFlyerView)
+(class RadarFlyerView)))
+(class DebugView))
+(class UserEventHandler
+  (attribute EventMappings best_effort receive)
+(attribute EventQueue best_effort receive))
+(class RTIamb)
+(class UIambassador)
+(class FlyerStatus
+  (attribute FlyerHandle best_effort receive)
+(attribute Position best_effort receive)
+(attribute Orientation best_effort receive)
+(attribute HipSaddlePos best_effort receive)
+(attribute CanardStickPos best_effort receive)
+(attribute CanardAngle best_effort receive)
+(attribute RudderAngle best_effort receive)
+(attribute WingWarpFactor best_effort receive))
+(class EnvironmentCache)
+(class FlyerModel)
+(class Flyer
+  (attribute PilotID best_effort receive)
+(attribute Position best_effort receive)
+(attribute OrientationAxis best_effort receive)
+(attribute OrientationUp best_effort receive)
+(attribute Velocity best_effort receive)
+(attribute AngularVelocity best_effort receive)
+(attribute Status best_effort receive)
+(attribute FuelLevel best_effort receive)
+(attribute HipSaddleSetting best_effort receive)
+(attribute CanardControlSetting best_effort receive)
+(attribute CanardAngle best_effort receive)
+(attribute RudderAngle best_effort receive)
+(attribute WingWarpFactor best_effort receive))
+(class ControlObject)
+(class Engine)
+(class PhysicalPilot)
+(class FlightState
+  (attribute PilotID best_effort receive)
+(attribute Position best_effort receive)
+(attribute Velocity best_effort receive)
+(attribute AngularVelocity best_effort receive)
+(attribute OrientationAxis best_effort receive)
+(attribute OrientationUp best_effort receive)
+(attribute CanardControlSetting best_effort receive)
+(attribute HipSaddleSetting best_effort receive)
+(attribute FuelLevel best_effort receive)
+(attribute Status best_effort receive)
+(attribute CanardAngle best_effort receive)
+(attribute RudderAngle best_effort receive)
+(attribute WingWarpFactor best_effort receive))
+(class WFFederate)
+(class Scripts)
+(class Environment
+  (class Terrain
+  (class Map
+  (attribute Coordinate_Data best_effort receive))
+(class Feature_List
+  (attribute List best_effort receive)))
+(class Weather
+  (attribute Wind best_effort receive)
+(attribute Precipitation best_effort receive)
+(attribute Temperature best_effort receive)
+(attribute Pressure best_effort receive)))
+(class Manager
+  (class Federation
+  (attribute FederationName reliable receive)
+(attribute FederatesInFederation reliable receive)
+(attribute RTIversion reliable receive)
+(attribute FEDid reliable receive)
+(attribute LastSaveName reliable receive)
+(attribute LastSaveTime reliable receive)
+(attribute NextSaveName reliable receive)
+(attribute NextSaveTime reliable receive))
+(class Federate
+  (attribute FederateHandle reliable receive)
+(attribute FederateType reliable receive)
+(attribute FederateHost reliable receive)
+(attribute RTIversion reliable receive)
+(attribute FEDid reliable receive)
+(attribute TimeConstrained reliable receive)
+(attribute TimeRegulating reliable receive)
+(attribute AsynchronousDelivery reliable receive)
+(attribute FederateState reliable receive)
+(attribute TimeManagerState reliable receive)
+(attribute FederateTime reliable receive)
+(attribute Lookahead reliable receive)
+(attribute LBTS reliable receive)
+(attribute MinNextEventTime reliable receive)
+(attribute ROlength reliable receive)
+(attribute TSOlength reliable receive)
+(attribute ReflectionsReceived reliable receive)
+(attribute UpdatesSent reliable receive)
+(attribute InteractionsReceived reliable receive)
+(attribute InteractionsSent reliable receive)
+(attribute ObjectsOwned reliable receive)
+(attribute ObjectsUpdated reliable receive)
+(attribute ObjectsReflected reliable receive)))))
+(interactions
+  (class InteractionRoot reliable timestamp
+  (class RTIprivate reliable timestamp)
+(class MoveHipSaddle best_effort receive
+  (parameter FlyerID)
+(parameter PilotID)
+(parameter Delta))
+(class MoveCanardControl best_effort receive
+  (parameter FlyerID)
+(parameter PilotID)
+(parameter Delta))
+(class MakeNewFlyer best_effort receive
+  (parameter PilotID)
+(parameter Position)
+(parameter OrientationAxis)
+(parameter OrientationUp)
+(parameter Velocity)
+(parameter FuelLevel)
+(parameter PilotMass))
+(class RelinquishFlyerControl best_effort receive
+  (parameter Flyer))
+(class FlyerControlRelinquished best_effort receive
+  (parameter Flyer))
+(class CollisionDetected best_effort receive
+  (parameter Flyer))
+(class DestroyFlyer best_effort receive
+  (parameter FlyerID)
+(parameter PilotID))
+(class IsPresent best_effort receive
+  (parameter Federate))
+(class Present best_effort receive
+  (parameter Federate))
+(class RequestEnvDump best_effort receive)
+(class EnvDump best_effort receive
+  (parameter MapWidth)
+(parameter MapHeight)
+(parameter GridWidth)
+(parameter GridHeight)
+(parameter GroundHeights))
+(class GetFileList best_effort receive
+  (parameter Category))
+(class FileList best_effort receive
+  (parameter Category)
+(parameter NumFiles)
+(parameter FileNames))
+(class ChooseFile best_effort receive
+  (parameter Category)
+(parameter FileName))
+(class UseRandomTerrain best_effort receive
+  (parameter MaxHeight)
+(parameter MinHeight))
+(class UseRandomFeatures best_effort receive)
+(class UseRandomWind best_effort receive
+  (parameter MaxSpeed)
+(parameter MinSpeed)
+(parameter MaxOrient)
+(parameter MinOrient))
+(class UseRandomTemp best_effort receive
+  (parameter MaxTemp)
+(parameter MinTemp))
+(class UseRandomAtmosPressure best_effort receive
+  (parameter MaxPres)
+(parameter MinPres))
+(class StartRecording best_effort receive
+  (parameter FlyerID)
+(parameter PilotID)
+(parameter FileName))
+(class StopRecording best_effort receive
+  (parameter FlyerID)
+(parameter PilotID))
+(class StartPlayback best_effort receive
+  (parameter FlyerID)
+(parameter FileName))
+(class RequestEnv best_effort receive
+  (parameter x)
+(parameter z))
+(class PublishEnv best_effort receive
+  (parameter Elevation)
+(parameter Wind)
+(parameter Pressure)
+(parameter Temperature)
+(parameter Precipitation)
+(parameter x)
+(parameter z))
+(class RequestMapDump best_effort receive)
+(class MapDump best_effort receive
+  (parameter MapWidth)
+(parameter MapHeight)
+(parameter GridWidth)
+(parameter GridHeight)
+(parameter GroundHeights))
+(class TerrainDump best_effort receive
+  (parameter Feature))
+(class Manager reliable receive
+  (class Federate reliable receive
+  (parameter Federate)
+(class Request reliable receive
+  (class RequestPublications reliable receive)
+(class RequestSubscriptions reliable receive)
+(class RequestObjectsOwned reliable receive)
+(class RequestObjectsUpdated reliable receive)
+(class RequestObjectsReflected reliable receive)
+(class RequestUpdatesSent reliable receive)
+(class RequestInteractionsSent reliable receive)
+(class RequestReflectionsReceived reliable receive)
+(class RequestInteractionsReceived reliable receive)
+(class RequestObjectInformation reliable receive
+  (parameter ObjectInstance)))
+(class Report reliable receive
+  (class ReportObjectPublication reliable receive
+  (parameter NumberOfClasses)
+(parameter ObjectClass)
+(parameter AttributeList))
+(class ReportObjectSubscription reliable receive
+  (parameter NumberOfClasses)
+(parameter ObjectClass)
+(parameter Active)
+(parameter AttributeList))
+(class ReportInteractionPublication reliable receive
+  (parameter InteractionClassList))
+(class ReportInteractionSubscription reliable receive
+  (parameter InteractionClassList))
+(class ReportObjectsOwned reliable receive
+  (parameter ObjectCounts))
+(class ReportObjectsUpdated reliable receive
+  (parameter ObjectCounts))
+(class ReportObjectsReflected reliable receive
+  (parameter ObjectCounts))
+(class ReportUpdatesSent reliable receive
+  (parameter TransportationType)
+(parameter UpdateCounts))
+(class ReportReflectionsReceived reliable receive
+  (parameter TransportationType)
+(parameter ReflectCounts))
+(class ReportInteractionsSent reliable receive
+  (parameter TransportationType)
+(parameter InteractionCounts))
+(class ReportInteractionsReceived reliable receive
+  (parameter TransportationType)
+(parameter InteractionCounts))
+(class ReportObjectInformation reliable receive
+  (parameter ObjectInstance)
+(parameter OwnedAttributeList)
+(parameter RegisteredClass)
+(parameter KnownClass))
+(class Alert reliable receive
+  (parameter AlertSeverity)
+(parameter AlertDescription)
+(parameter AlertID))
+(class ReportServiceInvocation reliable receive
+  (parameter Service)
+(parameter Initiator)
+(parameter SuccessIndicator)
+(parameter SuppliedArgument1)
+(parameter SuppliedArgument2)
+(parameter SuppliedArgument3)
+(parameter SuppliedArgument4)
+(parameter SuppliedArgument5)
+(parameter ReturnedArgument)
+(parameter ExceptionDescription)
+(parameter ExceptionID)))
+(class Adjust reliable receive
+  (class SetTiming reliable receive
+  (parameter ReportPeriod))
+(class ModifyAttributeState reliable receive
+  (parameter ObjectInstance)
+(parameter Attribute)
+(parameter AttributeState))
+(class SetServiceReporting reliable receive
+  (parameter ReportingState))
+(class SetExceptionLogging reliable receive
+  (parameter LoggingState)))
+(class Service reliable receive
+  (class ResignFederationExecution reliable receive
+  (parameter ResignAction))
+(class SynchronizationPointAchieved reliable receive
+  (parameter Label))
+(class FederateSaveBegun reliable receive)
+(class FederateSaveComplete reliable receive
+  (parameter SuccessIndicator))
+(class FederateRestoreComplete reliable receive
+  (parameter SuccessIndicator))
+(class PublishObjectClass reliable receive
+  (parameter ObjectClass)
+(parameter AttributeList))
+(class UnpublishObjectClass reliable receive
+  (parameter ObjectClass))
+(class PublishInteractionClass reliable receive
+  (parameter InteractionClass))
+(class UnpublishInteractionClass reliable receive
+  (parameter InteractionClass))
+(class SubscribeObjectClassAttributes reliable receive
+  (parameter ObjectClass)
+(parameter AttributeList)
+(parameter Active))
+(class UnsubscribeObjectClass reliable receive
+  (parameter ObjectClass))
+(class SubscribeInteractionClass reliable receive
+  (parameter InteractionClass)
+(parameter Active))
+(class UnsubscribeInteractionClass reliable receive
+  (parameter InteractionClass))
+(class DeleteObjectInstance reliable receive
+  (parameter ObjectInstance)
+(parameter Tag)
+(parameter FederationTime))
+(class LocalDeleteObjectInstance reliable receive
+  (parameter ObjectInstance))
+(class ChangeAttributeTransportationType reliable receive
+  (parameter ObjectInstance)
+(parameter AttributeList)
+(parameter TransportationType))
+(class ChangeAttributeOrderType reliable receive
+  (parameter ObjectInstance)
+(parameter AttributeList)
+(parameter OrderingType))
+(class ChangeInteractionTransportationType reliable receive
+  (parameter InteractionClass)
+(parameter TransportationType))
+(class ChangeInteractionOrderType reliable receive
+  (parameter InteractionClass)
+(parameter OrderingType))
+(class UnconditionalAttributeOwnershipDivestiture reliable receive
+  (parameter ObjectInstance)
+(parameter AttributeList))
+(class EnableTimeRegulation reliable receive
+  (parameter FederationTime)
+(parameter Lookahead))
+(class DisableTimeRegulation reliable receive)
+(class EnableTimeConstrained reliable receive)
+(class DisableTimeConstrained reliable receive)
+(class EnableAsynchronousDelivery reliable receive)
+(class DisableAsynchronousDelivery reliable receive)
+(class ModifyLookahead reliable receive
+  (parameter Lookahead))
+(class TimeAdvanceRequest reliable receive
+  (parameter FederationTime))
+(class TimeAdvanceRequestAvailable reliable receive
+  (parameter FederationTime))
+(class NextEventRequest reliable receive
+  (parameter FederationTime))
+(class NextEventRequestAvailable reliable receive
+  (parameter FederationTime))
+(class FlushQueueRequest reliable receive
+  (parameter FederationTime))))))))
