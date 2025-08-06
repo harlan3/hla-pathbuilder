@@ -184,7 +184,8 @@ public class Utils {
 		case "RPRboolean": // Representation as HLAoctet in FOM
 			returnVal = "HLAoctet";
 			break;
-			
+		
+		case "Byte":
 		case "HLAbyte":	
 			returnVal = "HLAbyte";
 			break;
@@ -207,18 +208,22 @@ public class Utils {
 			break;
 			
 		case "Integer16":
+		case "Short":
 		case "UnsignedShort":
 		case "UnsignedInteger16":
 			returnVal = "HLAinteger16BE";
 			break;
 
 		case "Integer32":
+		case "Integer":
 		case "UnsignedInt":
 		case "UnsignedInteger32":
 			returnVal = "HLAinteger32BE";
 			break;
 
 		case "Integer64":
+		case "Long":
+		case "UnsignedLong":	
 		case "UnsignedInteger64":
 			returnVal = "HLAinteger64BE";
 			break;
