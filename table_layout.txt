@@ -52,10 +52,6 @@ BasicDatatype (TID=13)
 ----------------------
 id(UUID), name(String), type(String), size(Number), endian(String), lineNum(String)
 
-Semantics (TID=14)
------------------
-id(UUID), name(String), semantics(String)
-
 Variant Ordering (TID=15)
 -------------------------
 id(UUID), variant(String), discriminant(String), ordering(String)

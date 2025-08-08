@@ -72,7 +72,6 @@ public class HlaPathBuilder {
 		String dataType = "";
 		String variableName = "";
 		String origVariableName = "";
-		String semantics = "";
 		String lineNumberStr = "";
 		
 		while (nodeChild != null) {
@@ -90,10 +89,6 @@ public class HlaPathBuilder {
 
 			if (name.equals("dataType")) {
 				dataType = nodeChild.getTextContent();
-			}
-			
-			if (name.equals("semantics")) {
-				semantics = nodeChild.getTextContent();
 			}
 
 			nodeChild = nodeChild.getNextSibling();
@@ -116,19 +111,6 @@ public class HlaPathBuilder {
 
 		databaseAPI.insertIntoAttributeTable(list);
 		
-		// Insert semantics into database
-		List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-		DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-		
-		var2.id = var.id;
-		var2.name = var.origName;
-		var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-		
-		list2.add(var2);
-		
-		if (semantics.length() > 0)
-			databaseAPI.insertIntoSemanticsDatatypeTable(list2);
-		
 	}
 
 	String parseObject(Node node, String parentClass, UUID parentUUID) {
@@ -137,8 +119,6 @@ public class HlaPathBuilder {
 		String typedefName = "";
 		UUID objectUUID = null;
 		int attributeIndex = 0;
-		String semanticsUUID = "";
-		String semantics = "";
 		
 		Node nodeChild = node.getFirstChild();
 		
@@ -169,7 +149,6 @@ public class HlaPathBuilder {
 
 				DbObject var = new DbObject();
 				
-				semanticsUUID = objectUUID.toString();
 				var.id = objectUUID.toString();
 				var.name = objectName;
 				var.path = pathBuilderStack.toString();
@@ -190,24 +169,6 @@ public class HlaPathBuilder {
 					databaseAPI.insertExtendsAttribute(attributeIndex, origVariableName, variableName, parentClass, lineNumberStr, objectUUID);
 
 				}
-			}
-			
-			if (name.equals("semantics")) {
-
-				semantics = nodeChild.getTextContent();
-				
-				// Insert semantics into database
-				List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-				DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-				
-				var2.id = semanticsUUID;
-				var2.name = "NA";
-				var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-				
-				list2.add(var2);
-				
-				if (semantics.length() > 0)
-					databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 			}
 
 			if (name.equals("attribute")) {
@@ -262,7 +223,6 @@ public class HlaPathBuilder {
 		String dataType = "";
 		String variableName = "";
 		String origVariableName = "";
-		String semantics = "";
 		String lineNumberStr = "";
 		
 		while (nodeChild != null) {
@@ -281,9 +241,6 @@ public class HlaPathBuilder {
 
 			if (name.equals("dataType"))
 				dataType = nodeChild.getTextContent();
-			
-			if (name.equals("semantics"))
-				semantics = nodeChild.getTextContent();
 
 			nodeChild = nodeChild.getNextSibling();
 		}
@@ -305,19 +262,6 @@ public class HlaPathBuilder {
 		list.add(var);
 
 		databaseAPI.insertIntoParameterTable(list);
-		
-		// Insert semantics into database
-		List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-		DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-		
-		var2.id = var.id;
-		var2.name = var.origName;
-		var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-		
-		list2.add(var2);
-		
-		if (semantics.length() > 0)
-			databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 
 		System.out.println("   " + dataType + " " + origVariableName + ";");
 	}
@@ -328,7 +272,6 @@ public class HlaPathBuilder {
 		String typedefName = "";
 		UUID interactionUUID = null;
 		int parameterIndex = 0;
-		String semanticsUUID = "";
 		
 		Node nodeChild = node.getFirstChild();
 
@@ -358,7 +301,6 @@ public class HlaPathBuilder {
 
 				DbInteraction var = new DbInteraction();
 
-				semanticsUUID = interactionUUID.toString();
 				var.id = interactionUUID.toString();
 				var.name = interactionName;
 				var.path = pathBuilderStack.toString();
@@ -380,22 +322,6 @@ public class HlaPathBuilder {
 					databaseAPI.insertExtendsParameter(parameterIndex, origVariableName, variableName, parentClass, lineNumberStr,
 							interactionUUID);
 				}
-			}
-
-			if (name.equals("semantics")) {
-
-				// Insert semantics into database
-				List<DbSemanticsDatatype> list = new ArrayList<DbSemanticsDatatype>();
-				DbSemanticsDatatype var = new DbSemanticsDatatype();
-				
-				var.id = semanticsUUID;
-				var.name = "NA";
-				var.semantics = utils.truncateString(nodeChild.getTextContent(), maxSemanticLineWidth);
-				
-				list.add(var);
-				
-				if (var.semantics.length() > 0)
-					databaseAPI.insertIntoSemanticsDatatypeTable(list);
 			}
 			
 			if (name.equals("parameter")) {
@@ -448,7 +374,6 @@ public class HlaPathBuilder {
 		String basicType = "";
 		String size = "";
 		String endian = "";
-		String semantics = "";
 		String lineNumberStr = "";
 		
 		boolean hasData = false;
@@ -477,9 +402,6 @@ public class HlaPathBuilder {
 
 			if (name.equals("endian"))
 				endian = nodeChild.getTextContent();
-			
-			if (name.equals("semantics"))
-				semantics = nodeChild.getTextContent();
 
 			nodeChild = nodeChild.getNextSibling();
 		}
@@ -500,19 +422,6 @@ public class HlaPathBuilder {
 			list.add(var1);
 
 			databaseAPI.insertIntoBasicDatatypeTable(list);
-			
-			// Insert semantics into database
-			List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-			DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-			
-			var2.id = var1.id;
-			var2.name = "NA";
-			var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-			
-			list2.add(var2);
-			
-			if (semantics.length() > 0)
-				databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 
 			System.out.println("const " + basicType + " = " + size + ";");
 		}
@@ -542,7 +451,6 @@ public class HlaPathBuilder {
 		String simpleType = "";
 		String representation = "";
 		boolean hasData = false;
-		String semantics = "";
 		String lineNumberStr = "";
 		
 		nodeChild = nodeChild.getFirstChild();
@@ -563,9 +471,6 @@ public class HlaPathBuilder {
 			if (name.equals("representation"))
 				representation = nodeChild.getTextContent();
 			
-			if (name.equals("semantics"))
-				semantics = nodeChild.getTextContent();
-
 			nodeChild = nodeChild.getNextSibling();
 		}
 
@@ -583,19 +488,6 @@ public class HlaPathBuilder {
 			list.add(var1);
 
 			databaseAPI.insertIntoSimpleDatatypeTable(list);
-
-			// Insert semantics into database
-			List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-			DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-			
-			var2.id = var1.id;
-			var2.name = "NA";
-			var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-			
-			list2.add(var2);
-			
-			if (semantics.length() > 0)
-				databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 			
 			System.out.println("typedef " + representation + " " + simpleType + ";");
 		}
@@ -625,7 +517,6 @@ public class HlaPathBuilder {
 		String currentParentObject = "";
 		String enumeratedType = "";
 		String representation = "";
-		String semantics = "";
 		String lineNumberStr = "";
 		
 		boolean hasData = false;
@@ -651,9 +542,6 @@ public class HlaPathBuilder {
 				System.out.println("enum " + enumeratedType + " : " + representation + ";");
 			}
 			
-			if (name.equals("semantics"))
-				semantics = nodeChild.getTextContent();
-			
 			if (name.equals("enumerator"))
 				parseEnumeratorData(nodeChild, currentParentObject);
 
@@ -676,18 +564,6 @@ public class HlaPathBuilder {
 
 			databaseAPI.insertIntoEnumeratedDatatypeTable(list);
 			
-			// Insert semantics into database
-			List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-			DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-			
-			var2.id = var.id;
-			var2.name = "NA";
-			var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-			
-			list2.add(var2);
-			
-			if (semantics.length() > 0)
-				databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 		}
 	}
 
@@ -759,7 +635,6 @@ public class HlaPathBuilder {
 		String dataType = "";
 		String cardinality = "";
 		String encoding = "";
-		String semantics = "";
 		String lineNumberStr = "";
 		
 		boolean hasData = false;
@@ -784,9 +659,6 @@ public class HlaPathBuilder {
 
 			if (name.equals("cardinality"))
 				cardinality = nodeChild.getTextContent();
-
-			if (name.equals("semantics"))
-				semantics = nodeChild.getTextContent();
 			
 			if (name.equals("encoding"))
 				encoding = nodeChild.getTextContent();
@@ -810,19 +682,6 @@ public class HlaPathBuilder {
 			list.add(var1);
 
 			databaseAPI.insertIntoArrayDatatypeTable(list);
-
-			// Insert semantics into database
-			List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-			DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-			
-			var2.id = var1.id;
-			var2.name = "NA";
-			var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-			
-			list2.add(var2);
-			
-			if (semantics.length() > 0)
-				databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 			
 			System.out.println("typedef " + dataType + " " + arrayType + " " + cardinality + " " + encoding + ";");
 		}
@@ -857,7 +716,6 @@ public class HlaPathBuilder {
 		String encoding = "";
 		String primitive = "";
 		String lineNumberStr = "";
-		String semantics = "";
 		
 		while (nodeChild != null) {
 
@@ -880,9 +738,6 @@ public class HlaPathBuilder {
 				encoding = utils.getEncodingType(dataType);
 				primitive = utils.getClassFromEncodingType(encoding);
 			}
-			
-			if (name.equals("semantics"))
-				semantics = nodeChild.getTextContent();
 
 			nodeChild = nodeChild.getNextSibling();
 		}
@@ -904,19 +759,6 @@ public class HlaPathBuilder {
 		list.add(var);
 
 		databaseAPI.insertIntoFixedRecordFieldTable(list);
-		
-		// Insert semantics into database
-		List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-		DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-		
-		var2.id = var.id;
-		var2.name = var.name;
-		var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-		
-		list2.add(var2);
-		
-		if (semantics.length() > 0)
-			databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 
 		System.out.println("   " + dataType + " " + variableName + ";");
 	}
@@ -927,8 +769,6 @@ public class HlaPathBuilder {
 		boolean hasData = false;
 		UUID objectUUID = null;
 		int fixedRecordFieldIndex = 0;
-		String semanticsUUID = "";
-		String semantics = "";
 		String varName = "";
 		
 		Node nodeChild = node.getFirstChild();
@@ -950,7 +790,6 @@ public class HlaPathBuilder {
 				System.out.println("typedef struct {");
 
 				objectUUID = UUID.randomUUID();
-				semanticsUUID = objectUUID.toString();
 				
 				List<DbFixedRecordDatatype> list = new ArrayList<DbFixedRecordDatatype>();
 				DbFixedRecordDatatype var = new DbFixedRecordDatatype();
@@ -963,24 +802,6 @@ public class HlaPathBuilder {
 				list.add(var);
 
 				databaseAPI.insertIntoFixedRecordDatatypeTable(list);
-			}
-
-			if (name.equals("semantics")) {
-				
-				semantics = nodeChild.getTextContent();
-				
-				// Insert semantics into database
-				List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-				DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-				
-				var2.id = semanticsUUID;
-				var2.name = varName;
-				var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-				
-				list2.add(var2);
-				
-				if (semantics.length() > 0)
-					databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 			}
 
 			if (name.equals("field")) {
@@ -1040,7 +861,6 @@ public class HlaPathBuilder {
 
 		String dataType = "";
 		String variableName = "";
-		String semantics = "";
 		String lineNumberStr = "";
 		
 		while (nodeChild != null) {
@@ -1057,9 +877,6 @@ public class HlaPathBuilder {
 
 			if (name.equals("dataType"))
 				dataType = nodeChild.getTextContent();
-			
-			if (name.equals("semantics"))
-				semantics = nodeChild.getTextContent();
 
 			nodeChild = nodeChild.getNextSibling();
 		}
@@ -1080,19 +897,6 @@ public class HlaPathBuilder {
 		list.add(var);
 
 		databaseAPI.insertIntoVariantRecordFieldTable(list);
-		
-		// Insert semantics into database
-		List<DbSemanticsDatatype> list2 = new ArrayList<DbSemanticsDatatype>();
-		DbSemanticsDatatype var2 = new DbSemanticsDatatype();
-		
-		var2.id = var.id;
-		var2.name = var.name;
-		var2.semantics = utils.truncateString(semantics, maxSemanticLineWidth);
-		
-		list2.add(var2);
-		
-		if (semantics.length() > 0)
-			databaseAPI.insertIntoSemanticsDatatypeTable(list2);
 
 		System.out.println("   " + dataType + " " + variableName + "; // Alternative");
 	}
@@ -1107,7 +911,6 @@ public class HlaPathBuilder {
 		UUID objectUUID = null;
 		int variantRecordFieldIndex = 0;
 		String lineNumberStr = "";
-		String semanticsUUID = "";
 		
 		Node nodeChild = node.getFirstChild();
 
@@ -1127,7 +930,6 @@ public class HlaPathBuilder {
 				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
 
 				objectUUID = UUID.randomUUID();
-				semanticsUUID = objectUUID.toString();
 				
 				List<DbVariantRecordDatatype> list = new ArrayList<DbVariantRecordDatatype>();
 
@@ -1158,22 +960,6 @@ public class HlaPathBuilder {
 			if (name.equals("alternative")) {
 				variantRecordFieldIndex++;
 				parseAlternative(nodeChild, variantRecordFieldIndex, objectUUID);
-			}
-			
-			if (name.equals("semantics")) {
-				
-				// Insert semantics into database
-				List<DbSemanticsDatatype> list = new ArrayList<DbSemanticsDatatype>();
-				DbSemanticsDatatype var = new DbSemanticsDatatype();
-				
-				var.id = semanticsUUID;
-				var.name = "NA";
-				var.semantics = utils.truncateString(nodeChild.getTextContent(), maxSemanticLineWidth);
-				
-				list.add(var);
-				
-				if (var.semantics.length() > 0)
-					databaseAPI.insertIntoSemanticsDatatypeTable(list);
 			}
 
 			nodeChild = nodeChild.getNextSibling();

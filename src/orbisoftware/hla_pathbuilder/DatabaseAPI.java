@@ -163,11 +163,6 @@ public class DatabaseAPI {
 					+ "lineNum VARCHAR(16), "
 				    + "parentObject VARCHAR(36))");	
 			
-			run("CREATE TABLE SemanticsDatatype ("
-					+ "id VARCHAR(36) PRIMARY KEY, "
-					+ "name VARCHAR(80), "
-				    + "semantics VARCHAR(400))");
-			
 			run("CREATE TABLE VariantOrdering ("
 					+ "id VARCHAR(36) PRIMARY KEY, "
 					+ "variant VARCHAR(80), "
@@ -531,24 +526,6 @@ public class DatabaseAPI {
 					var.alternative + ",'" +
 					var.lineNum + "','" +
 					var.parentObject + "')");
-			}
-		} catch (SQLException sqlExcept) {
-			sqlExcept.printStackTrace();
-		}
-	}
-	
-	public void insertIntoSemanticsDatatypeTable(List<DbSemanticsDatatype> list) {
-
-		try {
-			Statement stmt = conn.createStatement();
-			String tableName = "SemanticsDatatype";
-
-			for (DbSemanticsDatatype var : list) {
-
-				stmt.execute("INSERT INTO " + tableName + " VALUES ('" + 
-					var.id + "','" + 
-					var.name + "','" +
-					var.semantics + "')");
 			}
 		} catch (SQLException sqlExcept) {
 			sqlExcept.printStackTrace();
@@ -1088,37 +1065,6 @@ public class DatabaseAPI {
         return list;
     }
     
-    public List<DbSemanticsDatatype> selectFromSemanticsDatatypeTable(String selectStatement)
-    {
-    	List<DbSemanticsDatatype> list = new ArrayList<DbSemanticsDatatype>();
-    	
-        try
-        {
-        	Statement stmt = conn.createStatement();
-        	ResultSet results = stmt.executeQuery(selectStatement);
-        	
-        	while (results.next()) {
-        		
-        		DbSemanticsDatatype var = new DbSemanticsDatatype();
-        		
-        		var.id = results.getString("id");
-        		var.name = results.getString("name");
-        		var.semantics = results.getString("semantics"); 
-        		
-        		list.add(var);
-        	}
-        	
-        	results.close();
-            stmt.close();
-        }
-        catch (SQLException sqlExcept)
-        {
-            sqlExcept.printStackTrace();
-        }
-        
-        return list;
-    }
-    
     public List<DbVariantOrderingDatatype> selectFromVariantOrderingDatatypeTable(String selectStatement)
     {
     	List<DbVariantOrderingDatatype> list = new ArrayList<DbVariantOrderingDatatype>();
@@ -1150,60 +1096,6 @@ public class DatabaseAPI {
         
         return list;
     }
-    
-    private String getSemanticsDatatypeForName(String name) {
-    	
-    	String returnSemanticsField = "";
-		String selectStatement = "SELECT * FROM SemanticsDatatype WHERE name = '" + name + "'";
-		
-		List<DbSemanticsDatatype> returnVal = selectFromSemanticsDatatypeTable(selectStatement);
-		
-		if (returnVal.size() >= 1)
-			returnSemanticsField = returnVal.get(0).semantics;
-		
-		return returnSemanticsField;
-    }
-    
-    private String getSemanticsDatatypeForUUID(String uuidString) {
-    	
-    	String returnSemanticsField = "";
-		String selectStatement = "SELECT * FROM SemanticsDatatype WHERE id = '" + uuidString + "'";
-		
-		List<DbSemanticsDatatype> returnVal = selectFromSemanticsDatatypeTable(selectStatement);
-		
-		if (returnVal.size() >= 1)
-			returnSemanticsField = returnVal.get(0).semantics;
-		
-		return returnSemanticsField;
-    }
-    
-	public String getSemanticsText(String tid, String type, String name) {
-		
-		Utils utils = new Utils();
-		
-		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, "",
-				utils.getTIDFromText(tid.trim()), name.trim(), type.trim()));
-		
-		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid).trim();
-		
-		if (!name.equals("")) {
-			
-			if (semanticsText.equals(""))
-				semanticsText = getSemanticsDatatypeForName(name.trim()).trim();
-		}
-		
-		return semanticsText;
-	}
-	
-	public String getSemanticsText(String tid, String type) {
-		
-		Utils utils = new Utils();
-		
-		SearchResults searchResults = deepSearchForUUID(new SearchToken(Constants.NULL_UUID, "", utils.getTIDFromText(tid.trim()), "", type));
-		String semanticsText = getSemanticsDatatypeForUUID(searchResults.uuid).trim();
-		
-		return semanticsText;
-	}
     
     public String getUUIDForObject(SearchToken searchToken) {
     	

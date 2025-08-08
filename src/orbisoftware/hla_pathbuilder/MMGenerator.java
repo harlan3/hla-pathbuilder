@@ -387,11 +387,9 @@ public class MMGenerator {
 						
 						this.metaDataNode = nodeTree.insertNode(this.nodeTree.root, "MetaData", false);
 						
-						String semanticsText = databaseAPI.getSemanticsText("", classNameShort);
-						
 						updateElementTreeFromLine("ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\"" + classNameShort
-								+ "\"" + " className=\"" + classNameFull + "\"" + " classHandle=\"" + classHandle + "\""
-								+  " SEMANTICS=\"" + semanticsText + "\" FOLDED=\"true\"" + ">", false);
+								+ "\"" + " className=\"" + classNameFull + "\"" + " classHandle=\"" + classHandle
+								+ "\" FOLDED=\"true\"" + ">", false);
 					}
 				}
 
@@ -417,10 +415,8 @@ public class MMGenerator {
 							path = utils.removeLineNumberContent(path);
 						}
 						
-						String semanticsText = databaseAPI.getSemanticsText("", pathTokenString);
-						
 						String pathLine = "ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\""
-								+ pathTokenString + "\"" + " path=\"" + path + "\"" + " SEMANTICS=\"" + semanticsText 
+								+ pathTokenString + "\"" + " path=\"" + path
 								+ "\" FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\"" + ">";
 						updateElementTreeFromLine(pathLine, false);
 					}
