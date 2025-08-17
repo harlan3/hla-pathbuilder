@@ -175,7 +175,7 @@ public class MMGenerator {
 					+ enumTokens[2];
 		
 		// Ignore bogus basic element value
-		if (enumSubTokens[1].contains("Array"))
+		if (enumSubTokens[1].endsWith("Array"))
 			returnVal = "";
 
 		return returnVal;
