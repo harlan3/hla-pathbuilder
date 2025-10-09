@@ -47,13 +47,13 @@ import orbisoftware.hla_pathbuilder.db_classes.*;
 public class HlaPathBuilder {
 
 	private DatabaseAPI databaseAPI = new DatabaseAPI();
-	private static final String fomSupportTypes = "FOM_support_types.xml";
-	public static final String protocolSpecDir = "protocol_specs";
-	private static Stack<String> pathBuilderStack = new Stack<String>();
-	private static Stack<String> debugStack = new Stack<String>();
-	private static List<String> elementObjectList = new ArrayList<String>();
-	private static List<String> elementInteractionList = new ArrayList<String>();
-	private static final int maxSemanticLineWidth = 400;
+	private final String fomSupportTypes = "FOM_support_types.xml";
+	public final static String protocolSpecDir = "protocol_specs";
+	private Stack<String> pathBuilderStack = new Stack<String>();
+	private Stack<String> debugStack = new Stack<String>();
+	private List<String> elementObjectList = new ArrayList<String>();
+	private List<String> elementInteractionList = new ArrayList<String>();
+	private final int maxSemanticLineWidth = 400; 
 	
 	public Utils utils = new Utils();
 
@@ -1117,7 +1117,10 @@ public class HlaPathBuilder {
 
 			Node node = doc4.getFirstChild();
 			Node nodeChild = node.getFirstChild();
-
+			
+			elementObjectList.clear();
+			elementInteractionList.clear();
+			
 			while (nodeChild != null) {
 
 				String name = nodeChild.getNodeName();
