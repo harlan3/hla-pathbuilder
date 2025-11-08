@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objectModel xmlns="http://www.sisostds.org/schemas/IEEE1516-2010" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sisostds.org/schemas/IEEE1516-2010http://www.sisostds.org/schemas/IEEE1516-DIF-2010.xsd">
+   <modelIdentification>
+      <name>Solar System</name>
+      <type>FOM</type>
+      <version>1.0</version>
+      <modificationDate>2025-10-04</modificationDate>
+      <securityClassification>Unclassified</securityClassification>
+      <purpose>Example FOM for Solar System</purpose>
+      <applicationDomain>Educational</applicationDomain>
+      <description>Example FOM for Solar System</description>
+      <useLimitation>All uses are supported</useLimitation>
+      <poc>
+         <pocName>Sponsor</pocName>
+         <pocOrg>Mr. Harlan Murphy</pocOrg>
+         <pocEmail>harlan3@hotmail.com</pocEmail>
+         <pocPhone>NA</pocPhone>
+      </poc>
+      <reference>
+         <type>Standalone</type>
+         <identification>NA</identification>
+      </reference>
+      <other/>
+   </modelIdentification>
+   <objects>
+      <objectClass>
+         <name>HLAobjectRoot</name>
+         <objectClass>
+            <name>SolarSystem</name>
+            <sharing>Neither</sharing>
+            <semantics>A set of planets that comprise the solar system</semantics>
+            <attribute>
+               <name>Planets</name>
+               <dataType>PlanetTypeArray</dataType>
+               <updateType>Conditional</updateType>
+               <updateCondition>Planet data change</updateCondition>
+               <ownership>DivestAcquire</ownership>
+               <sharing>PublishSubscribe</sharing>
+               <transportation>HLAreliable</transportation>
+               <order>TimeStamp</order>
+               <semantics>Solar system planet data</semantics>
+            </attribute>
+         </objectClass>
+      </objectClass>
+   </objects>
+   <interactions>
+      <interactionClass>
+         <name>HLAinteractionRoot</name>
+         <interactionClass>
+            <name>PlanetHasCompletedAnOrbit</name>
+            <sharing>Publish</sharing>
+            <transportation>HLAreliable</transportation>
+            <order>TimeStamp</order>
+            <semantics>Planet has completed an orbit</semantics>
+            <parameter>
+               <name>PlanetID</name>
+               <dataType>HLAinteger32BE</dataType>
+               <semantics>ID of the planet that has completed an orbit</semantics>
+            </parameter>
+            <parameter>
+               <name>PlanetName</name>
+               <dataType>HLAASCIIstring</dataType>
+               <semantics>Name of the planet that has completed an orbit</semantics>
+            </parameter>
+         </interactionClass>
+      </interactionClass>
+   </interactions>
+   <dimensions>  </dimensions>
+   <time>
+      <timeStamp/>
+      <lookahead/>
+   </time>
+   <tags>  </tags>
+   <synchronizations>  </synchronizations>
+   <transportations>
+      <transportation name="HLAreliable" description="Reliable transport"/>
+      <transportation name="HLAbestEffort" description="Best effort transport"/>
+   </transportations>
+   <switches>
+      <autoProvide isEnabled="true"/>
+      <conveyRegionDesignatorSets isEnabled="false"/>
+      <conveyProducingFederate isEnabled="false"/>
+      <attributeScopeAdvisory isEnabled="false"/>
+      <attributeRelevanceAdvisory isEnabled="false"/>
+      <objectClassRelevanceAdvisory isEnabled="true"/>
+      <interactionRelevanceAdvisory isEnabled="true"/>
+      <serviceReporting isEnabled="false"/>
+      <exceptionReporting isEnabled="false"/>
+      <delaySubscriptionEvaluation isEnabled="false"/>
+      <automaticResignAction resignAction="CancelThenDeleteThenDivest"/>
+   </switches>
+   <dataTypes>
+      <basicDataRepresentations>
+         <basicData name="HLAinteger32BE" size="32" interpretation="Signed integer (big endian)"/>
+      </basicDataRepresentations>
+      <simpleDataTypes/>
+      <enumeratedDataTypes>
+         <enumeratedData>
+            <name>PlanetOrdinal</name>
+            <representation>HLAinteger32BE</representation>
+            <semantics>Ordinal value of planets</semantics>
+            <enumerator>
+               <name>Mercury</name>
+               <value>1</value>
+            </enumerator>
+            <enumerator>
+               <name>Venus</name>
+               <value>2</value>
+            </enumerator>
+            <enumerator>
+               <name>Earth</name>
+               <value>3</value>
+            </enumerator>
+            <enumerator>
+               <name>Mars</name>
+               <value>4</value>
+            </enumerator>
+            <enumerator>
+               <name>Jupiter</name>
+               <value>5</value>
+            </enumerator>
+            <enumerator>
+               <name>Saturn</name>
+               <value>6</value>
+            </enumerator>
+            <enumerator>
+               <name>Uranus</name>
+               <value>7</value>
+            </enumerator>
+            <enumerator>
+               <name>Neptune</name>
+               <value>8</value>
+            </enumerator>
+            <enumerator>
+               <name>Pluto</name>
+               <value>9</value>
+            </enumerator>
+         </enumeratedData>
+      </enumeratedDataTypes>
+      <arrayDataTypes>
+         <arrayData>
+            <name>PlanetTypeArray</name>
+            <dataType>PlanetType</dataType>
+            <cardinality>10</cardinality>
+            <encoding>HLAfixedArray</encoding>
+            <semantics>Array of planets</semantics>
+         </arrayData>
+      </arrayDataTypes>
+      <fixedRecordDataTypes>
+         <fixedRecordData>
+            <name>PlanetType</name>
+            <encoding>HLAfixedRecord</encoding>
+            <semantics>Planet characteristics</semantics>
+            <field>
+               <name>PlanetID</name>
+               <dataType>HLAinteger32BE</dataType>
+               <semantics>Planet ID</semantics>
+            </field>
+            <field>
+               <name>PlanetOrdinalValue</name>
+               <dataType>HLAinteger32BE</dataType>
+               <semantics>Planet ordinal value</semantics>
+            </field>
+            <field>
+               <name>XPos</name>
+               <dataType>HLAfloat64BE</dataType>
+               <semantics>X position of planet</semantics>
+            </field>
+            <field>
+               <name>YPos</name>
+               <dataType>HLAfloat64BE</dataType>
+               <semantics>Y position of planet</semantics>
+            </field>
+            <field>
+               <name>Theta</name>
+               <dataType>HLAfloat64BE</dataType>
+               <semantics>Theta factor of planet</semantics>
+            </field>
+            <field>
+               <name>PlanetSize</name>
+               <dataType>HLAfloat64BE</dataType>
+               <semantics>Size of planet</semantics>
+            </field>
+            <field>
+               <name>OrbitalRadius</name>
+               <dataType>HLAfloat64BE</dataType>
+               <semantics>Orbital radius of planet</semantics>
+            </field>
+            <field>
+               <name>OrbitalVelocity</name>
+               <dataType>HLAfloat64BE</dataType>
+               <semantics>Orbital velocity of planet</semantics>
+            </field>
+         </fixedRecordData>
+      </fixedRecordDataTypes>
+      <variantRecordDataTypes/>
+   </dataTypes>
+   <notes/>
+</objectModel>
