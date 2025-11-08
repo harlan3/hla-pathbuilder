@@ -53,7 +53,7 @@ public class HlaPathBuilder {
 	private Stack<String> debugStack = new Stack<String>();
 	private List<String> elementObjectList = new ArrayList<String>();
 	private List<String> elementInteractionList = new ArrayList<String>();
-	private final int maxSemanticLineWidth = 400; 
+	private boolean fomContainsLineNumbers = false;
 	
 	public Utils utils = new Utils();
 
@@ -83,8 +83,11 @@ public class HlaPathBuilder {
 				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 			}
 
 			if (name.equals("dataType")) {
@@ -121,6 +124,7 @@ public class HlaPathBuilder {
 		int attributeIndex = 0;
 		
 		Node nodeChild = node.getFirstChild();
+		String lineNumberStr = "";
 		
 		while (nodeChild != null) {
 
@@ -131,8 +135,11 @@ public class HlaPathBuilder {
 				objectName = nodeChild.getTextContent();
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				String lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 
 				System.out.println("// Start Object");
 				System.out.println("// " + objectName);
@@ -232,8 +239,11 @@ public class HlaPathBuilder {
 			if (name.equals("name")) {
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 				
 				origVariableName = nodeChild.getTextContent();
 				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
@@ -274,7 +284,8 @@ public class HlaPathBuilder {
 		int parameterIndex = 0;
 		
 		Node nodeChild = node.getFirstChild();
-
+		String lineNumberStr = "";
+		
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
@@ -287,8 +298,11 @@ public class HlaPathBuilder {
 				System.out.println("typedef struct {");
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				String lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 
 				// Insert interaction into database
 				interactionUUID = UUID.randomUUID();
@@ -392,8 +406,10 @@ public class HlaPathBuilder {
 				
 				if (nodeAttributes.getNamedItem("line") != null) {
 					
-					String lineNumber = nodeAttributes.getNamedItem("line").toString();
-					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+					if (fomContainsLineNumbers) {
+						String lineNumber = nodeAttributes.getNamedItem("line").toString();
+						lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+					}
 				}
 			}
 
@@ -464,8 +480,11 @@ public class HlaPathBuilder {
 				simpleType = nodeChild.getTextContent();
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 			}
 
 			if (name.equals("representation"))
@@ -533,8 +552,11 @@ public class HlaPathBuilder {
 				enumeratedType = nodeChild.getTextContent();
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 			}
 
 			if (name.equals("representation")) {
@@ -650,8 +672,11 @@ public class HlaPathBuilder {
 				arrayType = nodeChild.getTextContent();
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 			}
 
 			if (name.equals("dataType"))
@@ -726,8 +751,11 @@ public class HlaPathBuilder {
 				origVariableName = nodeChild.getTextContent();
 
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 				
 				if (variableName.equals("class"))
 					variableName = "classValue";
@@ -772,7 +800,8 @@ public class HlaPathBuilder {
 		String varName = "";
 		
 		Node nodeChild = node.getFirstChild();
-
+		String lineNumberStr = "";
+		
 		while (nodeChild != null) {
 
 			String name = nodeChild.getNodeName();
@@ -781,8 +810,11 @@ public class HlaPathBuilder {
 			if (name.equals("name")) {
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				String lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 		        
 				fixedRecordName = nodeChild.getTextContent();
 				System.out.println("// Start Fixed Record");
@@ -871,8 +903,11 @@ public class HlaPathBuilder {
 				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 			}
 
 			if (name.equals("dataType"))
@@ -926,8 +961,11 @@ public class HlaPathBuilder {
 				System.out.println("typedef struct {");
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
-				String lineNumber = nodeAttributes.getNamedItem("line").toString();
-				lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				
+				if (fomContainsLineNumbers) {
+					String lineNumber = nodeAttributes.getNamedItem("line").toString();
+					lineNumberStr = lineNumber.substring(lineNumber.indexOf("\"") + 1, lineNumber.lastIndexOf("\""));
+				}
 
 				objectUUID = UUID.randomUUID();
 				
@@ -1019,12 +1057,13 @@ public class HlaPathBuilder {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public void generateDatabase(String fomFilename, String elementModel, 
-			String postfixString, boolean processVariantOrdering)
+			String postfixString, boolean fomContainsLines, boolean processVariantOrdering)
 	{
 		HlaPathBuilder hlaPathBuilder = new HlaPathBuilder();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		BuildElementPaths buildElementPaths = new BuildElementPaths();
 		MMGenerator mmGenerator = new MMGenerator();
+		this.fomContainsLineNumbers = fomContainsLines;
 		
 		try {
 			
