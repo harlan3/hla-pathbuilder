@@ -12,5 +12,6 @@
 	<classpathentry kind="lib" path="lib/commons-text-1.10.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang3-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.15.1.jar"/>
+	<classpathentry kind="lib" path="lib/hla-shared-lib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

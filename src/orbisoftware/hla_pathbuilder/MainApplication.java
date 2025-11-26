@@ -63,7 +63,8 @@ public class MainApplication {
 		Boolean helpValue = (Boolean) parser.getOptionValue(helpOption);
 		
 		boolean linesValueBool = false;
-		
+		boolean variantBool = false;
+
 		if ((helpValue != null) || (fomValue == null || elementValue == null)) {
 			printUsage();
 			System.exit(0);

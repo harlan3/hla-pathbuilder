@@ -23,7 +23,7 @@ package orbisoftware.hla_pathbuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CaseUtils;
 
-public class Utils {
+public class PathBuilderUtilities {
 
 	public String convertToCamelCase(String name) {
 

@@ -55,7 +55,7 @@ public class HlaPathBuilder {
 	private List<String> elementInteractionList = new ArrayList<String>();
 	private boolean fomContainsLineNumbers = false;
 	
-	public Utils utils = new Utils();
+	public PathBuilderUtilities pathBuilderUtilties = new PathBuilderUtilities();
 
 	// If true, use memory based database. Otherwise use a file based database.
 	public static boolean useMemoryDb = false;
@@ -80,7 +80,7 @@ public class HlaPathBuilder {
 			
 			if (name.equals("name")) {
 				origVariableName = nodeChild.getTextContent();
-				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
+				variableName = pathBuilderUtilties.convertToCamelCase(nodeChild.getTextContent());
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
 				
@@ -169,7 +169,7 @@ public class HlaPathBuilder {
 				if (!parentClass.isEmpty()) {
 
 					String origVariableName = parentClass;
-					String variableName = utils.convertToCamelCase(parentClass);
+					String variableName = pathBuilderUtilties.convertToCamelCase(parentClass);
 					attributeIndex++;
 
 					System.out.println("   " + parentClass + " " + origVariableName + "; // extends");
@@ -246,7 +246,7 @@ public class HlaPathBuilder {
 				}
 				
 				origVariableName = nodeChild.getTextContent();
-				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
+				variableName = pathBuilderUtilties.convertToCamelCase(nodeChild.getTextContent());
 			}
 
 			if (name.equals("dataType"))
@@ -329,7 +329,7 @@ public class HlaPathBuilder {
 				if (!parentClass.isEmpty()) {
 
 					String origVariableName = parentClass;
-					String variableName = utils.convertToCamelCase(parentClass);
+					String variableName = pathBuilderUtilties.convertToCamelCase(parentClass);
 					parameterIndex++;
 
 					System.out.println("   " + parentClass + " " + origVariableName + "; // extends");
@@ -747,7 +747,7 @@ public class HlaPathBuilder {
 			String name = nodeChild.getNodeName();
 
 			if (name.equals("name")) {
-				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
+				variableName = pathBuilderUtilties.convertToCamelCase(nodeChild.getTextContent());
 				origVariableName = nodeChild.getTextContent();
 
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
@@ -763,8 +763,8 @@ public class HlaPathBuilder {
 
 			if (name.equals("dataType")) {
 				dataType = nodeChild.getTextContent();
-				encoding = utils.getEncodingType(dataType);
-				primitive = utils.getClassFromEncodingType(encoding);
+				encoding = pathBuilderUtilties.getEncodingType(dataType);
+				primitive = pathBuilderUtilties.getClassFromEncodingType(encoding);
 			}
 
 			nodeChild = nodeChild.getNextSibling();
@@ -900,7 +900,7 @@ public class HlaPathBuilder {
 			String name = nodeChild.getNodeName();
 
 			if (name.equals("name")) {
-				variableName = utils.convertToCamelCase(nodeChild.getTextContent());
+				variableName = pathBuilderUtilties.convertToCamelCase(nodeChild.getTextContent());
 				
 				NamedNodeMap nodeAttributes = nodeChild.getAttributes();
 				
@@ -984,7 +984,7 @@ public class HlaPathBuilder {
 
 			if (name.equals("discriminant")) {
 				origDiscriminantName = nodeChild.getTextContent();
-				discriminantName = utils.convertToCamelCase(nodeChild.getTextContent());
+				discriminantName = pathBuilderUtilties.convertToCamelCase(nodeChild.getTextContent());
 			}
 
 			if (name.equals("dataType")) {

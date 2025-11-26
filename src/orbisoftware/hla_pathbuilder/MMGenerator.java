@@ -44,7 +44,7 @@ public class MMGenerator {
 	private String classNameFull;
 	private String classNameShort;
 	private String classHandle;
-	Utils utils = new Utils();
+	PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 	
 	private NodeElement metaDataNode;
 	
@@ -116,10 +116,10 @@ public class MMGenerator {
 			for (DbSimpleDatatype var2 : list2) {
 
 				if (var2.type != null)
-					var.type = utils.convertFromRPRType(var2.type);
+					var.type = pathBuilderUtilities.convertFromRPRType(var2.type);
 			}
 
-			returnVal = utils.extractLineNumberContentWithBraces(element) + var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\""
+			returnVal = pathBuilderUtilities.extractLineNumberContentWithBraces(element) + var.name + " " + elementTokens[1] + " | " + "classtype=\"" + var.type + "\" cardinality=\""
 					+ var.cardinality + "\" encoding=\"" + var.encoding + "\" | " + "TID=\"Array\"" + " | "
 					+ elementTokens[5];
 
@@ -243,9 +243,9 @@ public class MMGenerator {
 				
 				if (prevElementString.contains("TID=\"Simple\"")) {
 
-					String lineNumStr = utils.extractLineNumberContentWithBraces(prevElementString);
+					String lineNumStr = pathBuilderUtilities.extractLineNumberContentWithBraces(prevElementString);
 					
-					nextElementString = squashAndMergeSimple(lineNumStr + utils.removeLineNumberContent(nextElementString), i);
+					nextElementString = squashAndMergeSimple(lineNumStr + pathBuilderUtilities.removeLineNumberContent(nextElementString), i);
 
 					// Ignore bogus value
 					if (nextElementString.equals(""))
@@ -253,9 +253,9 @@ public class MMGenerator {
 
 				} else if (prevElementString.contains("TID=\"Enumerated\"")) {
 
-					String lineNumStr = utils.extractLineNumberContentWithBraces(prevElementString);
+					String lineNumStr = pathBuilderUtilities.extractLineNumberContentWithBraces(prevElementString);
 					
-					nextElementString = squashAndMergeEnum(lineNumStr + utils.removeLineNumberContent(nextElementString), i);
+					nextElementString = squashAndMergeEnum(lineNumStr + pathBuilderUtilities.removeLineNumberContent(nextElementString), i);
 
 					// Ignore bogus value
 					if (nextElementString.equals(""))
@@ -406,13 +406,13 @@ public class MMGenerator {
 						String lineNumberStr = "";
 						String pathTokenString = "";
 								
-						lineNumberStr = utils.extractLineNumberContentNoBraces(pathTokens[(pathTokens.length - 1)]);
+						lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(pathTokens[(pathTokens.length - 1)]);
 						
 						if (debugLineNumbersInOutput)
 							pathTokenString = pathTokens[(pathTokens.length - 1)];
 						else {
-							pathTokenString = utils.removeLineNumberContent(pathTokens[(pathTokens.length - 1)]);
-							path = utils.removeLineNumberContent(path);
+							pathTokenString = pathBuilderUtilities.removeLineNumberContent(pathTokens[(pathTokens.length - 1)]);
+							path = pathBuilderUtilities.removeLineNumberContent(path);
 						}
 						
 						String pathLine = "ID=\"" + UUID.randomUUID() + "\"" + " TEXT=\""

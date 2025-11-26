@@ -34,7 +34,7 @@ public class NodeTree {
 	private int endNodeCount;
 	private int pathCount;
 	
-	private Utils utils = new Utils();
+	private PathBuilderUtilities pathBuilderUtilities = new PathBuilderUtilities();
 	
 	public NodeTree(String rootValue) {
 
@@ -250,12 +250,12 @@ public class NodeTree {
 				String nameStr = "";
 				String lineNumberStr = "";
 				
-				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(nameSplit[0]);
 				
 				if (MMGenerator.debugLineNumbersInOutput)
 					nameStr = nameSplit[0];
 				else
-					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+					nameStr = pathBuilderUtilities.removeLineNumberContent(nameSplit[0]);
 				
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
@@ -276,12 +276,12 @@ public class NodeTree {
 				String nameStr = "";
 				String lineNumberStr = "";
 				
-				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(nameSplit[0]);
 				
 				if (MMGenerator.debugLineNumbersInOutput)
 					nameStr = nameSplit[0];
 				else
-					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+					nameStr = pathBuilderUtilities.removeLineNumberContent(nameSplit[0]);
 
 				printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
@@ -301,12 +301,12 @@ public class NodeTree {
 				String nameStr = "";
 				String lineNumberStr = "";
 				
-				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(nameSplit[0]);
 				
 				if (MMGenerator.debugLineNumbersInOutput)
 					nameStr = nameSplit[0];
 				else
-					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+					nameStr = pathBuilderUtilities.removeLineNumberContent(nameSplit[0]);
 				
 				printContents(
 						format + "<node ID=\"" + elementNodes[3].trim() + "\" " + "TEXT=\""
@@ -326,12 +326,12 @@ public class NodeTree {
 				String nameStr = "";
 				String lineNumberStr = "";
 				
-				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(nameSplit[0]);
 				
 				if (MMGenerator.debugLineNumbersInOutput)
 					nameStr = nameSplit[0];
 				else
-					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+					nameStr = pathBuilderUtilities.removeLineNumberContent(nameSplit[0]);
 				
 				printContents(
 						format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameStr + "Imp " + nameSplit[1] + "\"" +
@@ -350,12 +350,12 @@ public class NodeTree {
 				String nameStr = "";
 				String lineNumberStr = "";
 				
-				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(nameSplit[0]);
 				
 				if (MMGenerator.debugLineNumbersInOutput)
 					nameStr = nameSplit[0];
 				else
-					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+					nameStr = pathBuilderUtilities.removeLineNumberContent(nameSplit[0]);
 				
 				if (nameSplit.length > 1) {
 					
@@ -388,17 +388,17 @@ public class NodeTree {
 				String nameStr = "";
 				String lineNumberStr = "";
 
-				lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+				lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(nameSplit[0]);
 				
 				if (MMGenerator.debugLineNumbersInOutput)
 					nameStr = nameSplit[0];
 				else
-					nameStr = utils.removeLineNumberContent(nameSplit[0]);
+					nameStr = pathBuilderUtilities.removeLineNumberContent(nameSplit[0]);
 				
 				if (nameSplit.length > 1) {
 					
 					if (nameSplit[1].endsWith("Array"))
-						nameSplit[1] = utils.convertToCamelCase(nameStr);
+						nameSplit[1] = pathBuilderUtilities.convertToCamelCase(nameStr);
 
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\"" + nameStr
 							+ " " + nameSplit[1] + "\" " + elementNodes[1].trim() 
@@ -474,19 +474,19 @@ public class NodeTree {
 				// Fix nodes that are referencing non existent RPR types in support of codegen
 				String rprRemoval[] = elementNodes[0].trim().split(" ");
 				
-				if (utils.removeLineNumberContent(rprRemoval[0]).startsWith("RPR")) {
+				if (pathBuilderUtilities.removeLineNumberContent(rprRemoval[0]).startsWith("RPR")) {
 					
 					String nameStr = "";
 					String lineNumberStr = "";
 
-					lineNumberStr = utils.extractLineNumberContentNoBraces(rprRemoval[0]);
+					lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(rprRemoval[0]);
 					
 					if (MMGenerator.debugLineNumbersInOutput)
 						nameStr = rprRemoval[0];
 					else
-						nameStr = utils.removeLineNumberContent(rprRemoval[0]);
+						nameStr = pathBuilderUtilities.removeLineNumberContent(rprRemoval[0]);
 					
-					String nodeType = utils.convertFromRPRType(nameStr);
+					String nodeType = pathBuilderUtilities.convertFromRPRType(nameStr);
 
 					printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
 							+ nodeType.trim() + " " + rprRemoval[1].trim() 
@@ -500,12 +500,12 @@ public class NodeTree {
 					String nameStr = "";
 					String lineNumberStr = "";
 
-					lineNumberStr = utils.extractLineNumberContentNoBraces(nameSplit[0]);
+					lineNumberStr = pathBuilderUtilities.extractLineNumberContentNoBraces(nameSplit[0]);
 					
 					if (MMGenerator.debugLineNumbersInOutput)
 						nameStr = nameSplit[0];
 					else
-						nameStr = utils.removeLineNumberContent(nameSplit[0]);
+						nameStr = pathBuilderUtilities.removeLineNumberContent(nameSplit[0]);
 					
 					if (nameSplit.length > 1 && elementNodes.length > 2) {
 						
