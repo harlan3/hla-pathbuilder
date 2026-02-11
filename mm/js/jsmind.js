@@ -1261,6 +1261,11 @@
             this.layout.collapse_all();
             this.view.relayout();
         },
+        
+        identify_attr_param: function (depth) {
+            this.layout.identify_attr_param(depth);
+            this.view.relayout();
+        },
 
         expand_to_depth: function (depth) {
             this.layout.expand_to_depth(depth);
@@ -2119,6 +2124,30 @@
                 var root = this.jm.mind.root;
                 this.part_layout(root);
                 this.set_visible(root.children, true);
+            }
+        },
+        
+        identify_attr_param: function(target_depth, curr_nodes, curr_depth) {
+            if (target_depth < 1) { return; }
+            var nodes = curr_nodes || this.jm.mind.root.children;
+            var depth = curr_depth || 1;
+            var i = nodes.length;
+            var node = null;
+            while (i--) {
+                node = nodes[i];
+                if (depth < target_depth) {
+                    if (!node.expanded) {
+                        this.expand_node(node);
+                    }
+                    this.identify_attr_param(target_depth, node.children, depth + 1);
+                }
+                if (depth == target_depth) {
+                	node.data['background-color'] = "#1d64c9";
+                	
+                    if (!node.expanded) {
+                        this.expand_node(node);
+                    }
+                }
             }
         },
 
