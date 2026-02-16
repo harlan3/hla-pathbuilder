@@ -466,6 +466,8 @@ public class MMGenerator {
 			// two folding nodes at bottom to complete matching node tags
 			updateElementTreeFromLine("   </node>", true);
 			updateElementTreeFromLine("</node>", true);
+			if (mindMapMode)
+				updateElementTreeFromLine("</map>", true);
 			
 			this.nodeTree.setDefaults();
 			this.nodeTree.traverseTree(nodeTree.root, mindMapMode); // true specifies mindmap instead of xml format

@@ -515,9 +515,15 @@ public class NodeTree {
 								+ " FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
 					} else {
 						
-						printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
-								+ nameStr.trim() + "\" " + elementNodes[1].trim() 
-								+ " FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
+						if (elementNodes[0].trim().equals("</map>") && mindMapMode) {
+							printContents(elementNodes[0].trim());
+						} else {
+							if (!elementNodes[0].trim().equals("</map>")) {
+								printContents(format + "<node ID=\"" + elementNodes[2].trim() + "\" " + "TEXT=\""
+									+ nameStr.trim() + "\" " + elementNodes[1].trim() 
+									+ " FOM_LINE_NUMBER=\"" + lineNumberStr + "\" FOLDED=\"true\">");
+							}
+						}
 					}
 				}
 			}
